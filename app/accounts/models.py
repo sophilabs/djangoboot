@@ -17,7 +17,7 @@ class Group(models.Model):
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, username, email=None, **extra_fields):
+    def create_user(self, username, email=None, password=None, **extra_fields):
         if not username:
             raise ValueError('The given username must be set')
         email = UserManager.normalize_email(email)
@@ -26,12 +26,17 @@ class UserManager(BaseUserManager):
         group.save(using=self._db)
 
         user = self.model(group=group, username=username, email=email)
+        user.set_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_superuser(self):
-        pass
+    def create_superuser(self, username,  email, password):
+        email = UserManager.normalize_email(email)
+        u = self.create_user(username, email, password)
+        u.is_superuser = True
+        u.save(using=self._db)
+        return u
 
 
 class User(TimeStampedMixin, AbstractBaseUser):
@@ -41,9 +46,16 @@ class User(TimeStampedMixin, AbstractBaseUser):
     username = models.CharField(_('username'), max_length=100, unique=True)
     email = models.EmailField(_('email'))
 
+    is_superuser = models.BooleanField(_('superuser status'), default=False)
+
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     objects = UserManager()
+
+    @property
+    def is_staff(self):
+        return self.is_superuser
 
     def get_absolute_url(self):
         return self.group.get_absolute_url()
