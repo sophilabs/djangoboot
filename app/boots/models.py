@@ -25,3 +25,4 @@ class Boot(TimeStampedMixin, models.Model):
 class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot)
     source = models.URLField()
+    name = models.CharField(max_length=50)

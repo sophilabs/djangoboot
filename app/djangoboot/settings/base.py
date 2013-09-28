@@ -22,12 +22,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# Specify these settings in secrets.py
+DATABASE_USER = None
+DATABASE_PASSWORD = None
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'djangoboot',
-        'USER': 'sl',
-        'PASSWORD': 'sl',
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
         'HOST': '',
         'PORT': ''
     }
@@ -89,6 +93,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
+    'south',
     'taggit',
 
     'core',
