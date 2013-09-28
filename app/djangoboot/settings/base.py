@@ -164,6 +164,7 @@ INSTALLED_APPS = (
     'south',
     'taggit',
     'storages',
+    'bootstrap3',
 
     'core',
     'accounts',

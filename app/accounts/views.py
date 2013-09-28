@@ -43,6 +43,7 @@ class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
 
     def get_form(self, form_class):
         form = super(TeamMixin, self).get_form(form_class)
-        if hasattr(form, 'team'):
-            form.team.queryset = self.get_teams_queryset()
+        team_field = form.fields.get('team')
+        if team_field:
+            team_field.queryset = self.get_teams_queryset()
         return form

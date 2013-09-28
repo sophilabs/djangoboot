@@ -14,6 +14,9 @@ class Team(models.Model):
     def get_absolute_url(self):
         return 'boots:team', [self.slug]
 
+    def __unicode__(self):
+        return self.name
+
 
 class UserManager(BaseUserManager):
 
@@ -52,6 +55,9 @@ class User(TimeStampedMixin, AbstractBaseUser):
     REQUIRED_FIELDS = ['email']
 
     objects = UserManager()
+
+    def __unicode__(self):
+        return self.username
 
     @property
     def is_staff(self):
