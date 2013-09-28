@@ -12,17 +12,17 @@ class Boot(TimeStampedMixin, models.Model):
     TYPE_APP = 'A'
 
     TYPES = (
-        (TYPE_PROJECT, _('Project')),
-        (TYPE_APP, _('Application')),
+        (TYPE_PROJECT, _('project')),
+        (TYPE_APP, _('application')),
     )
 
-    group = models.ForeignKey(Group)
-    slug = models.SlugField()
-    type = models.CharField(max_length=1, choices=TYPES)
-    tags = TaggableManager()
+    group = models.ForeignKey(Group, verbose_name=_('group'))
+    slug = models.SlugField(_('slug'))
+    type = models.CharField(_('type'), max_length=1, choices=TYPES)
+    tags = TaggableManager(verbose_name=_('tags'))
 
 
 class BootVersion(TimeStampedMixin, models.Model):
-    boot = models.ForeignKey(Boot)
-    source = models.URLField()
-    name = models.CharField(max_length=50)
+    boot = models.ForeignKey(Boot, verbose_name=_('boot'))
+    source = models.URLField(_('source'))
+    name = models.CharField(_('name'), max_length=50)
