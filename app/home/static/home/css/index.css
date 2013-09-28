@@ -1,5 +1,3 @@
-@import url(http://fonts.googleapis.com/css?family=Architects+Daughter);
-
 .home-index {
 
 }
@@ -9,28 +7,58 @@
 }
 
 .home-index main {
-    padding: 100px 0 100px 0;
+    padding: 80px 0 80px 0;
     margin: 0 0 20px 0;
     box-shadow: inset 0px -3px 10px 0px rgba(0,0,0,0.4);
     background: #2e7bcf url(../img/header.jpg) 0 0 repeat-x;
 }
 
-.home-index main .description {
+.home-index main .left {
 
 }
 
-.home-index main .description h1 {
+.home-index main .left h1 {
     font-family: 'Architects Daughter', cursive;
     color: #ffffff;
-    font-size: 80px;
+    font-size: 600%;
     margin: 0;
     padding: 0 10px;
 }
 
-.home-index main .description p {
+.home-index main .left p {
     font-family: 'Architects Daughter', cursive;
     color: #ffffff;
     font-size: 120%;
     margin: 0 0 0 190px;
     padding: 0 10px;
 }
+
+.home-index main .right {
+    padding: 30px 0 0 0;
+}
+
+.home-index main .right .login {
+    margin: 30px 0 0 0;
+}
+
+.home-index main .right .login h3 {
+    font-family: 'Architects Daughter', cursive;
+    color: #ffffff;
+    text-align: center;
+    font-size: 180%;
+    padding: 5px 0;
+    margin: 0;
+}
+
+.home-index main .right .login p {
+    text-align: center;
+    margin: 20px 0 0 0;
+    padding: 0;
+}
+
+.home-index main .right .login p span {
+    font-family: 'Architects Daughter', cursive;
+    color: #ffffff;
+    font-size: 140%;
+}
+
