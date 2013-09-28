@@ -32,6 +32,9 @@ class BootVersion(TimeStampedMixin, models.Model):
     slug = models.SlugField(_('slug'))
     source = models.URLField(_('source'))
 
+    @property
+    def group(self):
+        return self.boot.group
+
     class Meta:
         unique_together = (('boot', 'slug',),)
-

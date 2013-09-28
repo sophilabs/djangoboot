@@ -70,7 +70,7 @@ class BootVersionObjectMixin(SingleObjectMixin):
         return obj
 
 
-class BootVersionCreateView(CreateView):
+class BootVersionCreateView(GroupMixin, BootVersionObjectMixin, CreateView):
     template_name = 'boots/boot_version_create.html'
     fields = ['slug', 'source']
 
@@ -87,7 +87,7 @@ class BootVersionCreateView(CreateView):
         return super(ModelFormMixin, self).form_valid(form)
 
 
-class BootVersionDeleteView(DeleteView):
+class BootVersionDeleteView(GroupMixin, BootVersionObjectMixin, DeleteView):
     template_name = 'boots/boot_version_delete.html'
 
 

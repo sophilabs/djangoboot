@@ -34,5 +34,6 @@ class GroupMixin(FormMixin, SingleObjectMixin):
 
     def get_form(self):
         form = super(GroupMixin, self).get_form()
-        form.group.queryset = self.get_groups_queryset()
+        if hasattr(form, 'group'):
+            form.group.queryset = self.get_groups_queryset()
         return form
