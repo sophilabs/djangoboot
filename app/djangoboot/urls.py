@@ -16,4 +16,4 @@ urlpatterns = patterns('',
 
 
 if settings.DEBUG:
-    urlpatterns += static('/', document_root='static/extras/')
+    urlpatterns += static('/static', document_root='static/extras/')
