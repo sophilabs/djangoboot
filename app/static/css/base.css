@@ -22,3 +22,42 @@ footer a:hover {
     color: black;
     text-decoration: none;
 }
+
+
+.btn-important {
+    color: #ffffff;
+    background-color: #ff8800;
+    border-color: #fe8800;
+}
+.btn-important:hover,
+.btn-important:focus,
+.btn-important:active,
+.btn-important.active,
+.open .dropdown-toggle.btn-important {
+    color: #ffffff;
+    background-color: #fa8800;
+    border-color: #f88800;
+}
+.btn-important:active,
+.btn-important.active,
+.open .dropdown-toggle.btn-important {
+    background-image: none;
+}
+.btn-important.disabled,
+.btn-important[disabled],
+fieldset[disabled] .btn-important,
+.btn-important.disabled:hover,
+.btn-important[disabled]:hover,
+fieldset[disabled] .btn-important:hover,
+.btn-important.disabled:focus,
+.btn-important[disabled]:focus,
+fieldset[disabled] .btn-important:focus,
+.btn-important.disabled:active,
+.btn-important[disabled]:active,
+fieldset[disabled] .btn-important:active,
+.btn-important.disabled.active,
+.btn-important[disabled].active,
+fieldset[disabled] .btn-important.active {
+    background-color: #ff8800;
+    border-color: #fe8800;
+}
