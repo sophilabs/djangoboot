@@ -120,6 +120,8 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_USER_MODEL = 'accounts.User'
 
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
