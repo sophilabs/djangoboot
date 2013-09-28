@@ -149,6 +149,8 @@ SOCIAL_AUTH_USER_MODEL = 'accounts.User'
 
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
+LOGIN_REDIRECT_URL = '/'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
