@@ -7,9 +7,13 @@ def rel(*x):
     return os.path.join(APP_ROOT, *x)
 
 
-# Specify these settings in secrets.py
+#defined in secrets.py
 DATABASE_USER = None
 DATABASE_PASSWORD = None
+AWS_ACCESS_KEY_ID = None
+AWS_SECRET_ACCESS_KEY = None
+SOCIAL_AUTH_GITHUB_KEY = None
+SOCIAL_AUTH_GITHUB_SECRET = None
 
 
 try:
@@ -52,8 +56,22 @@ USE_L10N = True
 USE_TZ = True
 
 
+AWS_QUERYSTRING_AUTH = False
+AWS_IS_GZIPPED = True
+AWS_S3_SECURE_URLS = False
+
+
 MEDIA_ROOT = rel('media')
 MEDIA_URL = '/media/'
+MEDIA_BUCKET = None
+MEDIA_LOCATION = None
+MEDIA_DOMAIN = None
+MEDIA_HEADERS = {
+    'Expires': 'Thu, 31 Dec 2050 00:00:00 GMT',
+    'Cache-Control': 'max-age=315360000, public',
+}
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
 
 STATIC_ROOT = rel('assets')
 STATIC_URL = '/static/'
@@ -64,6 +82,14 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+STATIC_BUCKET = None
+STATIC_LOCATION = None
+STATIC_DOMAIN = None
+STATIC_HEADERS = {
+    'Expires': 'Thu, 31 Dec 2050 00:00:00 GMT',
+    'Cache-Control': 'max-age=315360000, public',
+}
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 SECRET_KEY = 'a1gf&i7+&+p7lkuazmvvw4g(w5ce(=i=k!quypy%q8-!tx=3*8'
 
@@ -105,6 +131,7 @@ INSTALLED_APPS = (
 
     'south',
     'taggit',
+    'storages',
 
     'core',
     'accounts',

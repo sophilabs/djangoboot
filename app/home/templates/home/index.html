@@ -14,11 +14,14 @@
     <main role="main">
         <div class="container">
             <div class="row">
-                <div class="col-lg-offset-1 col-md-5 left">
+                <div class="col-md-2 pony">
+                    <img src="{% static 'home/img/pony.png' %}" />
+                </div>
+                <div class="col-md-5 left">
                     <h1>djangoboot</h1>
                     <p>{% trans 'templates for startproject and startapp (boots)' %}</p>
                 </div>
-                <div class="col-lg-offset-2 col-md-4 right">
+                <div class=" col-md-offset-1 col-md-4 right">
                     <form action="{% url 'boots:search' %}" method="get" role="search">
                         <div class="input-group input-group-lg">
                             <input type="text" name="q" placeholder="Search for boots..." class="form-control">
