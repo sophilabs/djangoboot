@@ -89,7 +89,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
+    'taggit',
 
+    'core',
+    'accounts',
+    'boots',
+    'home',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

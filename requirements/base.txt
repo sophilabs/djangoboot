@@ -5,3 +5,4 @@ distribute==0.6.27
 psycopg2==2.5.1
 pytz==2013d
 wsgiref==0.1.2
+django-taggit==0.10
