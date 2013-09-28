@@ -48,10 +48,10 @@ USE_TZ = True
 MEDIA_ROOT = rel('media')
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = ''
+STATIC_ROOT = rel('colectedstatic')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    rel('static')
+    rel('static'),
 )
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -65,7 +65,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader'
 )
 TEMPLATE_DIRS = (
-    rel('templates')
+    rel('templates'),
 )
 
 MIDDLEWARE_CLASSES = (
