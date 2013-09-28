@@ -3,6 +3,7 @@ South==0.8.2
 argparse==1.2.1
 boto==2.13.3
 distribute==0.6.27
+django-bootstrap3==0.0.7
 django-storages==1.1.8
 django-taggit==0.10
 oauthlib==0.6.0
