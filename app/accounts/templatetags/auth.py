@@ -7,14 +7,14 @@ register = template.Library()
 
 def _get_next(context):
     request = context.get('request')
-    return request.GET.get('next') or request.get_full_path() if request else None
+    return '?next={0}'.format(request.GET.get('next') or request.get_full_path()) if request else ''
 
 
 @register.simple_tag(takes_context=True)
 def social(context, backend):
-    return reverse('social:begin', args=(backend,)) + '?next=' + _get_next(context)
+    return reverse('social:begin', args=(backend,)) + _get_next(context)
 
 
 @register.simple_tag(takes_context=True)
 def logout(context):
-    return reverse('accounts:logout') + '?next=' + _get_next(context)
+    return reverse('accounts:logout') + _get_next(context)
