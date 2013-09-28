@@ -1,7 +1,9 @@
 {%  extends "base.html" %}
 
-{% block title %}Boot on fire!{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'Boot on fire!' %}{% endblock %}
 
 {% block content %}
-<p>Oops...</p>
+<p>{% trans 'Oops...' %}</p>
 {% endblock content %}

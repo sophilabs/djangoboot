@@ -1,7 +1,9 @@
 {%  extends "base.html" %}
 
-{% block title %}Page Not found{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans 'Page Not found' %}{% endblock %}
 
 {% block content %}
-<p>This is not the page you were looking for.</p>
+<p>{% trans 'This is not the page you were looking for.' %}</p>
 {% endblock content %}
