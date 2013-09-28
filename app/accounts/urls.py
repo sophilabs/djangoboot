@@ -1,11 +1,11 @@
-from django.conf.urls import patterns
+from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
 from accounts.views import GroupCreateView, GroupUpdateView, GroupDeleteView
 
 
 urlpatterns = patterns('',
-    (r'^group/create', GroupCreateView.as_view(template_name='<template>')),
-    (r'^group/(?P<slug>[\w-]+)/update', GroupUpdateView.as_view(template_name='<template>')),
-    (r'^group/(?P<slug>[\w-]+)/delete', GroupDeleteView.as_view(template_name='<template>')),
+    url(r'^groups/create', GroupCreateView.as_view(), name='group_create'),
+    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/update', GroupUpdateView.as_view(), name='group_update'),
+    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/delete', GroupDeleteView.as_view(), name='group_delete'),
 )
