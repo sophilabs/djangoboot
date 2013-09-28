@@ -55,7 +55,7 @@ USE_TZ = True
 MEDIA_ROOT = rel('media')
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = rel('colectedstatic')
+STATIC_ROOT = rel('assets')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     rel('static'),

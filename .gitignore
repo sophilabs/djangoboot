@@ -1,3 +1,4 @@
 .idea
 *.pyc
 app/djangoboot/settings/secrets.py
+app/assets
