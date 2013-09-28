@@ -2,7 +2,13 @@ Django==1.5.4
 South==0.8.2
 argparse==1.2.1
 distribute==0.6.27
-psycopg2==2.5.1
-pytz==2013d
-wsgiref==0.1.2
 django-taggit==0.10
+oauthlib==0.6.0
+psycopg2==2.5.1
+python-openid==2.2.5
+python-social-auth==0.1.13
+pytz==2013d
+requests==2.0.0
+requests-oauthlib==0.3.3
+six==1.4.1
+wsgiref==0.1.2
