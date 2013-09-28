@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 
 from accounts.models import Group, User
 
@@ -11,5 +11,6 @@ class GroupUpdateView(UpdateView):
     model = Group
 
 
-class GroupDeleteView(UpdateView):
+class GroupDeleteView(DeleteView):
     model = Group
+
