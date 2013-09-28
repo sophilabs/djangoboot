@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load future %}
+{% load social %}
 
 {% block class  %}home-index{% endblock class %}
 
@@ -33,11 +34,11 @@
                     <div class="login">
                         <h3>{% trans 'Sign in / up' %}</h3>
                         <p>
-                            <a href="{% url 'social:begin' 'bitbucket' %}" class="btn btn-important btn-lg">
+                            <a href="{% social 'bitbucket' %}" class="btn btn-important btn-lg">
                                 <i class="icon-bitbucket"></i> Bitbucket
                             </a>
                             <span>or</span>
-                            <a href="{% url 'social:begin' 'github' %}" class="btn btn-important btn-lg">
+                            <a href="{% social 'github' %}" class="btn btn-important btn-lg">
                                 <i class="icon-github-alt"></i> Github
                             </a>
                         </p>

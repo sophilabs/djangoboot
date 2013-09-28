@@ -10,6 +10,10 @@ class Group(models.Model):
     name = models.CharField(_('name'), max_length=100)
     email = models.EmailField(_('email'))
 
+    @models.permalink
+    def get_absolute_url(self):
+        return 'boots:group', [self.slug]
+
 
 class UserManager(BaseUserManager):
 
@@ -40,3 +44,6 @@ class User(TimeStampedMixin, AbstractBaseUser):
     USERNAME_FIELD = 'username'
 
     objects = UserManager()
+
+    def get_absolute_url(self):
+        return self.group.get_absolute_url()

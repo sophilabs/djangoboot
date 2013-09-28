@@ -1,5 +1,8 @@
 import os
 
+from django.conf import global_settings
+
+
 APP_ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 
 
@@ -127,6 +130,21 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS = (
     'social.backends.bitbucket.BitbucketOAuth',
     'social.backends.github.GithubOAuth2',
 )
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+
+    'accounts.pipeline.perform_redirect',
+)
+
 
 SOCIAL_AUTH_USER_MODEL = 'accounts.User'
 
