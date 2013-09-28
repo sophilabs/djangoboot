@@ -46,6 +46,10 @@
                     <li><a href="{% url 'boots:trending' %}"><i class="icon-star"></i> {% trans 'Trending' %}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{% url 'boots:boot_create' %}"><i class="icon-plus"></i> {% trans 'Create Boot' %}</a>
+                    </li>
+
                     {% if request.user.is_authenticated %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="gravatar"><img src="{% gravatar request.user.email %}"> {{ request.user.team.slug }}</span> <b class="caret"></b></a>
