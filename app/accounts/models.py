@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import ugettext as _
 
 from core.models import TimeStampedMixin
@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
         team = Team(slug=username, name=username, email=email)
         team.save(using=self._db)
 
-        user = self.model(team=team, username=username, email=email)
+        user = self.model(team=team, username=email, email=email)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -39,14 +39,13 @@ class UserManager(BaseUserManager):
         return u
 
 
-class User(TimeStampedMixin, AbstractBaseUser):
-    team = models.ForeignKey(Team, related_name='default_users', verbose_name=_('default team'))
-    teams = models.ManyToManyField(Team, related_name='users', verbose_name=_('teams'))
+class User(AbstractBaseUser, TimeStampedMixin, PermissionsMixin):
 
     username = models.CharField(_('username'), max_length=100, unique=True)
     email = models.EmailField(_('email'))
 
-    is_superuser = models.BooleanField(_('superuser status'), default=False)
+    team = models.ForeignKey(Team, related_name='default_users', verbose_name=_('default team'))
+    teams = models.ManyToManyField(Team, related_name='users', verbose_name=_('teams'))
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -56,6 +55,7 @@ class User(TimeStampedMixin, AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_superuser
+
 
     def get_absolute_url(self):
         return self.team.get_absolute_url()

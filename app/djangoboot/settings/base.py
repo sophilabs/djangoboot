@@ -129,6 +129,7 @@ WSGI_APPLICATION = 'djangoboot.wsgi.application'
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS = (
     'social.backends.bitbucket.BitbucketOAuth',
     'social.backends.github.GithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_PIPELINE = (

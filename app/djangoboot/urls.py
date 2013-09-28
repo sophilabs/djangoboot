@@ -7,11 +7,11 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
+    url(r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^', include('home.urls', namespace='home')),
     url(r'^', include('accounts.urls', namespace='accounts')),
     url(r'^', include('boots.urls', namespace='boots')),
-    url(r'^admin/', include(admin.site.urls)),
 )
 
 
