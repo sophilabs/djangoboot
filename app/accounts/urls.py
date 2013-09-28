@@ -5,6 +5,10 @@ from accounts.views import GroupCreateView, GroupUpdateView, GroupDeleteView
 
 
 urlpatterns = patterns('',
+    url(r'^login',
+        TemplateView.as_view(template_name='accounts/login.html'),
+        name='login'),
+
     url(r'^groups/create',
         GroupCreateView.as_view(),
         name='group_create'),
