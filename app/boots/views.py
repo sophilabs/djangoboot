@@ -8,6 +8,39 @@ from boots.models import Boot, BootVersion
 from accounts.views import GroupMixin
 
 
+class BootObjectMixin(SingleObjectMixin):
+    model = Boot
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        try:
+            obj = queryset.get(group__slug=self.kwargs.get('group'),
+                               slug=self.kwargs.get('boot'))
+        except ObjectDoesNotExist:
+            raise Http404
+
+        return obj
+
+
+class BootVersionObjectMixin(SingleObjectMixin):
+    model = BootVersion
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        try:
+            obj = queryset.get(boot__group__slug=self.kwargs.get('group'),
+                               boot__slug=self.kwargs.get('boot'),
+                               slug=self.kwargs.get('version'))
+        except ObjectDoesNotExist:
+            raise Http404
+
+        return obj
+
+
 class SearchView(TemplateView):
     template_name = 'boots/search.html'
 
@@ -29,45 +62,12 @@ class BootCreateView(GroupMixin, CreateView):
     template_name = 'boots/boot_create.html'
 
 
-class BootObjectMixin(SingleObjectMixin):
-    model = Boot
-
-    def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-
-        try:
-            obj = queryset.get(group__slug=self.kwargs.get('group'),
-                               slug=self.kwargs.get('boot'))
-        except ObjectDoesNotExist:
-            raise Http404
-
-        return obj
-
-
 class BootUpdateView(GroupMixin, BootObjectMixin, UpdateView):
     template_name = 'boots/boot_update.html'
 
 
 class BootDeleteView(GroupMixin, BootObjectMixin, DeleteView):
     template_name = 'boots/boot_delete.html'
-
-
-class BootVersionObjectMixin(SingleObjectMixin):
-    model = BootVersion
-
-    def get_object(self, queryset=None):
-        if queryset is None:
-            queryset = self.get_queryset()
-
-        try:
-            obj = queryset.get(boot__group__slug=self.kwargs.get('group'),
-                               boot__slug=self.kwargs.get('boot'),
-                               slug=self.kwargs.get('version'))
-        except ObjectDoesNotExist:
-            raise Http404
-
-        return obj
 
 
 class BootVersionCreateView(GroupMixin, BootVersionObjectMixin, CreateView):

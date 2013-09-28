@@ -3,25 +3,26 @@ from django.views.generic.edit import FormMixin, SingleObjectMixin
 from django.db.models import Q
 from django.core.exceptions import PermissionDenied
 
+from core.views import LoginRequiredMixin
 from accounts.models import Group, User
 
 
-class GroupCreateView(CreateView):
+class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
     template_name = 'accounts/group_create.html'
 
 
-class GroupUpdateView(UpdateView):
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     template_name = 'accounts/group_update.html'
 
 
-class GroupDeleteView(DeleteView):
+class GroupDeleteView(LoginRequiredMixin, DeleteView):
     model = Group
     template_name = 'accounts/group_delete.html'
 
 
-class GroupMixin(FormMixin, SingleObjectMixin):
+class GroupMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
     def get_groups_queryset(self):
         user = self.request.user
         return Group.objects.filter(Q(default_users=user) | Q(users=user))
