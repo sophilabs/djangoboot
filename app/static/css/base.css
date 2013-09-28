@@ -8,3 +8,17 @@ body {
     font-family: 'Architects Daughter', cursive;
     font-size: 20px;
 }
+
+footer {
+    color: gray;
+    margin: 30px;
+}
+
+footer a {
+    color: #333333;
+}
+
+footer a:hover {
+    color: black;
+    text-decoration: none;
+}
