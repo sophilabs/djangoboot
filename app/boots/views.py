@@ -1,4 +1,7 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
+
+from boots.models import Boot, BootVersion
+from accounts.views import GroupMixin
 
 
 class SearchView(TemplateView):
@@ -15,6 +18,18 @@ class GroupView(TemplateView):
 
 class BootView(TemplateView):
     template_name = 'boots/boot.html'
+
+
+class BootCreateView(GroupMixin, CreateView):
+    model = Boot
+
+
+class BootUpdateView(GroupMixin, UpdateView):
+    model = Boot
+
+
+class BootDeleteView(GroupMixin, DeleteView):
+    model = Boot
 
 
 class VersionView(TemplateView):
