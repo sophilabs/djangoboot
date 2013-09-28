@@ -47,7 +47,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="{% url 'boots:boot_create' %}"><i class="icon-plus"></i> {% trans 'Create Boot' %}</a>
+                        <a href="{% url 'boots:boot_create' %}">{% trans 'Create Boot' %}</a>
                     </li>
 
                     {% if request.user.is_authenticated %}

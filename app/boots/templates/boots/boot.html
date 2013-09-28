@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load bootstrap3 %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+
+{% block content %}
+    <main role="main">
+        <div class="container">
+            <div class="page-header">
+                <h1>{{ object.slug }}</h1>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}

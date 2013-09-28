@@ -12,16 +12,20 @@ class Boot(models.Model, TimeStampedMixin):
     TYPE_APP = 'A'
 
     TYPES = (
-        (TYPE_PROJECT, _('project')),
-        (TYPE_APP, _('application')),
+        (TYPE_PROJECT, _('Project')),
+        (TYPE_APP, _('Application')),
     )
 
-    team = models.ForeignKey(Team, verbose_name=_('team'))
+    team = models.ForeignKey(Team, verbose_name=_('owner'))
     slug = models.SlugField(_('slug'))
-    tagline = models.CharField(max_length=250)
-    url = models.URLField(null=True, blank=True)
-    type = models.CharField(_('type'), max_length=1, choices=TYPES)
+    tagline = models.CharField(max_length=250, help_text=_('Short description.'))
+    url = models.URLField(_('URL'), null=True, blank=True, help_text=_('Public site or repository.'))
+    type = models.CharField(_('type'), max_length=1, choices=TYPES, help_text=_('Type of template.'))
     tags = TaggableManager(verbose_name=_('tags'))
+
+    @models.permalink
+    def get_absolute_url(self):
+        return 'boots:boot', [self.team.slug, self.slug]
 
     class Meta:
         unique_together = (('team', 'slug',),)
@@ -35,6 +39,10 @@ class BootVersion(models.Model, TimeStampedMixin):
     @property
     def team(self):
         return self.boot.team
+
+    @models.permalink
+    def get_absolute_url(self):
+        return 'boots:boot_version', [self.boot.team.slug, self.boot.slug, self.slug]
 
     class Meta:
         unique_together = (('boot', 'slug',),)

@@ -1,0 +1,14 @@
+{{ form.team }}
+
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="team">{{ form.team.label }}</span> <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu team-dropdown">
+        {% for value, name in form.team.field.choices %}
+            {% if not forloop.first %}
+                <li><a href="#" data-value="{{ value }}">{{ name }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

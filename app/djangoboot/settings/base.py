@@ -167,6 +167,7 @@ INSTALLED_APPS = (
     'taggit',
     'storages',
     'bootstrap3',
+    'widget_tweaks',
 
     'core',
     'accounts',
