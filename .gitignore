@@ -1,4 +1,7 @@
-.idea
-*.pyc
+.*
+*.py[co]
 app/djangoboot/settings/secrets.py
 app/assets
+
+!.gitignore
+!.travis.yml

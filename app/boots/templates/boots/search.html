@@ -1,5 +1,116 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+{% load future %}
+{% load gravatar %}
+{% load staticfiles %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'boots/css/search.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block class %}{{ block.super }} boots-search{% endblock class %}
+
 {% block content %}
-    SEARCH
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 filters">
+                <div class="well">
+                    <div class="row">
+                        <img class="col-md-12" src="{% gravatar user.email 200 %}" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                                <h5><i class="icon-user"></i> {{ request.user.team.slug }}</h5>
+                                <h5><i class="icon-envelope"></i> {{ request.user.team.email }}</h5>
+                                <h5><i class="icon-time"></i> September 24, 2013</h5>
+                            </div>
+                        </div>
+                    </div>
+                <form class="form-inline" role="form" method="get" action="/search?tag=b">
+                    <div class="input-group">
+                        <input name="q" class="form-control" type="text" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="icon-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+                <h3>Tags</h3>
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="active">
+                        <a href="#">
+                            <span class="badge pull-right">42</span>
+                            puppet
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <span class="badge pull-right">34</span>
+                            sphinx
+                        </a>
+                    </li>
+                    <li>
+                        <form class="form-inline" role="form" method="get" action="/search?tag=b">
+                            <input name="tag" class="form-control" type="text" placeholder="Type a tag...">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-9 results">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="btn-group btn-group-sm pull-right">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                Sort: <strong></strong> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                        <h2>{% block search_title %}{% trans 'Results' %}{% endblock search_title %} <small>500 boots</small></h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <h4 class="list-group-item-heading">
+                                    <span class="pull-right"><a class="btn btn-primary btn-xs" href="#"><i class="icon-heart"></i> 45</a></span>
+                                    <a href="#">pricco</a> / <a href="#">django-two-scoops</a>
+                                </h4>
+                                <p class="list-group-item-text">text text text text text text text text </p>
+                                <p class="list-group-item-text"><a class="label label-primary" href="#">puppet</a> <a class="label label-primary" href="#">sphinx</a></p>
+                            </div>
+                            <div class="list-group-item">
+                                <h4 class="list-group-item-heading">
+                                    <span class="pull-right"><a class="btn btn-primary btn-xs" href="#"><i class="icon-heart"></i> 45</a></span>
+                                    <a href="#">pricco</a> / <a href="#">django-two-scoops</a>
+                                </h4>
+                                <p class="list-group-item-text">text text text text text text text text </p>
+                                <p class="list-group-item-text"><a class="label label-primary" href="#">puppet</a> <a class="label label-primary" href="#">sphinx</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <ul class="pagination">
+                            <li><a href="#">&laquo;</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li><a href="#">&raquo;</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
