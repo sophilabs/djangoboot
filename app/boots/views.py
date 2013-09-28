@@ -1,5 +1,7 @@
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import SingleObjectMixin, ModelFormMixin
+from django.views.generic.detail import BaseDetailView
+from django.views.generic.base import TemplateResponseMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -53,7 +55,7 @@ class TeamView(TemplateView):
     template_name = 'boots/team.html'
 
 
-class BootView(TemplateView):
+class BootView(BootObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot.html'
 
 
@@ -91,5 +93,5 @@ class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
     template_name = 'boots/boot_version_delete.html'
 
 
-class BootVersionView(TemplateView):
+class BootVersionView(BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot_version.html'

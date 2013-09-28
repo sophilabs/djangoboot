@@ -23,6 +23,10 @@ class Boot(TimeStampedMixin, models.Model):
     type = models.CharField(_('type'), max_length=1, choices=TYPES, help_text=_('Type of template.'))
     tags = TaggableManager(verbose_name=_('tags'))
 
+    @models.permalink
+    def get_absolute_url(self):
+        return 'boots:boot', [self.team.slug, self.slug]
+
     class Meta:
         unique_together = (('team', 'slug',),)
 
@@ -35,6 +39,10 @@ class BootVersion(TimeStampedMixin, models.Model):
     @property
     def team(self):
         return self.boot.team
+
+    @models.permalink
+    def get_absolute_url(self):
+        return 'boots:boot_version', [self.boot.team.slug, self.boot.slug, self.slug]
 
     class Meta:
         unique_together = (('boot', 'slug',),)
