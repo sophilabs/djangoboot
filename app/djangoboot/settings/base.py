@@ -87,6 +87,13 @@ ROOT_URLCONF = 'djangoboot.urls'
 
 WSGI_APPLICATION = 'djangoboot.wsgi.application'
 
+SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
+    'social.backends.bitbucket.BitbucketOAuth',
+    'social.backends.github.GithubOAuth2',
+)
+
+SOCIAL_AUTH_USER_MODEL = 'accounts.models.User'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
