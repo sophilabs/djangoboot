@@ -35,7 +35,7 @@ DATABASES = {
         'NAME': 'djangoboot',
         'USER': DATABASE_USER,
         'PASSWORD': DATABASE_PASSWORD,
-        'HOST': '',
+        'HOST': 'localhost',
         'PORT': ''
     }
 }
