@@ -1,10 +1,18 @@
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, View
 from django.views.generic.edit import FormMixin, SingleObjectMixin
 from django.db.models import Q
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 from core.views import LoginRequiredMixin
 from accounts.models import Group, User
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect(request.GET.get('next', 'home:index'))
 
 
 class GroupCreateView(LoginRequiredMixin, CreateView):
