@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _
 
 
 class Group(models.Model):
-    slug = models.SlugField(_('slug'))
+    slug = models.SlugField(_('slug'), unique=True)
     name = models.CharField(_('name'), max_length=100)
     email = models.EmailField(_('email'))
 

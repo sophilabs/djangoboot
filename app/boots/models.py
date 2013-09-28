@@ -23,9 +23,15 @@ class Boot(TimeStampedMixin, models.Model):
     type = models.CharField(_('type'), max_length=1, choices=TYPES)
     tags = TaggableManager(verbose_name=_('tags'))
 
+    class Meta:
+        unique_together = (('group', 'slug',),)
+
 
 class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'))
-    name = models.CharField(_('name'), max_length=50)
+    slug = models.SlugField(_('slug'))
     source = models.URLField(_('source'))
+
+    class Meta:
+        unique_together = (('boot', 'slug',),)
 
