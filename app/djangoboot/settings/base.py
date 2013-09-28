@@ -6,6 +6,12 @@ APP_ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 def rel(*x):
     return os.path.join(APP_ROOT, *x)
 
+
+# Specify these settings in secrets.py
+DATABASE_USER = None
+DATABASE_PASSWORD = None
+
+
 try:
     from secrets import *
 except ImportError:
@@ -22,12 +28,13 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'djangoboot',
-        'USER': 'sl',
-        'PASSWORD': 'sl',
+        'USER': DATABASE_USER,
+        'PASSWORD': DATABASE_PASSWORD,
         'HOST': '',
         'PORT': ''
     }
@@ -89,6 +96,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
+    'south',
     'taggit',
 
     'core',
