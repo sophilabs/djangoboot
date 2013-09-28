@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django import forms
 
 from core.views import LoginRequiredMixin
 from accounts.models import Team, User
@@ -46,4 +47,5 @@ class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
         team_field = form.fields.get('team')
         if team_field:
             team_field.queryset = self.get_teams_queryset()
+        team_field.widget = forms.HiddenInput()
         return form
