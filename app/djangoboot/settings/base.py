@@ -6,6 +6,12 @@ APP_ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 def rel(*x):
     return os.path.join(APP_ROOT, *x)
 
+
+# Specify these settings in secrets.py
+DATABASE_USER = None
+DATABASE_PASSWORD = None
+
+
 try:
     from secrets import *
 except ImportError:
@@ -22,9 +28,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-# Specify these settings in secrets.py
-DATABASE_USER = None
-DATABASE_PASSWORD = None
 
 DATABASES = {
     'default': {
