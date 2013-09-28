@@ -150,6 +150,9 @@ SOCIAL_AUTH_USER_MODEL = 'accounts.User'
 
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -171,7 +174,7 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
 )
 
-RESERVED_SLUGS = ['create', 'update', 'delete']
+RESERVED_SLUGS = ['create', 'update', 'delete', 'search', 'trending']
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 

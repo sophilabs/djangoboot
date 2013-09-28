@@ -41,8 +41,8 @@ class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
             raise PermissionDenied()
         return obj
 
-    def get_form(self):
-        form = super(TeamMixin, self).get_form()
+    def get_form(self, form_class):
+        form = super(TeamMixin, self).get_form(form_class)
         if hasattr(form, 'team'):
             form.team.queryset = self.get_teams_queryset()
         return form
