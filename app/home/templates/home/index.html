@@ -31,18 +31,20 @@
                             </span>
                         </div>
                     </form>
-                    <div class="login">
-                        <h3>{% trans 'Sign in / up' %}</h3>
-                        <p>
-                            <a href="{% social 'bitbucket' %}" class="btn btn-important btn-lg">
-                                <i class="icon-bitbucket"></i> Bitbucket
-                            </a>
-                            <span>or</span>
-                            <a href="{% social 'github' %}" class="btn btn-important btn-lg">
-                                <i class="icon-github-alt"></i> Github
-                            </a>
-                        </p>
-                    </div>
+                    {% if not request.user.is_authenticated %}
+                        <div class="login">
+                            <h3>{% trans 'Sign in / up' %}</h3>
+                            <p>
+                                <a href="{% social 'bitbucket' %}" class="btn btn-important btn-lg">
+                                    <i class="icon-bitbucket"></i> Bitbucket
+                                </a>
+                                <span>or</span>
+                                <a href="{% social 'github' %}" class="btn btn-important btn-lg">
+                                    <i class="icon-github-alt"></i> Github
+                                </a>
+                            </p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
