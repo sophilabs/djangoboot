@@ -113,7 +113,7 @@ ROOT_URLCONF = 'djangoboot.urls'
 
 WSGI_APPLICATION = 'djangoboot.wsgi.application'
 
-SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
+SOCIAL_AUTH_AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS = (
     'social.backends.bitbucket.BitbucketOAuth',
     'social.backends.github.GithubOAuth2',
 )

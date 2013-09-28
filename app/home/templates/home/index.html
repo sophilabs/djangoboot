@@ -33,9 +33,13 @@
                     <div class="login">
                         <h3>{% trans 'Sign in / up' %}</h3>
                         <p>
-                            <a href="#" class="btn btn-default btn-lg"><i class="icon-bitbucket"></i> Bitbucket</a>
+                            <a href="{% url 'social:begin' 'bitbucket' %}" class="btn btn-default btn-lg">
+                                <i class="icon-bitbucket"></i> Bitbucket
+                            </a>
                             <span>or</span>
-                            <a href="#" class="btn btn-default btn-lg"><i class="icon-github-alt"></i> Github</a>
+                            <a href="{% url 'social:begin' 'github' %}" class="btn btn-default btn-lg">
+                                <i class="icon-github-alt"></i> Github
+                            </a>
                         </p>
                     </div>
                 </div>
