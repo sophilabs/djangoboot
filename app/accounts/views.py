@@ -8,17 +8,20 @@ from accounts.models import Group, User
 
 class GroupCreateView(CreateView):
     model = Group
+    template_name = 'accounts/group_create.html'
 
 
 class GroupUpdateView(UpdateView):
     model = Group
+    template_name = 'accounts/group_update.html'
 
 
 class GroupDeleteView(DeleteView):
     model = Group
+    template_name = 'accounts/group_delete.html'
 
 
-class GroupMixin(SingleObjectMixin, FormMixin):
+class GroupMixin(FormMixin, SingleObjectMixin):
     def get_groups_queryset(self):
         user = self.request.user
         return Group.objects.filter(Q(default_users=user) | Q(users=user))

@@ -5,7 +5,13 @@ from accounts.views import GroupCreateView, GroupUpdateView, GroupDeleteView
 
 
 urlpatterns = patterns('',
-    url(r'^groups/create', GroupCreateView.as_view(), name='group_create'),
-    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/update', GroupUpdateView.as_view(), name='group_update'),
-    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/delete', GroupDeleteView.as_view(), name='group_delete'),
+    url(r'^groups/create',
+        GroupCreateView.as_view(),
+        name='group_create'),
+    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/update',
+        GroupUpdateView.as_view(),
+        name='group_update'),
+    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/delete',
+        GroupDeleteView.as_view(),
+        name='group_delete'),
 )

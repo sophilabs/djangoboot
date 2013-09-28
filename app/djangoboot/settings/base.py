@@ -112,6 +112,8 @@ INSTALLED_APPS = (
     'home',
 )
 
+RESERVED_SLUGS = ['create', 'update', 'delete']
+
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 LOGGING = {
