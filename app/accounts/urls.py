@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
-from accounts.views import LogoutView, GroupCreateView, GroupUpdateView, GroupDeleteView
+from accounts.views import LogoutView, TeamCreateView, TeamUpdateView, TeamDeleteView
 
 
 urlpatterns = patterns('',
@@ -12,13 +12,13 @@ urlpatterns = patterns('',
         LogoutView.as_view(),
         name='logout'),
 
-    url(r'^groups/create',
-        GroupCreateView.as_view(),
-        name='group_create'),
-    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/update',
-        GroupUpdateView.as_view(),
-        name='group_update'),
-    url(r'^groups/(?P<slug>[-a-zA-Z0-9_]+)/delete',
-        GroupDeleteView.as_view(),
-        name='group_delete'),
+    url(r'^teams/create',
+        TeamCreateView.as_view(),
+        name='team_create'),
+    url(r'^teams/(?P<slug>[-a-zA-Z0-9_]+)/update',
+        TeamUpdateView.as_view(),
+        name='team_update'),
+    url(r'^teams/(?P<slug>[-a-zA-Z0-9_]+)/delete',
+        TeamDeleteView.as_view(),
+        name='team_delete'),
 )

@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from boots.views import SearchView, TrendingView, GroupView, BootView, BootVersionView, BootCreateView, \
+from boots.views import SearchView, TrendingView, TeamView, BootView, BootVersionView, BootCreateView, \
     BootUpdateView, BootDeleteView, BootVersionCreateView, BootVersionDeleteView
 
 
@@ -12,30 +12,30 @@ urlpatterns = patterns('',
         TrendingView.as_view(),
         name='trending'),
 
-    url(r'^(?P<group>[-a-zA-Z0-9_]+)$',
-        GroupView.as_view(),
-        name='group'),
-    url(r'^(?P<group>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)$',
+    url(r'^(?P<team>[-a-zA-Z0-9_]+)$',
+        TeamView.as_view(),
+        name='team'),
+    url(r'^(?P<team>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)$',
         BootView.as_view(),
         name='boot'),
-    url(r'^(?P<group>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/(?P<version>[-a-zA-Z0-9_]+)$',
+    url(r'^(?P<team>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/(?P<version>[-a-zA-Z0-9_]+)$',
         BootVersionView.as_view(),
         name='boot_version'),
 
     url(r'^create$',
         BootCreateView.as_view(),
         name='boot_create'),
-    url(r'^(?P<group>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/update$',
+    url(r'^(?P<team>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/update$',
         BootUpdateView.as_view(),
         name='boot_update'),
-    url(r'^(?P<group>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/delete$',
+    url(r'^(?P<team>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/delete$',
         BootDeleteView.as_view(),
         name='boot_delete'),
 
-    url(r'^(?P<group>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/create$',
+    url(r'^(?P<team>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/create$',
         BootVersionCreateView.as_view(),
         name='boot_version_create'),
-    url(r'^(?P<group>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/(?P<version>[-a-zA-Z0-9_]+)/delete$',
+    url(r'^(?P<team>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/(?P<version>[-a-zA-Z0-9_]+)/delete$',
         BootVersionDeleteView.as_view(),
         name='boot_version_delete'),
 )

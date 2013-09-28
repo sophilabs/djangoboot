@@ -5,7 +5,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from boots.models import Boot, BootVersion
-from accounts.views import GroupMixin
+from accounts.views import TeamMixin
 
 
 class BootObjectMixin(SingleObjectMixin):
@@ -16,7 +16,7 @@ class BootObjectMixin(SingleObjectMixin):
             queryset = self.get_queryset()
 
         try:
-            obj = queryset.get(group__slug=self.kwargs.get('group'),
+            obj = queryset.get(team__slug=self.kwargs.get('team'),
                                slug=self.kwargs.get('boot'))
         except ObjectDoesNotExist:
             raise Http404
@@ -32,7 +32,7 @@ class BootVersionObjectMixin(SingleObjectMixin):
             queryset = self.get_queryset()
 
         try:
-            obj = queryset.get(boot__group__slug=self.kwargs.get('group'),
+            obj = queryset.get(boot__team__slug=self.kwargs.get('team'),
                                boot__slug=self.kwargs.get('boot'),
                                slug=self.kwargs.get('version'))
         except ObjectDoesNotExist:
@@ -49,34 +49,34 @@ class TrendingView(TemplateView):
     template_name = 'boots/trending.html'
 
 
-class GroupView(TemplateView):
-    template_name = 'boots/group.html'
+class TeamView(TemplateView):
+    template_name = 'boots/team.html'
 
 
 class BootView(TemplateView):
     template_name = 'boots/boot.html'
 
 
-class BootCreateView(GroupMixin, CreateView):
+class BootCreateView(TeamMixin, CreateView):
     model = Boot
     template_name = 'boots/boot_create.html'
 
 
-class BootUpdateView(GroupMixin, BootObjectMixin, UpdateView):
+class BootUpdateView(TeamMixin, BootObjectMixin, UpdateView):
     template_name = 'boots/boot_update.html'
 
 
-class BootDeleteView(GroupMixin, BootObjectMixin, DeleteView):
+class BootDeleteView(TeamMixin, BootObjectMixin, DeleteView):
     template_name = 'boots/boot_delete.html'
 
 
-class BootVersionCreateView(GroupMixin, BootVersionObjectMixin, CreateView):
+class BootVersionCreateView(TeamMixin, BootVersionObjectMixin, CreateView):
     template_name = 'boots/boot_version_create.html'
     fields = ['slug', 'source']
 
     def dispatch(self, request, *args, **kwargs):
         self.boot = get_object_or_404(Boot,
-                                      group__slug=self.kwargs.get('group'),
+                                      team__slug=self.kwargs.get('team'),
                                       slug=self.kwargs.get('boot'))
         return super(BootVersionCreateView, self).dispatch(*args, **kwargs)
 
@@ -87,7 +87,7 @@ class BootVersionCreateView(GroupMixin, BootVersionObjectMixin, CreateView):
         return super(ModelFormMixin, self).form_valid(form)
 
 
-class BootVersionDeleteView(GroupMixin, BootVersionObjectMixin, DeleteView):
+class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
     template_name = 'boots/boot_version_delete.html'
 
 

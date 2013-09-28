@@ -5,14 +5,14 @@ from django.utils.translation import ugettext as _
 from core.models import TimeStampedMixin
 
 
-class Group(models.Model):
+class Team(models.Model):
     slug = models.SlugField(_('slug'), unique=True)
     name = models.CharField(_('name'), max_length=100)
     email = models.EmailField(_('email'))
 
     @models.permalink
     def get_absolute_url(self):
-        return 'boots:group', [self.slug]
+        return 'boots:team', [self.slug]
 
 
 class UserManager(BaseUserManager):
@@ -22,10 +22,10 @@ class UserManager(BaseUserManager):
             raise ValueError('The given username must be set')
         email = UserManager.normalize_email(email)
 
-        group = Group(slug=username, name=username, email=email)
-        group.save(using=self._db)
+        team = Team(slug=username, name=username, email=email)
+        team.save(using=self._db)
 
-        user = self.model(group=group, username=username, email=email)
+        user = self.model(team=team, username=username, email=email)
         user.set_password(password)
         user.save(using=self._db)
 
@@ -40,8 +40,8 @@ class UserManager(BaseUserManager):
 
 
 class User(TimeStampedMixin, AbstractBaseUser):
-    group = models.ForeignKey(Group, related_name='default_users', verbose_name=_('default group'))
-    groups = models.ManyToManyField(Group, related_name='users', verbose_name=_('groups'))
+    team = models.ForeignKey(Team, related_name='default_users', verbose_name=_('default team'))
+    teams = models.ManyToManyField(Team, related_name='users', verbose_name=_('teams'))
 
     username = models.CharField(_('username'), max_length=100, unique=True)
     email = models.EmailField(_('email'))
@@ -58,4 +58,4 @@ class User(TimeStampedMixin, AbstractBaseUser):
         return self.is_superuser
 
     def get_absolute_url(self):
-        return self.group.get_absolute_url()
+        return self.team.get_absolute_url()

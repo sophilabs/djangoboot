@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _
 from taggit.managers import TaggableManager
 
 from core.models import TimeStampedMixin
-from accounts.models import Group
+from accounts.models import Team
 
 
 class Boot(TimeStampedMixin, models.Model):
@@ -16,7 +16,7 @@ class Boot(TimeStampedMixin, models.Model):
         (TYPE_APP, _('application')),
     )
 
-    group = models.ForeignKey(Group, verbose_name=_('group'))
+    team = models.ForeignKey(Team, verbose_name=_('team'))
     slug = models.SlugField(_('slug'))
     tagline = models.CharField(max_length=250)
     url = models.URLField(null=True, blank=True)
@@ -24,7 +24,7 @@ class Boot(TimeStampedMixin, models.Model):
     tags = TaggableManager(verbose_name=_('tags'))
 
     class Meta:
-        unique_together = (('group', 'slug',),)
+        unique_together = (('team', 'slug',),)
 
 
 class BootVersion(TimeStampedMixin, models.Model):
@@ -33,8 +33,8 @@ class BootVersion(TimeStampedMixin, models.Model):
     source = models.URLField(_('source'))
 
     @property
-    def group(self):
-        return self.boot.group
+    def team(self):
+        return self.boot.team
 
     class Meta:
         unique_together = (('boot', 'slug',),)

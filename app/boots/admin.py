@@ -11,8 +11,8 @@ class BootVersionInline(admin.TabularInline):
 
 class BootAdmin(admin.ModelAdmin):
 
-    search_fields = ('name', 'group__name',)
-    list_display = ('group', 'slug',)
+    search_fields = ('name', 'team__name',)
+    list_display = ('team', 'slug',)
     list_filter = ('type',)
     inlines = [
         BootVersionInline,
