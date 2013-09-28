@@ -118,7 +118,7 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.github.GithubOAuth2',
 )
 
-SOCIAL_AUTH_USER_MODEL = 'accounts.models.User'
+SOCIAL_AUTH_USER_MODEL = 'accounts.User'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -137,6 +137,8 @@ INSTALLED_APPS = (
     'accounts',
     'boots',
     'home',
+
+    'social.apps.django_app.default',
 )
 
 RESERVED_SLUGS = ['create', 'update', 'delete']
