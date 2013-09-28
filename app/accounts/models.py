@@ -42,7 +42,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, TimeStampedMixin, PermissionsMixin):
 
     username = models.CharField(_('username'), max_length=100, unique=True)
-    email = models.EmailField(_('email'))
+    email = models.EmailField(_('email'), unique=True)
 
     team = models.ForeignKey(Team, related_name='default_users', verbose_name=_('default team'))
     teams = models.ManyToManyField(Team, related_name='users', verbose_name=_('teams'))
@@ -56,6 +56,8 @@ class User(AbstractBaseUser, TimeStampedMixin, PermissionsMixin):
     def is_staff(self):
         return self.is_superuser
 
+    def get_short_name(self):
+        return self.username
 
     def get_absolute_url(self):
         return self.team.get_absolute_url()
