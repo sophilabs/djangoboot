@@ -5,15 +5,16 @@ from django import template
 register = template.Library()
 
 
+def _get_next(context):
+    request = context.get('request')
+    return request.GET.get('next') or request.get_full_path() if request else None
+
+
 @register.simple_tag(takes_context=True)
 def social(context, backend):
-    request = context.get('request')
-    next = request.GET.get('next') or request.get_full_path()
-    return reverse('social:begin', args=(backend,)) + '?next=' + next
+    return reverse('social:begin', args=(backend,)) + '?next=' + _get_next(context)
 
 
 @register.simple_tag(takes_context=True)
 def logout(context):
-    request = context.get('request')
-    next = request.GET.get('next') or request.get_full_path()
-    return reverse('accounts:logout') + '?next=' + next
+    return reverse('accounts:logout') + '?next=' + _get_next(context)
