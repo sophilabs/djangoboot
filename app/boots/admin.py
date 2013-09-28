@@ -6,7 +6,7 @@ class BootVersionInline(admin.TabularInline):
 
     model = BootVersion
     ordering = ('created', 'id',)
-    fields = ('name', 'source',)
+    fields = ('slug', 'source',)
 
 
 class BootAdmin(admin.ModelAdmin):

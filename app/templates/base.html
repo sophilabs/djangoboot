@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load i18n %}
+{% load future %}
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -33,18 +34,18 @@
                 <a class="navbar-brand" href="/">djangoboot</a>
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <form class="navbar-form navbar-left" role="search">
+                <form action="{% url 'boots:search' %}" method="get" class="navbar-form navbar-left" role="search">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search for boots...">
+                        <input name="q" type="text" class="form-control" placeholder="Search for boots...">
                     </div>
                 </form>
                 <ul class="nav navbar-nav">
-                    <li><a href="#">{% trans 'Trending' %}</a></li>
+                    <li><a href="{% url 'boots:trending' %}">{% trans 'Trending' %}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ request.user.group.slug }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">{% trans 'Sign out' %}</a></li>
                         </ul>
