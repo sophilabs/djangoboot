@@ -29,7 +29,7 @@ class GroupMixin(SingleObjectMixin, FormMixin):
             raise PermissionDenied()
         return obj
 
-    def get_form_class(self):
-        form = super(GroupMixin, self).get_form_class()
+    def get_form(self):
+        form = super(GroupMixin, self).get_form()
         form.group.queryset = self.get_groups_queryset()
         return form
