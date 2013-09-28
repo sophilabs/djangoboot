@@ -63,6 +63,11 @@ class BootCreateView(TeamMixin, CreateView):
     model = Boot
     template_name = 'boots/boot_create.html'
 
+    def get_initial(self):
+        return {
+            'team': self.request.user.team.id
+        }
+
 
 class BootUpdateView(TeamMixin, BootObjectMixin, UpdateView):
     template_name = 'boots/boot_update.html'
