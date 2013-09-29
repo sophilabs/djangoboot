@@ -43,7 +43,7 @@ class UserManager(BaseUserManager):
         return u
 
 
-class User(AbstractBaseUser, TimeStampedMixin, PermissionsMixin):
+class User(TimeStampedMixin, AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(_('username'), max_length=100, unique=True)
     email = models.EmailField(_('email'), unique=True)

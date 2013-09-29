@@ -7,7 +7,7 @@ from core.models import TimeStampedMixin
 from accounts.models import Team
 
 
-class Boot(models.Model, TimeStampedMixin):
+class Boot(TimeStampedMixin, models.Model):
     TYPE_PROJECT = 'P'
     TYPE_APP = 'A'
 
@@ -31,7 +31,7 @@ class Boot(models.Model, TimeStampedMixin):
         unique_together = (('team', 'slug',),)
 
 
-class BootVersion(models.Model, TimeStampedMixin):
+class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'))
     slug = models.SlugField(_('slug'))
     source = models.URLField(_('source'))
