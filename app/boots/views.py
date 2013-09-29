@@ -57,6 +57,11 @@ class BootVersionObjectMixin(SingleObjectMixin):
 class SearchView(BaseSearchView):
     template = 'boots/search.html'
 
+    def extra_context(self):
+        extra = super(SearchView, self).extra_context()
+        extra['facets'] = self.results.facet_counts()
+        return extra
+
     @classmethod
     def as_view(cls):
         return cls(

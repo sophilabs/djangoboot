@@ -46,6 +46,7 @@
                         </span>
                     </div>
                 </form>
+                <hr>
                 <h4>Type</h4>
                 <ul class="nav nav-pills nav-justified">
                     <li class="{% if not form.type.value %}active{% endif %}">
@@ -61,28 +62,30 @@
                         <a href="{% qurl request.get_full_path page=None type='C' %}">{% trans 'Cookie' %}</a>
                     </li>
                 </ul>
-                <div class="btn-group btn-group-sm btn-group-justified">
-
-                </div>
+                <hr>
                 <h4>Tags</h4>
                 <ul class="nav nav-pills nav-stacked">
+                    {% for facet in facets.fields.tags %}
+                    {% if facet.0 in form.tag.value %}
                     <li class="active">
-                        <a href="#">
-                            <span class="badge pull-right">42</span>
-                            puppet
+                        <a href="{% qurl request.get_full_path page=None tag-=facet.0 %}">
+                            <span class="badge pull-right">{{ facet.1 }}</span>
+                            {{ facet.0 }}
                         </a>
                     </li>
-                    <li class="">
-                        <a href="#">
-                            <span class="badge pull-right">34</span>
-                            sphinx
+                    {% else %}
+                    <li>
+                        <a href="{% qurl request.get_full_path page=None tag+=facet.0 %}">
+                            <span class="badge pull-right">{{ facet.1 }}</span>
+                            {{ facet.0 }}
                         </a>
                     </li>
+                    {% endif %}
+                    {% endfor %}
                     <li>
                         <form class="form-inline" role="form" method="get" action="{% qurl request.get_full_path page=None %}">
                             <input name="tag" class="form-control" type="text" placeholder="Type a tag...">
-                            <input name="tag" class="form-control" type="text" value="aaad">
-                            <input type="submit" >
+                            {{ form.tag }}
                         </form>
                     </li>
                 </ul>

@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from haystack import forms as hsforms
 from haystack.query import SearchQuerySet
 from boots.models import Boot
+from core.forms import FreeMultipleChoiceField
 
 
 from boots.models import Boot, BootVersion
@@ -48,17 +49,20 @@ class SearchForm(hsforms.SearchForm):
     #sort = forms.CharField(required=False, label=_('Sort'))
 
     type = forms.CharField(required=False, label=_('Type'))
-    #tag = forms.MultipleChoiceField(required=False, label=_('Tag'))
+    tag = FreeMultipleChoiceField(required=False, label=_('Tag'))
 
     def search(self):
         sqs = super(SearchForm, self).search()
+
+        sqs = sqs.facet('tags')
+
         if not self.is_valid():
-            print self.errors
             return sqs
-        print 'aaa'
-        print self.cleaned_data['tag']
+        if self.cleaned_data['tag']:
+            for tag in self.cleaned_data['tag']:
+                sqs = sqs.filter(tags_exact=tag)
         if self.cleaned_data['type']:
-            sqs = sqs.filter(type=self.cleaned_data['type'])
+            sqs = sqs.filter(type_exact=self.cleaned_data['type'])
 
         return sqs
 
