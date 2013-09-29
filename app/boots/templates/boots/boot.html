@@ -7,7 +7,7 @@
 {% load stars %}
 {% load humanize %}
 
-{% block title %}{{ block.super }} - {{ boot.team }}/{{ boot }}{% endblock %}
+{% block title %}{{ block.super }} - {{ boot.team }}/{{ boot }}{% if version %}/{{ version.slug }}{% endif %}{% endblock %}
 
 {% block css %}
     {{ block.super }}
@@ -37,6 +37,10 @@
                     <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>
                     <span class="text-muted">/</span>
                     <a href="{{ boot.get_absolute_url }}">{{ boot.slug }}</a>
+                    {% if version %}
+                        <span class="text-muted">/</span>
+                        <a href="{{ version.get_absolute_url }}">{{ version.slug }}</a>
+                    {% endif %}
                 </h1>
             </div>
 
