@@ -61,6 +61,7 @@ class SearchForm(hsforms.SearchForm):
 
     def __init__(self, *args, **kwargs):
         self.sort = kwargs.pop('sort', 'loved')
+        self.team = kwargs.pop('team', None)
         super(SearchForm, self).__init__(*args, **kwargs)
 
     def search(self):
@@ -68,6 +69,9 @@ class SearchForm(hsforms.SearchForm):
 
         sqs = sqs.facet('tags')
         sqs = sqs.order_by(self.sorted_value, 'id')
+
+        if self.team:
+            sqs = sqs.filter(team_slug=self.team)
 
         if not self.is_valid():
             return sqs
