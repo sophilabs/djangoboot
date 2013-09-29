@@ -1,0 +1,21 @@
+{% load stars %}
+{% load qurl %}
+{% load gravatar %}
+<div class="list-group-item">
+    <h4 class="list-group-item-heading">
+        <span class="pull-right">{% star_button boot.object css_class='btn-xs' %}</span>
+        <a href="{{ boot.object.team.get_absolute_url }}">{{ boot.object.team.slug }}</a>
+        /
+        <a href="{{ boot.object.get_absolute_url }}">{{ boot.slug }}</a>
+    </h4>
+    <p class="list-group-item-text">{{ boot.object.tagline }}</p>
+    <p class="list-group-item-text">
+        {% if not team %}
+        <a href="{{ boot.object.team.get_absolute_url }}"><img src="{% gravatar boot.object.team.email %}" /></a>
+        {% endif %}
+        <a href="{% qurl search_url page=None type=boot.object.type %}" class="label label-default">{{ boot.object.get_type_display|lower }}</a>
+        {% for tag in boot.object.tags.all %}
+            <a href="{% qurl search_url page=None tag+=tag.slug %}" class="label label-primary">{{ tag.slug }}</a>
+        {% endfor %}
+    </p>
+</div>

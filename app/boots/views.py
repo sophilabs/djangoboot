@@ -93,8 +93,15 @@ class TrendingView(SearchView):
             kwargs.update(form_kwargs)
         return super(TrendingView, self).build_form(kwargs)
 
+
 class TeamView(TeamObjectMixin, SearchView):
     template = 'boots/team.html'
+
+    def build_form(self, form_kwargs=None):
+        kwargs = {'team': self.kwargs['team']}
+        if form_kwargs:
+            kwargs.update(form_kwargs)
+        return super(TeamView, self).build_form(kwargs)
 
     def extra_context(self):
         extra = super(TeamView, self).extra_context()

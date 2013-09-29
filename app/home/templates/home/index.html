@@ -9,6 +9,7 @@
 
 {% block css %}
     <link href="{% static 'home/css/index.css' %}" rel="stylesheet">
+    {% include 'boots/star_boot_css.html' %}
 {% endblock %}
 
 {% block content %}
@@ -49,32 +50,42 @@
             </div>
         </div>
     </main>
+    {% url 'boots:search' as search_url %}
     <div class="container">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <h2>Trending Projects</h2>
             <div class="list-group">
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">...</p>
-                </a>
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Test test test test</p>
-                </a>
+                {% for boot in trending.projects %}
+                {% include 'boots/_boot_item.html' %}
+                {% empty %}
+                <div class="alert alert-info text-center">No boots found.</div>
+                {% endfor %}
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <h2>Trending Apps</h2>
             <div class="list-group">
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Test test test test</p>
-                </a>
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">List group item heading</h4>
-                    <p class="list-group-item-text">Test test test test</p>
-                </a>
+                {% for boot in trending.apps %}
+                    {% include 'boots/_boot_item.html' %}
+                {% empty %}
+                    <div class="alert alert-info text-center">No boots found.</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h2>Trending CookieCutters</h2>
+            <div class="list-group">
+                {% for boot in trending.cookiecutters %}
+                    {% include 'boots/_boot_item.html' %}
+                {% empty %}
+                    <div class="alert alert-info text-center">No boots found.</div>
+                {% endfor %}
             </div>
         </div>
     </div>
 {% endblock content %}
+
+{% block js %}
+    {{ block.super }}
+    {% include 'boots/star_boot_js.html' %}
+{% endblock %}

@@ -139,21 +139,7 @@
                     <div class="col-lg-12">
                         <div class="list-group">
                             {% for boot in page.object_list %}
-                            <div class="list-group-item">
-                                <h4 class="list-group-item-heading">
-                                    <span class="pull-right">{% star_button boot.object css_class='btn-xs' %}</span>
-                                    <a href="{{ boot.object.team.get_absolute_url }}">{{ boot.object.team.slug }}</a>
-                                    /
-                                    <a href="{{ boot.object.get_absolute_url }}">{{ boot.slug }}</a>
-                                </h4>
-                                <p class="list-group-item-text">{{ boot.object.tagline }}</p>
-                                <p class="list-group-item-text">
-                                    <a href="{% qurl request.get_full_path page=None type=boot.object.type %}" class="label label-default">{{ boot.object.get_type_display|lower }}</a>
-                                    {% for tag in boot.object.tags.all %}
-                                    <a href="{% qurl request.get_full_path page=None tag+=tag.slug %}" class="label label-primary">{{ tag.slug }}</a>
-                                    {% endfor %}
-                                </p>
-                            </div>
+                            {% include 'boots/_boot_item.html' with search_url=request.get_full_path %}
                             {% empty %}
                                 <div class="alert alert-info text-center">No boots found.</div>
                             {% endfor %}
