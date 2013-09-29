@@ -58,11 +58,19 @@
 
                     <div class="col-md-4 left">
                         {% bootstrap_field form.url %}
-                        <div class="pull-right">
-                            {% bootstrap_form_buttons %}
-                                {% block buttons %}
+
+                        <div class="form-buttons">
+                            <div class="pull-right buttons">
+                                {% bootstrap_form_buttons %}
+                                    {% block buttons %}
+                                    {% endblock %}
+                                {% end_bootstrap_form_buttons %}
+                            </div>
+
+                            <div class="text-right buttons-help">
+                                {% block buttons_help %}
                                 {% endblock %}
-                            {% end_bootstrap_form_buttons %}
+                            </div>
                         </div>
                     </div>
                 </div>

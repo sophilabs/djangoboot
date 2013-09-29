@@ -33,6 +33,17 @@ footer a:hover {
     text-decoration: none;
 }
 
+.form-buttons {
+    margin-top: 40px;
+}
+
+.form-buttons .buttons {
+    margin-left: 10px;
+}
+
+.form-buttons .buttons-help {
+    vertical-align: middle;
+}
 
 .btn-important {
     color: #ffffff;

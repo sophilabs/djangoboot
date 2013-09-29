@@ -36,6 +36,10 @@
                             {% endif %}
                         </div>
                     </div>
+
+                    {% if team in request.user.get_teams and not team.default_users.all %}
+                        <a class="btn btn-sm btn-default" href="{{ team.get_update_url }}"><i class="icon-pencil"></i> {% trans 'Modify' %}</a>
+                    {% endif %}
                 </div>
                 {% endif %}
                 <form class="form-inline" role="form" method="get" action="{% qurl request.get_full_path page=None q=None %}">
