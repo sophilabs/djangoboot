@@ -83,26 +83,13 @@ class Boot(TimeStampedMixin, models.Model):
             self.update_star_count()
         return self.r_star_count_month
 
-    def star_count_increment(self, value=1):
-        self.r_star_count = self.star_count + value
-
-        self.r_star_count_day = self.star_count_day + value
-        self.r_star_count_week = self.star_count_week + value
-        self.r_star_count_month = self.star_count_month + value
-
-        self.save()
-        return self.star_count
-
-    def star_count_decrement(self):
-        return self.star_count_increment(-1)
-
     def update_star_count(self):
         self.r_star_count = self.stars.count()
 
         now = timezone.now()
         self.r_star_count_day = self.stars.filter(timestamp__gte=now - timedelta(days=1)).count()
-        self.r_star_count_week = self.stars.filter(timestamp__gte=now - timedelta(weeks=1)).count()
-        self.r_star_count_month = self.stars.filter(timestamp__gte=now - timedelta(months=1)).count()
+        self.r_star_count_week = self.stars.filter(timestamp__gte=now - timedelta(days=7)).count()
+        self.r_star_count_month = self.stars.filter(timestamp__gte=now - timedelta(days=30)).count()
 
         self.save()
 
@@ -122,7 +109,7 @@ class Star(models.Model):
 class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
     slug = SlugField(_('slug'), help_text=_('Version slug.'))
-    source = models.URLField(_('source'), help_text=_('ZIP source containing the template.'))
+    source = models.URLField(_('source'), help_text=_('Template source url.'))
     append = models.CharField(_('command arguments'), help_text=_('Extra command arguments for django-admin.py'),
                               null=True, blank=True, max_length=200)
 
@@ -130,8 +117,16 @@ class BootVersion(TimeStampedMixin, models.Model):
         return unicode(self.boot) + ' ' + self.slug
 
     def get_command(self):
-        return u'./django-admin.py %s --template=%s %s' % (
-            Boot.COMMAND[self.boot.type], self.source, self.append if self.append else '')
+        if self.boot.type == Boot.TYPE_COOKIECUTTER:
+            return u'cookiecutter {source}'.format(
+                source=self.source
+            )
+        else:
+            return u'./django-admin.py {type} --template={source} {append}'.format(
+                type=Boot.COMMAND[self.boot.type],
+                source=self.source,
+                append=self.append if self.append else ''
+            )
 
     @property
     def team(self):
@@ -153,9 +148,9 @@ class BootVersion(TimeStampedMixin, models.Model):
 
 @receiver(post_save, sender=Star)
 def star_count_increment(sender, instance, created, **kwargs):
-    instance.boot.star_count_increment()
+    instance.boot.update_star_count()
 
 
 @receiver(pre_delete, sender=Star)
 def star_count_decrement(sender, instance, **kwargs):
-    instance.boot.star_count_decrement()
+    instance.boot.update_star_count()
