@@ -1,9 +1,23 @@
-{%  extends "base.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
+{% load staticfiles %}
 
-{% block title %}{% trans 'Page Not found' %}{% endblock %}
+{% block subtitle %}{% trans 'Page not found' %}{% endblock %}
 
 {% block content %}
-<p>{% trans 'This is not the page you were looking for.' %}</p>
+    <img style="z-index: -100; position: absolute; top: 50%; right: 0; margin-top: -247px;" src="{% static 'img/europe.png' %}" alt="Europe"/>
+
+    <main role="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 left">
+                    <h1>404</h1>
+                    <h3>{% trans 'Boot not found' %}</h3>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock content %}
+
+{% block footer %}{% endblock %}

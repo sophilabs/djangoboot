@@ -1,9 +1,26 @@
-{%  extends "base.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
+{% load staticfiles %}
 
-{% block title %}{% trans 'Boot on fire!' %}{% endblock %}
+{% block subtitle %}{% trans 'Server error' %}{% endblock %}
 
 {% block content %}
-<p>{% trans 'Oops...' %}</p>
+
+    <main role="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 left">
+                    <h1>500</h1>
+                    <h3>{% trans 'Server error' %}</h3>
+
+                    <div class="text-center">
+                        <img src="{% static 'img/bootstraps.jpg' %}" alt="Boot"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 {% endblock content %}
+
+{% block footer %}{% endblock %}
