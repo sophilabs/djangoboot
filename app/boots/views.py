@@ -4,16 +4,15 @@ from django.views.generic.detail import BaseDetailView
 from django.views.generic.base import TemplateResponseMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
-from boots.models import Boot, BootVersion, Star
-from boots.forms import BootVersionCreationForm, SearchForm
-from accounts.views import TeamMixin, TeamObjectMixin
-from boots.models import Team, Boot, BootVersion
-from core.views import EnsureCSRFMixin, JSONResponseMixin
 from haystack.views import SearchView as BaseSearchView
 from haystack.query import SearchQuerySet
+
+from boots.models import Boot, BootVersion, Star
+from boots.forms import BootForm, BootVersionForm, SearchForm
+from accounts.views import TeamMixin, TeamObjectMixin
+from core.views import EnsureCSRFMixin, JSONResponseMixin
 
 
 class BootObjectMixin(SingleObjectMixin):
@@ -105,8 +104,9 @@ class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateRespo
 
 
 class BootCreateView(TeamMixin, CreateView):
-    model = Boot
     template_name = 'boots/boot_create.html'
+    form_class = BootForm
+    model = Boot
 
     def get_initial(self):
         return {
@@ -116,16 +116,28 @@ class BootCreateView(TeamMixin, CreateView):
 
 class BootUpdateView(TeamMixin, BootObjectMixin, UpdateView):
     template_name = 'boots/boot_update.html'
+    form_class = BootForm
 
 
 class BootDeleteView(TeamMixin, BootObjectMixin, DeleteView):
-    template_name = 'boots/boot_delete.html'
+    template_name = 'delete.html'
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
 
 
-class BootVersionCreateView(TeamMixin, BootObjectMixin, CreateView):
+class BootVersionCreateView(TeamMixin, CreateView):
     template_name = 'boots/boot_version_create.html'
-    form_class = BootVersionCreationForm
+    form_class = BootVersionForm
     model = BootVersion
+
+    def get_form(self, form_class):
+        self.boot = Boot.objects.get(team__slug=self.kwargs.get('team'),
+                                     slug=self.kwargs.get('boot'))
+
+        form = super(BootVersionCreateView, self).get_form(form_class)
+        form.boot = self.boot
+        return form
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -135,7 +147,10 @@ class BootVersionCreateView(TeamMixin, BootObjectMixin, CreateView):
 
 
 class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
-    template_name = 'boots/boot_version_delete.html'
+    template_name = 'delete.html'
+
+    def get_success_url(self):
+        return self.object.boot.get_absolute_url()
 
 
 class BootVersionView(EnsureCSRFMixin, BootContextMixin, BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):

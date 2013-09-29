@@ -53,7 +53,7 @@
                         <div class="input-group">
                             <input disabled="disabled" type="text" class="form-control input-lg" value="{{ version.source }}">
                             <span class="input-group-btn">
-                                <button id="boot-copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ version.source }}">
+                                <button id="copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ version.source }}">
                                     <i class="icon-copy"></i>
                                 </button>
                             </span>
@@ -100,11 +100,6 @@
 
 {% block js %}
     {{ block.super }}
-    <script src="{% static 'js/ZeroClipboard.js' %}"></script>
-    <script>
-        var clip = new ZeroClipboard(document.getElementById('boot-copy-button'), {
-            moviePath: '{% static "swf/ZeroClipboard.swf" %}'
-        });
-    </script>
+    {% include 'zero_clipboard_js.html' %}
     {% include 'boots/star_boot_js.html' %}
 {% endblock %}
