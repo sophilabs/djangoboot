@@ -2,6 +2,7 @@
 *.py[co]
 app/djangoboot/settings/secrets.py
 app/assets
+solr/data
 
 !.gitignore
 !.travis.yml
