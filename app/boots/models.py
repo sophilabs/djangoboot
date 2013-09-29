@@ -91,6 +91,8 @@ class BootVersion(TimeStampedMixin, models.Model):
 
     class Meta:
         unique_together = (('boot', 'slug',),)
+        ordering = ('-created',)
+        get_latest_by = 'created'
 
 
 @receiver(post_save, sender=Star)

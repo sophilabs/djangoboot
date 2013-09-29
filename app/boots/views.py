@@ -11,7 +11,7 @@ from django.utils.translation import ugettext as _
 
 from boots.models import Boot, BootVersion, Star
 from boots.forms import BootVersionCreationForm
-from accounts.views import TeamMixin
+from accounts.views import TeamMixin, TeamObjectMixin
 from boots.models import Team, Boot, BootVersion
 from core.views import EnsureCSRFMixin
 from haystack.views import SearchView as BaseSearchView
@@ -74,21 +74,11 @@ class TrendingView(SearchView):
     template_name = 'boots/trending.html'
 
 
-class TeamView(SearchView):
+class TeamView(TeamObjectMixin, SearchView):
     template_name = 'boots/team.html'
 
-    def __get_team(self):
-        try:
-            return Team.objects.get(slug=self.kwargs['team'])
-        except Team.DoesNotExist:
-            raise Http404
-
-    def get_context_data(self, **kwargs):
-        kwargs['team'] = self.__get_team()
-        return super(TeamView, self).get_context_data(**kwargs)
-
     def get_queryset(self):
-        return super(TeamView, self).get_queryset().filter(team=self.__get_team())
+        return super(TeamView, self).get_queryset().filter(team=self.object)
 
 
 class BootContextMixin(object):
@@ -107,7 +97,7 @@ class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateRespo
     def get_object(self, queryset=None):
         self.boot = super(BootView, self).get_object(queryset)
         try:
-            return self.boot.versions.latest('created')
+            return self.boot.versions.latest()
         except ObjectDoesNotExist:
             return None
 
