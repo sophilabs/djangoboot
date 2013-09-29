@@ -11,51 +11,68 @@
             <div class="page-header">
                 <span class="pull-right"><a class="btn btn-primary btn-md" href="#"><i class="icon-heart"></i> 45</a></span>
 
-                <h2><a href="#">{{ object.team.slug }}</a> <span class="text-muted">/</span> <a href="#">{{ object.slug }}</a></h2>
+                <h2>
+                    <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>
+                    <span class="text-muted">/</span>
+                    <a href="{{ boot.get_absolute_url }}">{{ boot.slug }}</a>
+                </h2>
             </div>
 
-            {{ object.tagline }} - <a href="{{ object.url }}">{{ object.url }}</a> <br/>
 
-            <div class="row">
-                <div class="col-md-8">
-                    {% for tag in object.tags.all %}
-                        <a href="#" class="label label-primary">{{ tag }}</a>
-                    {% endfor %}
+            {% if object %}
+                {{ boot.tagline }} {% if boot.url %} - <a href="{{ boot.url }}">{{ boot.url }}</a> {% endif %}<br/>
 
-                    <hr/>
+                <div class="row">
+                    <div class="col-md-8">
+                        {% for tag in boot.tags.all %}
+                            <a href="#" class="label label-primary">{{ tag }}</a>
+                        {% endfor %}
 
-                    <div class="input-group">
-                        <input disabled="disabled" type="text" class="form-control input-lg" value="http://asdf.com/qwer/uiop.zip">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-search btn-lg btn-primary" data-clipboard-text=""><i class="icon-copy"></i></button>
-                        </span>
+                        <hr/>
+
+                        <div class="input-group">
+                            <input disabled="disabled" type="text" class="form-control input-lg" value="{{ object.source }}">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ object.source }}">
+                                    <i class="icon-copy"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="list-group">
+                            {% for version in boot.versions.all %}
+                                <a href="{% if version != object %}{{ version.get_absolute_url }}{% endif %}" class="list-group-item {% if version == object %}active{% endif %}">
+                                    <span>{{ version.created }}</span>
+                                    <span class="badge">{{ version.slug }}</span>
+                                </a>
+                            {% endfor %}
+
+                            {% if boot_team_member %}
+                                <a href="{{ boot.get_create_url }}" class="list-group-item">
+                                    <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="list-group">
-                        <a href="#" class="list-group-item active">
-                            <span>December 14, 2013</span>
-                            <span class="badge">0.4</span>
-                        </a>
-
-                        <a href="#" class="list-group-item">
-                            <span>December 14, 2013</span>
-                            <span class="badge">0.4</span>
-                        </a>
-
-                        <a href="#" class="list-group-item">
-                            <span>December 14, 2013</span>
-                            <span class="badge">0.4</span>
-                        </a>
-
-                        <a href="#" class="list-group-item">
-                            <span>December 14, 2013</span>
-                            <span class="badge">0.4</span>
-                        </a>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-offset-4 col-md-4">
+                        <h3></h3>
+                        <div class="text-center">
+                            {% trans 'This boot does not have any version.' %}
+                            {% if boot_team_member %}
+                                <hr/>
+                                <a href="{{ boot.get_create_url }}" class="btn btn-primary btn-lg">
+                                    <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </main>
 {% endblock %}

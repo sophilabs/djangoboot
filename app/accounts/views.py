@@ -31,10 +31,17 @@ class TeamDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'accounts/team_delete.html'
 
 
-class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
+class UserTeamsMixin(object):
+
     def get_teams_queryset(self):
         user = self.request.user
-        return Team.objects.filter(Q(default_users=user) | Q(users=user))
+        if user.is_anonymous():
+            return Team.objects.none()
+        else:
+            return Team.objects.filter(Q(default_users=user) | Q(users=user))
+
+
+class TeamMixin(LoginRequiredMixin, UserTeamsMixin, FormMixin, SingleObjectMixin):
 
     def get_object(self, queryset=None):
         obj = super(TeamMixin, self).get_object(queryset)

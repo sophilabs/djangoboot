@@ -27,14 +27,18 @@ class Boot(TimeStampedMixin, models.Model):
     def get_absolute_url(self):
         return 'boots:boot', [self.team.slug, self.slug]
 
+    @models.permalink
+    def get_create_url(self):
+        return 'boots:boot_version_create', [self.team.slug, self.slug]
+
     class Meta:
         unique_together = (('team', 'slug',),)
 
 
 class BootVersion(TimeStampedMixin, models.Model):
-    boot = models.ForeignKey(Boot, verbose_name=_('boot'))
-    slug = models.SlugField(_('slug'))
-    source = models.URLField(_('source'))
+    boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
+    slug = models.SlugField(_('slug'), help_text=_('Version slug.'))
+    source = models.URLField(_('source'), help_text=_('ZIP source containing the template.'))
 
     @property
     def team(self):
