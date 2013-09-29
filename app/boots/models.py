@@ -4,7 +4,7 @@ from django.utils.translation import ugettext as _
 from taggit.managers import TaggableManager
 
 from core.models import TimeStampedMixin
-from accounts.models import Team
+from accounts.models import User, Team
 
 
 class Boot(TimeStampedMixin, models.Model):
@@ -41,6 +41,15 @@ class Boot(TimeStampedMixin, models.Model):
 
     class Meta:
         unique_together = (('team', 'slug',),)
+
+
+class Star(models.Model):
+    boot = models.ForeignKey(Boot, related_name='stars')
+    user = models.ForeignKey(User)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('boot', 'user',),)
 
 
 class BootVersion(TimeStampedMixin, models.Model):
