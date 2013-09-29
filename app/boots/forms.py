@@ -14,8 +14,12 @@ class BootForm(forms.ModelForm):
     def clean(self, *args, **kwargs):
         team = self.cleaned_data.get('team')
         slug = self.cleaned_data.get('slug')
-        if team and slug and Boot.objects.filter(team=team, slug=slug):
-            raise ValidationError(_('A boot with the specified slug already exists for that owner.'))
+        if team and slug:
+            queryset = Boot.objects.filter(team=team, slug=slug)
+            if self.instance:
+                queryset = queryset.exclude(id=self.instance.id)
+            if queryset:
+                raise ValidationError(_('A boot with the specified slug already exists for that owner.'))
         return super(BootForm, self).clean(*args, **kwargs)
 
     class Meta:
@@ -26,8 +30,12 @@ class BootVersionForm(forms.ModelForm):
 
     def clean(self, *args, **kwargs):
         slug = self.cleaned_data.get('slug')
-        if slug and self.boot.versions.filter(slug=slug):
-            raise ValidationError(_('A version with the specified slug already exists for this boot.'))
+        if slug:
+            queryset = self.boot.versions.filter(slug=slug)
+            if self.instance:
+                queryset = queryset.exclude(id=self.instance.id)
+            if queryset:
+                raise ValidationError(_('A version with the specified slug already exists for this boot.'))
         return super(BootVersionForm, self).clean(*args, **kwargs)
 
     class Meta:
