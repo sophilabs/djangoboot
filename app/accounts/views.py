@@ -30,13 +30,9 @@ class TeamObjectMixin(SingleObjectMixin):
         except ObjectDoesNotExist:
             raise Http404
 
-        print '*' * 100
-
         if not self.include_users:
             if User.objects.filter(team=obj):
                 raise Http404()
-
-        print '-' * 100
 
         return obj
 

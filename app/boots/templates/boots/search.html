@@ -26,13 +26,13 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <h5><i class="icon-user"></i> {{ team.slug }}</h5>
+                            <h5><b>{{ team }}</b> {% if team.name != team.slug %}<span class="text-muted">({{ team.slug }})</span>{% endif %}</h5>
                             <h5><i class="icon-envelope"></i> {{ team.email }}</h5>
                             {% if team.url %}
-                            <h5><i class="icon-link"></i> {{ team.url }}</h5>
+                            <h5><i class="icon-link"></i> <a href="{{ team.url }}">{{ team.url }}</a></h5>
                             {% endif %}
                             {% if team.created %}
-                            <h5><i class="icon-time"></i> Joined on {{ team.created|date:'M j, Y' }}</h5>
+                            <h5><i class="icon-calendar-empty"></i> Joined on {{ team.created|date:'M j, Y' }}</h5>
                             {% endif %}
                         </div>
                     </div>
