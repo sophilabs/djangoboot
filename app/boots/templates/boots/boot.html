@@ -9,9 +9,55 @@
     <main role="main">
         <div class="container">
             <div class="page-header">
-                <h1>{{ object.slug }}</h1>
+                <span class="pull-right"><a class="btn btn-primary btn-lg" href="#"><i class="icon-heart"></i> 45</a></span>
+
+                <h2><a href="#">{{ object.team.slug }}</a> <span class="text-muted">/</span> <a href="#">{{ object.slug }}</a></h2>
+
+                {% for tag in object.tags.all %}
+                    <a href="#" class="label label-primary">{{ tag }}</a>
+                {% endfor %}
+
+                <a href="{{ object.url }}">{{ object.url }}</a>
             </div>
 
+            <div class="row">
+                <div class="col-md-8">
+                    {{ object.tagline|linebreaks }}
+
+                    <hr/>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control input-lg" placeholder="" value="http://asdf.com/qwer/uiop.zip">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-search btn-lg btn-primary"><i class="icon-copy"></i></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <span class="label label-default">0.4</span>
+                            <span class="pull-right">December 14, 2013</span> <br/>
+                        </a>
+
+                        <a href="#" class="list-group-item">
+                            <span class="label label-default">0.4</span>
+                            <span class="pull-right">December 14, 2013</span> <br/>
+                        </a>
+
+                        <a href="#" class="list-group-item">
+                            <span class="label label-default">0.4</span>
+                            <span class="pull-right">December 14, 2013</span> <br/>
+                        </a>
+
+                        <a href="#" class="list-group-item">
+                            <span class="label label-default">0.4</span>
+                            <span class="pull-right">December 14, 2013</span> <br/>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 {% endblock %}
