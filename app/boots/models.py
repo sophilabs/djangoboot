@@ -12,10 +12,12 @@ from accounts.models import User, Team
 class Boot(TimeStampedMixin, models.Model):
     TYPE_PROJECT = 'P'
     TYPE_APP = 'A'
+    TYPE_COOKIECUTTER = 'C'
 
     TYPES = (
         (TYPE_PROJECT, _('Project')),
-        (TYPE_APP, _('Application')),
+        (TYPE_APP, _('App')),
+        (TYPE_COOKIECUTTER, _('CookieCutter')),
     )
 
     team = models.ForeignKey(Team, verbose_name=_('owner'))
@@ -25,7 +27,10 @@ class Boot(TimeStampedMixin, models.Model):
     type = models.CharField(_('type'), max_length=1, choices=TYPES, help_text=_('Type of template.'))
     tags = TaggableManager(verbose_name=_('tags'))
 
-    star_count = models.IntegerField(null=True, blank=True)
+    r_star_count = models.IntegerField(null=True, blank=True)
+    r_star_count_daily = models.IntegerField(null=True, blank=True)
+    r_star_count_weekly = models.IntegerField(null=True, blank=True)
+    r_star_count_monthly = models.IntegerField(null=True, blank=True)
 
     @models.permalink
     def get_absolute_url(self):
@@ -43,21 +48,48 @@ class Boot(TimeStampedMixin, models.Model):
     def get_create_url(self):
         return 'boots:boot_version_create', [self.team.slug, self.slug]
 
-    def get_star_count(self):
-        if self.star_count is None:
-            self.star_count = self.stars.count()
-            self.save()
-        return self.star_count
+    @property
+    def star_count(self):
+        if self.r_star_count is None:
+            self.update_star_count()
+        return self.r_star_count
 
-    def star_count_increment(self):
-        self.star_count = self.get_star_count() + 1
+    @property
+    def star_count_daily(self):
+        if self.r_star_count_daily is None:
+            self.update_star_count()
+        return self.r_star_count_daily
+
+    @property
+    def star_count_weekly(self):
+        if self.r_star_count_weekly is None:
+            self.update_star_count()
+        return self.r_star_count_weekly
+
+    @property
+    def star_count_monthly(self):
+        if self.r_star_count_monthly is None:
+            self.update_star_count()
+        return self.r_star_count_monthly
+
+    def star_count_increment(self, value=1):
+        self.r_star_count = self.star_count + value
+        self.r_star_count_daily = self.star_count_daily + value
+        self.r_star_count_weekly = self.star_count_weekly + value
+        self.r_star_count_monthly = self.star_count_monthly + value
         self.save()
         return self.star_count
 
     def star_count_decrement(self):
-        self.star_count = self.get_star_count() - 1
+        return self.star_count_increment(-1)
+
+    def update_star_count(self):
+        self.r_star_count = self.stars.count()
+        #TODO: calculate daily, ...
+        self.r_star_count_daily = self.stars.count()
+        self.r_star_count_weekly = self.stars.count()
+        self.r_star_count_monthly = self.stars.count()
         self.save()
-        return self.star_count
 
     class Meta:
         unique_together = (('team', 'slug',),)

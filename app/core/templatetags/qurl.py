@@ -44,7 +44,7 @@ def qurl(parser, token):
 
     qs = []
     if len(bits):
-        kwarg_re = re.compile(r"(\w+)(\-=|\+=|=)(.+)")
+        kwarg_re = re.compile(r"(\w+)(\-=|\+=|=)(.*)")
         for bit in bits:
             match = kwarg_re.match(bit)
             if not match:
@@ -68,8 +68,10 @@ class QURLNode(Node):
         qp = parse_qsl(urlp[4])
         for name, op, value in self.qs:
             name = smart_str(name)
-            value = smart_str(value.resolve(context))
+            value = value.resolve(context)
+            value = smart_str(value) if value is not None else None
             if op == '+=':
+                qp = filter(lambda (n, v): not(n == name and v == value), qp)
                 qp.append((name, value,))
             elif op == '-=':
                 qp = filter(lambda (n, v): not(n == name and v == value), qp)

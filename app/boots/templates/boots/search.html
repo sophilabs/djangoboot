@@ -5,10 +5,12 @@
 {% load gravatar %}
 {% load staticfiles %}
 {% load qurl %}
+{% load stars %}
 
 {% block css %}
     {{ block.super }}
     <link href="{% static 'boots/css/search.css' %}" rel="stylesheet">
+    {% include 'boots/star_boot_css.html' %}
 {% endblock css %}
 
 {% block class %}{{ block.super }} boots-search{% endblock class %}
@@ -44,7 +46,14 @@
                         </span>
                     </div>
                 </form>
-                <h3>Tags</h3>
+                <h4>Type</h4>
+                <div class="btn-group btn-group-sm">
+                    <a href="{% qurl request.get_full_path type=None %}" type="button" class="btn btn-default">All</a>
+                    <a href="{% qurl request.get_full_path type='P' %}" type="button" class="btn btn-default">{% trans 'Project' %}</a>
+                    <a href="{% qurl request.get_full_path type='A' %}" type="button" class="btn btn-default">{% trans 'App' %}</a>
+                    <a href="{% qurl request.get_full_path type='C' %}" type="button" class="btn btn-default">{% trans 'CookieCutter' %}</a>
+                </div>
+                <h4>Tags</h4>
                 <ul class="nav nav-pills nav-stacked">
                     <li class="active">
                         <a href="#">
@@ -76,39 +85,42 @@
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 {% block sort_options %}
-                                <li><a href="#">{% trans 'Most Loved' %}</a></li>
-                                <li><a href="#">{% trans 'Recently Added' %}</a></li>
-                                <li><a href="#">{% trans 'Recently Created' %}</a></li>
+                                <li><a href="{% qurl request.get_full_path sort='loved' %}">{% trans 'Most Loved' %}</a></li>
+                                <li><a href="{% qurl request.get_full_path sort='adde' %}">{% trans 'Recently Added' %}</a></li>
+                                <li><a href="{% qurl request.get_full_path sort='modified' %}">{% trans 'Recently Modified' %}</a></li>
                                 {% endblock sort_options %}
                             </ul>
                         </div>
-                        <h2>{% block search_title %}{% trans 'Results' %}{% endblock search_title %} <small>{{ object_list.count }} boots</small></h2>
+                        <h2>{% block search_title %}{% trans 'Results' %}{% endblock search_title %} <small>{{ page.paginator.count }} boots</small></h2>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="list-group">
                             {% for boot in page.object_list %}
-                                HOLA!
                             <div class="list-group-item">
                                 <h4 class="list-group-item-heading">
-                                    <span class="pull-right"><a class="btn btn-primary btn-xs" href="#"><i class="icon-heart"></i> 45</a></span>
-                                    <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>
+                                    <span class="pull-right">{% star_button boot.object css_class='btn-xs' %}</span>
+                                    <a href="{{ boot.object.team.get_absolute_url }}">{{ boot.object.team.slug }}</a>
                                     /
-                                    <a href="{{ boot.get_absolute_url }}">{{ boot.slug }}</a>
+                                    <a href="{{ boot.object.get_absolute_url }}">{{ boot.slug }}</a>
                                 </h4>
-                                <p class="list-group-item-text">{{ boot.tagline }}</p>
+                                <p class="list-group-item-text">{{ boot.object.tagline }}</p>
                                 <p class="list-group-item-text">
                                     {% if boot.type == 'A' %}
                                     <span class="label label-default">app</span>
+                                    {% elif boot.type == 'C' %}
+                                        <span class="label label-default">cookiecutter</span>
                                     {% else %}
                                     <span class="label label-default">project</span>
                                     {% endif %}
-                                    {% for tag in boot.tags.all %}
-                                    <a class="label label-primary" href="#">{{ tag.slug }}</a>
+                                    {% for tag in boot.object.tags.all %}
+                                    <a class="label label-primary" href="{% qurl request.get_full_path tag+=tag.slug %}">{{ tag.slug }}</a>
                                     {% endfor %}
                                 </p>
                             </div>
+                            {% empty %}
+                                <div class="alert alert-info text-center">No boots found.</div>
                             {% endfor %}
                         </div>
                     </div>
@@ -116,13 +128,24 @@
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <ul class="pagination">
-                            <li><a href="#">&laquo;</a></li>
+                            {% if page.has_previous %}
+                            <li><a href="{% qurl request.get_full_path page=page.previous_page_number %}">&laquo;</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="#">&laquo;</a></li>
+                            {% endif %}
+
+
+
                             <li><a href="#">1</a></li>
                             <li><a href="#">2</a></li>
                             <li><a href="#">3</a></li>
                             <li><a href="#">4</a></li>
                             <li><a href="#">5</a></li>
-                            <li><a href="#">&raquo;</a></li>
+                            {% if page.has_next %}
+                                <li><a href="{% qurl request.get_full_path page=page.next_page_number %}">&raquo;</a></li>
+                            {% else %}
+                                <li class="disabled"><a href="#">&raquo;</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -130,3 +153,8 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block js %}
+    {{ block.super }}
+    {% include 'boots/star_boot_js.html' %}
+{% endblock %}

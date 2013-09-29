@@ -8,11 +8,12 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
 from boots.models import Boot, BootVersion, Star
-from boots.forms import BootVersionCreationForm
+from boots.forms import BootVersionCreationForm, SearchForm
 from accounts.views import TeamMixin, TeamObjectMixin
 from boots.models import Team, Boot, BootVersion
 from core.views import EnsureCSRFMixin, JSONResponseMixin
 from haystack.views import SearchView as BaseSearchView
+from haystack.query import SearchQuerySet
 
 
 class BootObjectMixin(SingleObjectMixin):
@@ -54,23 +55,16 @@ class BootVersionObjectMixin(SingleObjectMixin):
         return obj
 
 
-from haystack.forms import SearchForm as BaseSearchForm
-from haystack.query import SearchQuerySet
-from boots.search_indexes import BootIndex
-
-class SearchForm(BaseSearchForm):
-    pass
-
-
 class SearchView(BaseSearchView):
     template = 'boots/search.html'
-    form = SearchForm
-    results = SearchQuerySet().all()
-    results_per_page = 1
 
     @classmethod
     def as_view(cls):
-        return cls()
+        return cls(
+            load_all=True,
+            form_class=SearchForm,
+            searchqueryset=SearchQuerySet().models(Boot),
+            results_per_page=1)
 
 
 class TrendingView(SearchView):
@@ -80,8 +74,12 @@ class TrendingView(SearchView):
 class TeamView(TeamObjectMixin, SearchView):
     template_name = 'boots/team.html'
 
-    def get_queryset(self):
-        return super(TeamView, self).get_queryset().filter(team=self.object)
+    def extra_context(self):
+        return {'team': self.get_object()}
+
+    def __call__(self, request, team):
+        self.kwargs = {'team': team}
+        return super(TeamView, self).__call__(request)
 
 
 class BootContextMixin(object):
