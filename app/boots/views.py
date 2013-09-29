@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
 from boots.models import Boot, BootVersion, Star
-from boots.forms import BootVersionCreationForm
+from boots.forms import BootForm, BootVersionForm
 from accounts.views import TeamMixin, TeamObjectMixin
 from boots.models import Team, Boot, BootVersion
 from core.views import EnsureCSRFMixin, JSONResponseMixin
@@ -108,8 +108,9 @@ class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateRespo
 
 
 class BootCreateView(TeamMixin, CreateView):
-    model = Boot
     template_name = 'boots/boot_create.html'
+    form_class = BootForm
+    model = Boot
 
     def get_initial(self):
         return {
@@ -119,6 +120,7 @@ class BootCreateView(TeamMixin, CreateView):
 
 class BootUpdateView(TeamMixin, BootObjectMixin, UpdateView):
     template_name = 'boots/boot_update.html'
+    form_class = BootForm
 
 
 class BootDeleteView(TeamMixin, BootObjectMixin, DeleteView):
@@ -130,13 +132,20 @@ class BootDeleteView(TeamMixin, BootObjectMixin, DeleteView):
 
 class BootVersionCreateView(TeamMixin, CreateView):
     template_name = 'boots/boot_version_create.html'
-    form_class = BootVersionCreationForm
+    form_class = BootVersionForm
     model = BootVersion
+
+    def get_form(self, form_class):
+        self.boot = Boot.objects.get(team__slug=self.kwargs.get('team'),
+                                     slug=self.kwargs.get('boot'))
+
+        form = super(BootVersionCreateView, self).get_form(form_class)
+        form.boot = self.boot
+        return form
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.boot = Boot.objects.get(team__slug=self.kwargs.get('team'),
-                                            slug=self.kwargs.get('boot'))
+        self.object.boot = self.boot
         self.object.save()
         return super(ModelFormMixin, self).form_valid(form)
 
