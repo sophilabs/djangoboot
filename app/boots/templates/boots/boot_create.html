@@ -6,8 +6,16 @@
     {% trans 'Add Boot' %}
 {% endblock %}
 
+{% block buttons_help %}
+    <span class="text-muted">
+        {% blocktrans %}
+            Once you add the boot you'll be able to add its first version.
+        {% endblocktrans %}
+    </span>
+{% endblock %}
+
 {% block buttons %}
-    <button type="submit" class="btn btn-primary btn-lg">
+    <button type="submit" class="btn btn-primary btn-lg space-10">
         <i class="icon-plus-sign"></i> {% trans 'Add' %}
     </button>
 {% endblock %}

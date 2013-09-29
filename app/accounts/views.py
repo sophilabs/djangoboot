@@ -30,14 +30,19 @@ class TeamObjectMixin(SingleObjectMixin):
         except ObjectDoesNotExist:
             raise Http404
 
-        print '*' * 100
-
         if not self.include_users:
             if User.objects.filter(team=obj):
                 raise Http404()
 
-        print '-' * 100
+        return obj
 
+
+class TeamMixin(LoginRequiredMixin, TeamObjectMixin):
+
+    def get_object(self, queryset=None):
+        obj = super(TeamMixin, self).get_object(queryset)
+        if not self.request.user.get_teams().filter(id=obj.id):
+            raise PermissionDenied()
         return obj
 
 
@@ -51,31 +56,31 @@ class TeamCreateView(LoginRequiredMixin, CreateView):
         return super(TeamCreateView, self).form_valid(form)
 
 
-class TeamUpdateView(LoginRequiredMixin, TeamObjectMixin, UpdateView):
+class TeamUpdateView(TeamMixin, UpdateView):
     model = Team
     template_name = 'accounts/team_update.html'
     include_users = False
 
 
-class TeamDeleteView(LoginRequiredMixin, TeamObjectMixin, DeleteView):
+class TeamDeleteView(TeamMixin, DeleteView):
     model = Team
     template_name = 'delete.html'
     include_users = False
 
 
-class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
+class TeamOnlyMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
 
     def get_teams_queryset(self):
         return self.request.user.get_teams()
 
     def get_object(self, queryset=None):
-        obj = super(TeamMixin, self).get_object(queryset)
+        obj = super(TeamOnlyMixin, self).get_object(queryset)
         if obj.team and not self.get_teams_queryset().filter(id=obj.team.id):
             raise PermissionDenied()
         return obj
 
     def get_form(self, form_class):
-        form = super(TeamMixin, self).get_form(form_class)
+        form = super(TeamOnlyMixin, self).get_form(form_class)
         team_field = form.fields.get('team')
         if team_field:
             team_field.queryset = self.get_teams_queryset()

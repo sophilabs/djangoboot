@@ -11,7 +11,7 @@ from haystack.query import SearchQuerySet
 
 from boots.models import Boot, BootVersion, Star
 from boots.forms import BootForm, BootVersionForm, SearchForm
-from accounts.views import TeamMixin, TeamObjectMixin
+from accounts.views import TeamOnlyMixin, TeamObjectMixin
 from core.views import EnsureCSRFMixin, JSONResponseMixin
 
 
@@ -108,7 +108,7 @@ class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateRespo
             return None
 
 
-class BootCreateView(TeamMixin, CreateView):
+class BootCreateView(TeamOnlyMixin, CreateView):
     template_name = 'boots/boot_create.html'
     form_class = BootForm
     model = Boot
@@ -119,19 +119,19 @@ class BootCreateView(TeamMixin, CreateView):
         }
 
 
-class BootUpdateView(TeamMixin, BootObjectMixin, UpdateView):
+class BootUpdateView(TeamOnlyMixin, BootObjectMixin, UpdateView):
     template_name = 'boots/boot_update.html'
     form_class = BootForm
 
 
-class BootDeleteView(TeamMixin, BootObjectMixin, DeleteView):
+class BootDeleteView(TeamOnlyMixin, BootObjectMixin, DeleteView):
     template_name = 'delete.html'
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()
 
 
-class BootVersionCreateView(TeamMixin, CreateView):
+class BootVersionCreateView(TeamOnlyMixin, CreateView):
     template_name = 'boots/boot_version_create.html'
     form_class = BootVersionForm
     model = BootVersion
@@ -144,6 +144,11 @@ class BootVersionCreateView(TeamMixin, CreateView):
         form.boot = self.boot
         return form
 
+    def get_context_data(self, **kwargs):
+        context = super(BootVersionCreateView, self).get_context_data(**kwargs)
+        context['boot'] = self.boot
+        return context
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.boot = self.boot
@@ -151,7 +156,7 @@ class BootVersionCreateView(TeamMixin, CreateView):
         return super(BootVersionCreateView, self).form_valid(form)
 
 
-class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
+class BootVersionDeleteView(TeamOnlyMixin, BootVersionObjectMixin, DeleteView):
     template_name = 'delete.html'
 
     def get_success_url(self):
