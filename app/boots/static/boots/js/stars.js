@@ -23,8 +23,6 @@
 
         var csrf_token = $.cookie('csrftoken');
 
-        alert(csrf_token);
-
         $.post(STAR_BOOT_URL, {
             'boot_id': bootId,
             'value': value,
