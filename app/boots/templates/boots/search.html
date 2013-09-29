@@ -6,6 +6,7 @@
 {% load staticfiles %}
 {% load qurl %}
 {% load stars %}
+{% load teams %}
 
 {% block css %}
     {{ block.super }}
@@ -37,9 +38,38 @@
                         </div>
                     </div>
 
-                    {% if team in request.user.get_teams %}
+                    {% if team|has_user:user %}
                         <a class="btn btn-sm btn-default" href="{{ team.get_update_url }}"><i class="icon-pencil"></i> {% trans 'Modify' %}</a>
+                        {% if team.is_team %}
+                            <a class="btn btn-sm btn-default" href="{{ team.get_leave_url }}">{% trans 'Leave Team' %}</a>
+                        {% endif %}
                     {% endif %}
+
+                    {% with team.is_user as view_user %}
+                    {% with user.teams.all as user_teams %}
+                        {% if user.team != team and view_user and user_teams %}
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-sm btn-default" data-toggle="dropdown">
+                                    {% trans 'Shared teams' %} <span class="caret"></span>
+                                </button>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    {% for add_team in user_teams %}
+                                        <li>
+                                            {% if add_team|has_user:view_user %}
+                                                <a href="{{ add_team.get_absolute_url }}"><b>{{ add_team }}</b></a>
+                                            {% else %}
+                                                <a href="{{ add_team.get_add_user_url }}?user={{ view_user.id }}">
+                                                    {% trans 'Add to' %} <b>{{ add_team }}</b>
+                                                </a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    {% endwith %}
                 </div>
                 {% endif %}
                 <form class="form-inline" role="form" method="get" action="{% qurl request.get_full_path page=None q=None %}">
