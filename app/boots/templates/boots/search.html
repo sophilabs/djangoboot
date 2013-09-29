@@ -8,6 +8,8 @@
 {% load stars %}
 {% load teams %}
 
+{% block title %}{{ block.super }} - {% block subtitle %}Search{% endblock %}{% endblock %}
+
 {% block css %}
     {{ block.super }}
     <link href="{% static 'boots/css/search.css' %}" rel="stylesheet">

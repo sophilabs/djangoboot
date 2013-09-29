@@ -100,21 +100,23 @@
 
     {% block content %}{% endblock content %}
 
-    <footer>
-        <div class="container">
-            <hr/>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        Made with <i class="icon-heart"></i> by <a href="http://sophilabs.com/">Sophilabs</a> for
-                        <a href="http://djangodash.com/">DjangoDash 2013</a> <br/>
-                        Fork me on
-                        <a href="https://github.com/sophilabs/djangoboot"><i class="icon-github"></i> GitHub</a>
+    {% block footer %}
+        <footer>
+            <div class="container">
+                <hr/>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            Made with <i class="icon-heart"></i> by <a href="http://sophilabs.com/">Sophilabs</a> for
+                            <a href="http://djangodash.com/">DjangoDash 2013</a> <br/>
+                            Fork me on
+                            <a href="https://github.com/sophilabs/djangoboot"><i class="icon-github"></i> GitHub</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    {% endblock %}
 
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery.cookie.js' %}"></script>

@@ -2,22 +2,24 @@
 
 {% load i18n %}
 
+{% block title %}{{ block.super }} - Modify Team{% endblock title %}
+
 {% block header %}
     {% trans 'Modify Team' %}
-{% endblock %}
+{% endblock header %}
 
 {% block header_buttons %}
     <a href="{{ team.get_absolute_url }}" class="btn btn-default btn-sm">
-        <i class="icon-arrow-left"></i> {% trans 'View Team' %}
+        <i class="icon-arrow-left"></i> {% trans 'Back' %}
     </a>
 
     <a href="{{ team.get_delete_url }}" class="btn btn-danger btn-sm">
         <i class="icon-remove"></i> {% trans 'Delete this Team' %}
     </a>
-{% endblock %}
+{% endblock header_buttons %}
 
 {% block buttons %}
     <button type="submit" class="btn btn-primary btn-lg">
         <i class="icon-ok"></i> {% trans 'Save' %}
     </button>
-{% endblock %}
+{% endblock buttons %}

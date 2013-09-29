@@ -5,11 +5,19 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 
+{% block title %}{{ block.super }} - {{ boot.team }}/{{ boot }} - Create Version{% endblock %}
+
 {% block content %}
     <main role="main">
         <div class="container">
             <div class="page-header">
-                <h1>{% trans 'Add Version' %} <small></small></h1>
+                <h1>
+                    <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>
+                    <span class="text-muted">/</span>
+                    <a href="{{ boot.get_absolute_url }}">{{ boot.slug }}</a>
+                    <span class="text-muted">/</span>
+                    {% trans 'Add Version' %}
+                </h1>
             </div>
 
             <form action="" method="post" class="form">

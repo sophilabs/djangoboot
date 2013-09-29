@@ -2,18 +2,20 @@
 
 {% load i18n %}
 
+{% block title %}{{ block.super }} - User Details{% endblock title %}
+
 {% block header %}
     {% trans 'User Details' %}
-{% endblock %}
+{% endblock header %}
 
 {% block header_buttons %}
     <a href="{{ team.get_absolute_url }}" class="btn btn-default btn-sm">
         <i class="icon-arrow-left"></i> {% trans 'My Boots' %}
     </a>
-{% endblock %}
+{% endblock header_buttons %}
 
 {% block buttons %}
     <button type="submit" class="btn btn-primary btn-lg">
         <i class="icon-ok"></i> {% trans 'Save' %}
     </button>
-{% endblock %}
+{% endblock buttons %}
