@@ -50,14 +50,16 @@
 
                         <hr/>
 
-                        <div class="input-group">
-                            <input disabled="disabled" type="text" class="form-control input-lg" value="{{ version.source }}">
-                            <span class="input-group-btn">
-                                <button id="copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ version.source }}">
-                                    <i class="icon-copy"></i>
-                                </button>
-                            </span>
-                        </div>
+                        {% with version.get_command as command %}
+                            <div class="input-group">
+                                <input disabled="disabled" type="text" class="form-control input-lg" value="{{ command }}">
+                                <span class="input-group-btn">
+                                    <button id="copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ command }}">
+                                        <i class="icon-copy"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        {% endwith %}
                     </div>
 
                     <div class="col-md-4">

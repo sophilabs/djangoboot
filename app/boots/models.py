@@ -23,6 +23,11 @@ class Boot(TimeStampedMixin, models.Model):
         (TYPE_COOKIECUTTER, _('CookieCutter')),
     )
 
+    COMMAND = {
+        TYPE_PROJECT: 'startproject',
+        TYPE_APP: 'startapp'
+    }
+
     team = models.ForeignKey(Team, verbose_name=_('owner'))
     slug = SlugField(_('slug'))
     tagline = models.CharField(max_length=250, help_text=_('Short description.'))
@@ -118,9 +123,15 @@ class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
     slug = SlugField(_('slug'), help_text=_('Version slug.'))
     source = models.URLField(_('source'), help_text=_('ZIP source containing the template.'))
+    append = models.CharField(_('command arguments'), help_text=_('Extra command arguments for django-admin.py'),
+                              null=True, blank=True, max_length=200)
 
     def __unicode__(self):
         return unicode(self.boot) + ' ' + self.slug
+
+    def get_command(self):
+        return u'./django-admin.py %s --template=%s %s' % (
+            Boot.COMMAND[self.boot.type], self.source, self.append if self.append else '')
 
     @property
     def team(self):
