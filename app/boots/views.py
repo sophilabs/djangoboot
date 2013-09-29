@@ -107,7 +107,7 @@ class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateRespo
     def get_object(self, queryset=None):
         self.boot = super(BootView, self).get_object(queryset)
         try:
-            return self.boot.versions.latest('created')
+            return self.boot.versions.latest()
         except ObjectDoesNotExist:
             return None
 
