@@ -1,0 +1,13 @@
+{% extends 'accounts/team_common.html' %}
+
+{% load i18n %}
+
+{% block header %}
+    {% trans 'Create Team' %}
+{% endblock %}
+
+{% block buttons %}
+    <button type="submit" class="btn btn-primary btn-lg">
+        <i class="icon-plus-sign"></i> {% trans 'Create' %}
+    </button>
+{% endblock %}

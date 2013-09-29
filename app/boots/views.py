@@ -143,7 +143,7 @@ class BootVersionCreateView(TeamMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.boot = self.boot
         self.object.save()
-        return super(ModelFormMixin, self).form_valid(form)
+        return super(BootVersionCreateView, self).form_valid(form)
 
 
 class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):

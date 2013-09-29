@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block content %}
+    <main role="main">
+        <div class="container">
+            <div class="page-header">
+                <div class="pull-right">
+                    {% block header_buttons %}{% endblock %}
+                </div>
+
+                <h1>{% block header %}{% endblock %}</h1>
+            </div>
+
+            <form action="" method="post" class="form">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-offset-4 col-md-4">
+                        {% bootstrap_form form %}
+
+                        <div class="pull-right">
+                            {% bootstrap_form_buttons %}
+                                {% block buttons %}
+                                {% endblock %}
+                            {% end_bootstrap_form_buttons %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}

@@ -6,3 +6,5 @@ Tag: get_absolute_url => /search?tag=...
 Add support to cookiecutter
 Show django-admin.py command in detail page
 Add comments per version?
+Append search button to search input in navbar?
+Login with user that has an e-mail owned by a team
