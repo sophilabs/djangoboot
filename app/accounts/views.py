@@ -1,6 +1,7 @@
 from django.views.generic import CreateView, UpdateView, DeleteView, View
 from django.views.generic.edit import FormMixin, SingleObjectMixin
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.http import Http404
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django import forms
@@ -13,6 +14,22 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect(request.GET.get('next', 'home:index'))
+
+
+class TeamObjectMixin(SingleObjectMixin):
+    model = Team
+    context_object_name = 'team'
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        try:
+            obj = queryset.get(slug=self.kwargs['team'])
+        except ObjectDoesNotExist:
+            raise Http404
+
+        return obj
 
 
 class TeamCreateView(LoginRequiredMixin, CreateView):
