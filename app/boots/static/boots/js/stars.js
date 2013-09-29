@@ -10,11 +10,6 @@
         var bootId = button.data('boot-id');
         var value = button.data('value');
 
-        button.addClass('btn-star-boot-change');
-        setTimeout(function() {
-            button.removeClass('btn-star-boot-change');
-        }, 200);
-
         var showMessage = function(text) {
             button.tooltip({
                 'title': text,
@@ -42,9 +37,17 @@
             if (value) {
                 button.data('value', 'true');
                 button.find('i').attr('class', 'icon-heart');
+                button.addClass('btn-star-boot-increment');
+                setTimeout(function() {
+                    button.removeClass('btn-star-boot-increment');
+                }, 200);
             } else {
                 button.data('value', 'false');
                 button.find('i').attr('class', 'icon-heart-empty');
+                button.addClass('btn-star-boot-decrement');
+                setTimeout(function() {
+                    button.removeClass('btn-star-boot-decrement');
+                }, 200);
             }
 
             var count = response['count'];

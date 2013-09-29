@@ -7,9 +7,16 @@
     transition: transform 150ms ease-in;
 }
 
-.btn-star-boot-change {
+.btn-star-boot-increment {
     -ms-transform: scale(1.5);
     -moz-transform: scale(1.5);
     -webkit-transform: scale(1.5);
     transform: scale(1.5);
+}
+
+.btn-star-boot-decrement {
+    -ms-transform: scale(0.5);
+    -moz-transform: scale(0.5);
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
 }
