@@ -2,7 +2,5 @@ Bootstrap: http://getbootstrap.com/customize/
 Icons: https://github.com/styleguide/css/7.0
 
 Pending:
-Tag: get_absolute_url => /search?tag=...
 Add comments per version?
 Login with user that has an e-mail owned by a team
-Page titles
