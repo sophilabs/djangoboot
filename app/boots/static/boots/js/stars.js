@@ -10,6 +10,11 @@
         var bootId = button.data('boot-id');
         var value = button.data('value');
 
+        button.addClass('btn-star-boot-change');
+        setTimeout(function() {
+            button.removeClass('btn-star-boot-change');
+        }, 200);
+
         var showMessage = function(text) {
             button.tooltip({
                 'title': text,

@@ -1,0 +1,15 @@
+.btn-star-boot {
+    -ms-transition: -ms-transform 150ms ease-in;
+    -moz-transition: -moz-transform 150ms ease-in;
+    -webkit-transition: -webkit-transform 150ms ease-in;
+    -moz-transition: -moz-transform 150ms ease-in;
+    -o-transition: -o-transform 150ms ease-in;
+    transition: transform 150ms ease-in;
+}
+
+.btn-star-boot-change {
+    -ms-transform: scale(1.5);
+    -moz-transform: scale(1.5);
+    -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+}

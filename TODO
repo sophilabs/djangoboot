@@ -1,3 +1,8 @@
 Bootstrap: http://getbootstrap.com/customize/
 Icons: https://github.com/styleguide/css/7.0
+
+Pending:
 Tag: get_absolute_url => /search?tag=...
+Add support to cookiecutter
+Show django-admin.py command in detail page
+Add comments per version?

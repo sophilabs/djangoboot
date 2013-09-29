@@ -7,6 +7,11 @@
 {% load stars %}
 
 
+{% block css %}
+    {{ block.super }}
+    {% include 'boots/star_boot_css.html' %}
+{% endblock css %}
+
 {% block content %}
     <main role="main">
         <div class="container">
