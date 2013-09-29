@@ -37,7 +37,7 @@
                         </div>
                     </div>
 
-                    {% if team in request.user.get_teams and not team.default_users.all %}
+                    {% if team in request.user.get_teams %}
                         <a class="btn btn-sm btn-default" href="{{ team.get_update_url }}"><i class="icon-pencil"></i> {% trans 'Modify' %}</a>
                     {% endif %}
                 </div>

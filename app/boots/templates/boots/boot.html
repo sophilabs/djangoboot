@@ -64,18 +64,18 @@
 
                     <div class="col-md-4">
                         <div class="list-group">
+                            {% if team_member %}
+                                <a href="{{ boot.get_create_url }}" class="list-group-item text-center">
+                                    <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
+                                </a>
+                            {% endif %}
+
                             {% for boot_version in boot.versions.all %}
                                 <a href="{% if boot_version != version %}{{ boot_version.get_absolute_url }}{% endif %}" class="list-group-item {% if boot_version == version %}active{% endif %}">
                                     <span>{{ boot_version.slug }}</span>
                                     <span class="badge">{{ boot_version.created|naturalday }}</span>
                                 </a>
                             {% endfor %}
-
-                            {% if team_member %}
-                                <a href="{{ boot.get_create_url }}" class="list-group-item">
-                                    <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
-                                </a>
-                            {% endif %}
                         </div>
                     </div>
                 </div>

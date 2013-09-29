@@ -62,13 +62,22 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% logout %}"><i class="icon-signout"></i> {% trans 'Sign out' %}</a></li>
-                            <li class="divider"></li>
+                            <li><a href="{% url 'accounts:user_details' request.user.team %}">
+                                <i class="icon-pencil"></i> {% trans 'User details' %}</a>
+                            </li>
+                            <li><a href="{% url 'accounts:team_create' %}">
+                                <i class="icon-plus"></i> {% trans 'Create Team' %}</a>
+                            </li>
                             {% for team in user.teams.all %}
+                                {% if forloop.first %}
+                                    <li class="divider"></li>
+                                {% endif %}
                                 <li><a href="{{ team.get_absolute_url }}">{{ team }}</a></li>
+                                {% if forloop.last %}
+                                    <li class="divider"></li>
+                                {% endif %}
                             {% endfor %}
-                            <li class="divider"></li>
-                            <li><a href="{% url 'accounts:team_create' %}">{% trans 'Create Team' %}</a></li>
+                            <li><a href="{% logout %}"><i class="icon-signout"></i> {% trans 'Sign out' %}</a></li>
                         </ul>
                     </li>
                     {% else %}
