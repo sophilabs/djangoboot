@@ -1,16 +1,21 @@
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, View
+import json
+
+from django.views.generic import CreateView, UpdateView, DeleteView, View
 from django.views.generic.edit import SingleObjectMixin, ModelFormMixin
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.base import TemplateResponseMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 
-from boots.models import Boot, BootVersion
+from boots.models import Boot, BootVersion, Star
 from boots.forms import BootVersionCreationForm
-from accounts.views import UserTeamsMixin, TeamMixin
+from accounts.views import TeamMixin
 from boots.models import Team, Boot, BootVersion
+from core.views import EnsureCSRFMixin
 from haystack.views import SearchView as BaseSearchView
+
 
 class BootObjectMixin(SingleObjectMixin):
     model = Boot
@@ -86,16 +91,17 @@ class TeamView(SearchView):
         return super(TeamView, self).get_queryset().filter(team=self.__get_team())
 
 
-class BootContextMixin(UserTeamsMixin):
+class BootContextMixin(object):
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
         context = super(BootContextMixin, self).get_context_data(**kwargs)
         context['boot'] = self.boot
-        context['boot_team_member'] = self.get_teams_queryset().filter(id=self.boot.team.id)
+        context['team_member'] = user.get_teams().filter(id=self.boot.team.id) if user.is_authenticated() else False
         return context
 
 
-class BootView(BootContextMixin, BootObjectMixin, TemplateResponseMixin, BaseDetailView):
+class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot.html'
 
     def get_object(self, queryset=None):
@@ -151,5 +157,44 @@ class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
     template_name = 'boots/boot_version_delete.html'
 
 
-class BootVersionView(BootContextMixin, BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):
+class BootVersionView(EnsureCSRFMixin, BootContextMixin, BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot.html'
+
+
+class StarBootView(EnsureCSRFMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        response = {}
+
+        if user.is_authenticated():
+            boot_id = request.POST.get('boot_id')
+            try:
+                boot = Boot.objects.get(id=boot_id)
+            except ObjectDoesNotExist:
+                boot = None
+                response['message'] = _('Boot not found.')
+
+            if boot:
+                value = request.POST.get('value') == 'true'
+                try:
+                    star = Star.objects.get(user=user, boot=boot)
+                except Star.DoesNotExist:
+                    star = None
+
+                if not value:
+                    if not star:
+                        Star.objects.create(user=user, boot=boot)
+                    response['value'] = True
+                    response['message'] = _('Thank you!')
+                else:
+                    if star:
+                        star.delete()
+                    response['value'] = False
+
+                response['count'] = Boot.objects.get(id=boot_id).star_count
+        else:
+            response['message'] = _('Must be logged in.')
+
+        return HttpResponse(json.dumps(response), content_type='application/json')

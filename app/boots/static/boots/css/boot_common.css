@@ -1,0 +1,11 @@
+.form-group.boot-team, .form-group.boot-slash, .form-group.boot-slug {
+    vertical-align: top;
+}
+
+.form-group.boot-slash {
+    padding: 6px;
+}
+
+.form-group.boot-slug {
+    width: 150px;
+}

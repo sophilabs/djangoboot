@@ -4,22 +4,26 @@
 {% load bootstrap3 %}
 {% load widget_tweaks %}
 {% load staticfiles %}
+{% load stars %}
+
 
 {% block content %}
     <main role="main">
         <div class="container">
             <div class="page-header">
                 <div class="pull-right">
-                    {% if boot_team_member %}
-                        <a class="btn btn-default btn-md" href="{{ boot.get_update_url }}">
+                    {% if team_member %}
+                        <a class="btn btn-default btn-sm" href="{{ boot.get_update_url }}">
                             <i class="icon-pencil"></i> {% trans 'Update Boot' %}
                         </a>
-                        <a class="btn btn-danger btn-md" href="{{ object.get_delete_url }}">
-                            <i class="icon-remove"></i> {% trans 'Delete this version' %}
-                        </a>
+                        {% if object %}
+                            <a class="btn btn-danger btn-sm" href="{{ object.get_delete_url }}">
+                                <i class="icon-remove"></i> {% trans 'Delete this Version' %}
+                            </a>
+                        {% endif %}
                     {% endif %}
 
-                    <a class="btn btn-primary btn-md" href="#"><i class="icon-heart"></i> 45</a>
+                    {% star_button boot %}
                 </div>
 
                 <h1>
@@ -44,7 +48,7 @@
                         <div class="input-group">
                             <input disabled="disabled" type="text" class="form-control input-lg" value="{{ object.source }}">
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ object.source }}">
+                                <button id="boot-copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ object.source }}">
                                     <i class="icon-copy"></i>
                                 </button>
                             </span>
@@ -60,7 +64,7 @@
                                 </a>
                             {% endfor %}
 
-                            {% if boot_team_member %}
+                            {% if team_member %}
                                 <a href="{{ boot.get_create_url }}" class="list-group-item">
                                     <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
                                 </a>
@@ -74,7 +78,7 @@
                         <h3></h3>
                         <div class="text-center">
                             {% trans 'This boot does not have any version.' %}
-                            {% if boot_team_member %}
+                            {% if team_member %}
                                 <hr/>
                                 <a href="{{ boot.get_create_url }}" class="btn btn-primary btn-lg">
                                     <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
@@ -86,4 +90,16 @@
             {% endif %}
         </div>
     </main>
+{% endblock %}
+
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/ZeroClipboard.js' %}"></script>
+    <script>
+        var clip = new ZeroClipboard(document.getElementById('boot-copy-button'), {
+            moviePath: '{% static "swf/ZeroClipboard.swf" %}'
+        });
+    </script>
+    {% include 'boots/star_boot_js.html' %}
 {% endblock %}

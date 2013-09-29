@@ -1,6 +1,5 @@
 from django.views.generic import CreateView, UpdateView, DeleteView, View
 from django.views.generic.edit import FormMixin, SingleObjectMixin
-from django.db.models import Q
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import logout
 from django.shortcuts import redirect
@@ -31,17 +30,10 @@ class TeamDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'accounts/team_delete.html'
 
 
-class UserTeamsMixin(object):
+class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
 
     def get_teams_queryset(self):
-        user = self.request.user
-        if user.is_anonymous():
-            return Team.objects.none()
-        else:
-            return Team.objects.filter(Q(default_users=user) | Q(users=user))
-
-
-class TeamMixin(LoginRequiredMixin, UserTeamsMixin, FormMixin, SingleObjectMixin):
+        return self.request.user.get_teams()
 
     def get_object(self, queryset=None):
         obj = super(TeamMixin, self).get_object(queryset)

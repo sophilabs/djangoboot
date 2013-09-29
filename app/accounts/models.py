@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import ugettext as _
+from django.db.models import Q
 
-from core.models import TimeStampedMixin
+from core.models import TimeStampedMixin, SlugField
 
 
 class Team(models.Model):
-    slug = models.SlugField(_('slug'), unique=True)
+    slug = SlugField(_('slug'), unique=True)
     name = models.CharField(_('name'), max_length=100)
     email = models.EmailField(_('email'))
     url = models.URLField(_('URL'), null=True, blank=True)
@@ -58,6 +59,9 @@ class User(TimeStampedMixin, AbstractBaseUser, PermissionsMixin):
 
     def __unicode__(self):
         return self.username
+
+    def get_teams(self):
+        return Team.objects.filter(Q(default_users=self) | Q(users=self))
 
     @property
     def is_staff(self):

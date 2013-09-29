@@ -5,10 +5,18 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'boots/css/boot_common.css' %}"/>
+{% endblock %}
+
 {% block content %}
     <main role="main">
         <div class="container">
             <div class="page-header">
+                <div class="pull-right">
+                    {% block header_buttons %}{% endblock %}
+                </div>
+
                 <h1>{% block header %}{% endblock %}</h1>
             </div>
 
@@ -24,18 +32,18 @@
                             <label>Boot slug</label>
 
                             <div class="form-inline">
-                                <div class="form-group {% if form.team.errors %}has-error{% endif %}">
+                                <div class="form-group {% if form.team.errors %}has-error{% endif %} boot-team">
                                     <!-- Owner -->
                                     {% include 'accounts/team_selector.html' %}
                                 </div>
 
-                                <div class="form-group text-muted">
+                                <div class="form-group text-muted boot-slash">
                                     /
                                 </div>
 
-                                <div class="form-group {% if form.slug.errors %}has-error{% endif %}">
+                                <div class="form-group {% if form.slug.errors %}has-error{% endif %} boot-slug">
                                     <!-- Slug -->
-                                    {{ form.slug|attr:'class:form-control' }}
+                                    {% bootstrap_field form.slug show_label=False %}
                                 </div>
                             </div>
                         </div>
@@ -51,9 +59,8 @@
                         {% bootstrap_field form.url %}
                         <div class="pull-right">
                             {% bootstrap_form_buttons %}
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    {% block caption %}{% endblock %}
-                                </button>
+                                {% block buttons %}
+                                {% endblock %}
                             {% end_bootstrap_form_buttons %}
                         </div>
                     </div>
