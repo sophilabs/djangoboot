@@ -6,6 +6,7 @@
 {% load staticfiles %}
 {% load stars %}
 {% load humanize %}
+{% load future %}
 
 {% block css %}
     {{ block.super }}
@@ -38,51 +39,46 @@
                 </h1>
             </div>
 
+            <div class="row">
+                <div class="col-md-8">
+                    {{ boot.tagline }} {% if boot.url %} - <a href="{{ boot.url }}">{{ boot.url }}</a> {% endif %}<br/>
+                    {% for tag in boot.tags.all %}
+                        <a href="{% url 'boots:search' %}?tag={{ tag }}" class="label label-primary">{{ tag }}</a>
+                    {% endfor %}
 
-            {% if version %}
-                {{ boot.tagline }} {% if boot.url %} - <a href="{{ boot.url }}">{{ boot.url }}</a> {% endif %}<br/>
 
-                <div class="row">
-                    <div class="col-md-8">
-                        {% for tag in boot.tags.all %}
-                            <a href="#" class="label label-primary">{{ tag }}</a>
-                        {% endfor %}
-
-                        <hr/>
-
-                        {% with version.get_command as command %}
-                            <div class="input-group">
-                                <input disabled="disabled" type="text" class="form-control input-lg" value="{{ command }}">
-                                <span class="input-group-btn">
-                                    <button id="copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ command }}">
-                                        <i class="icon-copy"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        {% endwith %}
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="list-group">
-                            {% if team_member %}
-                                <a href="{{ boot.get_create_url }}" class="list-group-item text-center">
-                                    <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
-                                </a>
-                            {% endif %}
-
-                            {% for boot_version in boot.versions.all %}
-                                <a href="{% if boot_version != version %}{{ boot_version.get_absolute_url }}{% endif %}" class="list-group-item {% if boot_version == version %}active{% endif %}">
-                                    <span>{{ boot_version.slug }}</span>
-                                    <span class="badge">{{ boot_version.created|naturalday }}</span>
-                                </a>
-                            {% endfor %}
+                    {% if version %}
+                    <hr/>
+                    {% with version.get_command as command %}
+                        <div class="input-group">
+                            <input disabled="disabled" type="text" class="form-control input-lg" value="{{ command }}">
+                            <span class="input-group-btn">
+                                <button id="copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ command }}">
+                                    <i class="icon-copy"></i>
+                                </button>
+                            </span>
                         </div>
-                    </div>
+                    {% endwith %}
+                    {% endif %}
                 </div>
-            {% else %}
-                <div class="row">
-                    <div class="col-md-offset-4 col-md-4">
-                        <h3></h3>
+
+                <div class="col-md-4">
+                    {% if version %}
+                    <div class="list-group">
+                        {% if team_member %}
+                            <a href="{{ boot.get_create_url }}" class="list-group-item text-center">
+                                <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
+                            </a>
+                        {% endif %}
+
+                        {% for boot_version in boot.versions.all %}
+                            <a href="{% if boot_version != version %}{{ boot_version.get_absolute_url }}{% endif %}" class="list-group-item {% if boot_version == version %}active{% endif %}">
+                                <span>{{ boot_version.slug }}</span>
+                                <span class="badge">{{ boot_version.created|naturalday }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
                         <div class="text-center">
                             {% trans 'This boot does not have any version.' %}
                             {% if team_member %}
@@ -92,9 +88,9 @@
                                 </a>
                             {% endif %}
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
-            {% endif %}
+            </div>
         </div>
     </main>
 {% endblock %}

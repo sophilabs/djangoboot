@@ -30,11 +30,13 @@ class Boot(TimeStampedMixin, models.Model):
     }
 
     team = models.ForeignKey(Team, verbose_name=_('owner'))
-    slug = SlugField(_('slug'))
+    slug = SlugField(_('slug'), help_text=_('Boot name. e.g: <code>my-boot</code>.'))
     tagline = models.CharField(max_length=250, help_text=_('Short description.'))
-    url = models.URLField(_('URL'), null=True, blank=True, help_text=_('Public site or repository.'))
+    url = models.URLField(_('URL'), null=True, blank=True,
+                          help_text=_('Public site or repository. e.g: <code>http://yourproject.com</code>.'))
     type = models.CharField(_('type'), max_length=1, choices=TYPES, help_text=_('Type of template.'))
-    tags = TaggableManager(verbose_name=_('tags'))
+    tags = TaggableManager(verbose_name=_('tags'),
+                           help_text=_('A comma-separated list of tags. e.g: <code>sphinx</code>, <code>puppet</code>, <code>south</code>.'))
 
     r_star_count = models.IntegerField(null=True, blank=True)
     r_star_count_day = models.IntegerField(null=True, blank=True)
@@ -109,9 +111,11 @@ class Star(models.Model):
 
 class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
-    slug = SlugField(_('slug'), help_text=_('Version slug.'))
-    source = models.URLField(_('source'), help_text=_('Template source url.'))
-    append = models.CharField(_('command arguments'), help_text=_('Extra command arguments for django-admin.py or cookiecutter.'),
+    slug = SlugField(_('slug'), help_text=_('Version slug. e.g: <code>1.0</code> or <code>0.1a</code>.'))
+    source = models.URLField(_('source'),
+                             help_text=_('A zip file url for project/app or git url for cookiecutter.'))
+    append = models.CharField(_('command arguments'),
+                              help_text=_('Extra command arguments for django-admin.py or cookiecutter. e.g: <code>--extension=py,rst,html</code>.'),
                               null=True, blank=True, max_length=200)
 
     def __unicode__(self):
@@ -149,20 +153,21 @@ class BootVersion(TimeStampedMixin, models.Model):
 
 @receiver(post_save, sender=Star)
 def star_count_increment(sender, instance, created, **kwargs):
-    instance.boot.update_star_count()
+    try:
+        instance.boot.update_star_count()
+    except:
+        pass
 
 
 @receiver(post_delete, sender=Star)
 def star_count_decrement(sender, instance, **kwargs):
-    instance.boot.update_star_count()
+    try:
+        instance.boot.update_star_count()
+    except:
+        pass
 
 
 @receiver(post_save, sender=TaggedItem)
-def update_search(sender, instance, **kwargs):
-    from haystack import connections
-    connections['default'].get_unified_index().get_index(Boot).update_object(instance.content_object)
-
-@receiver(post_delete, sender=TaggedItem)
 def update_search(sender, instance, **kwargs):
     from haystack import connections
     connections['default'].get_unified_index().get_index(Boot).update_object(instance.content_object)
