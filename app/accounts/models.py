@@ -8,9 +8,9 @@ from core.models import TimeStampedMixin, SlugField
 
 class Team(TimeStampedMixin, models.Model):
     slug = SlugField(_('slug'), unique=True)
-    name = models.CharField(_('name'), max_length=100, help_text=_('Display name for the team.'))
+    name = models.CharField(_('name'), max_length=100, help_text=_('Display name.'))
     email = models.EmailField(_('email'))
-    url = models.URLField(_('URL'), null=True, blank=True, help_text=_('Website of the team.'))
+    url = models.URLField(_('URL'), null=True, blank=True, help_text=_('Website.'))
 
     @models.permalink
     def get_absolute_url(self):
@@ -22,7 +22,10 @@ class Team(TimeStampedMixin, models.Model):
 
     @models.permalink
     def get_update_url(self):
-        return 'accounts:team_update', [self.slug]
+        if self.default_users.all():
+            return 'accounts:user_details', [self.slug]
+        else:
+            return 'accounts:team_update', [self.slug]
 
     def __unicode__(self):
         return self.name

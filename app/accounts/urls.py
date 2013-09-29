@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
-from accounts.views import LogoutView, TeamCreateView, TeamUpdateView, TeamDeleteView
+from accounts.views import LogoutView, TeamCreateView, TeamUpdateView, TeamDeleteView, UserDetailsView
 
 
 urlpatterns = patterns('',
@@ -11,6 +11,9 @@ urlpatterns = patterns('',
     url(r'^logout',
         LogoutView.as_view(),
         name='logout'),
+    url(r'^(?P<team>[-a-zA-Z0-9_\.]+)/details',
+        UserDetailsView.as_view(),
+        name='user_details'),
 
     url(r'^teams/create',
         TeamCreateView.as_view(),

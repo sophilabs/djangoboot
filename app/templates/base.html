@@ -63,11 +63,15 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{% logout %}"><i class="icon-signout"></i> {% trans 'Sign out' %}</a></li>
-                            <li class="divider"></li>
                             {% for team in user.teams.all %}
+                                {% if forloop.first %}
+                                    <li class="divider"></li>
+                                {% endif %}
                                 <li><a href="{{ team.get_absolute_url }}">{{ team }}</a></li>
+                                {% if forloop.last %}
+                                    <li class="divider"></li>
+                                {% endif %}
                             {% endfor %}
-                            <li class="divider"></li>
                             <li><a href="{% url 'accounts:team_create' %}">{% trans 'Create Team' %}</a></li>
                         </ul>
                     </li>

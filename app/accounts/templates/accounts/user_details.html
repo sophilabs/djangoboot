@@ -1,0 +1,19 @@
+{% extends 'accounts/team_common.html' %}
+
+{% load i18n %}
+
+{% block header %}
+    {% trans 'User Details' %}
+{% endblock %}
+
+{% block header_buttons %}
+    <a href="{{ team.get_absolute_url }}" class="btn btn-default btn-sm">
+        <i class="icon-arrow-left"></i> {% trans 'My Boots' %}
+    </a>
+{% endblock %}
+
+{% block buttons %}
+    <button type="submit" class="btn btn-primary btn-lg">
+        <i class="icon-ok"></i> {% trans 'Save' %}
+    </button>
+{% endblock %}

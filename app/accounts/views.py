@@ -20,6 +20,7 @@ class TeamObjectMixin(SingleObjectMixin):
     model = Team
     context_object_name = 'team'
     include_users = True
+    include_teams = True
 
     def get_object(self, queryset=None):
         if queryset is None:
@@ -34,7 +35,17 @@ class TeamObjectMixin(SingleObjectMixin):
             if User.objects.filter(team=obj):
                 raise Http404()
 
+        if not self.include_teams:
+            if User.objects.filter(teams=obj):
+                raise Http404()
+
         return obj
+
+
+class UserDetailsView(LoginRequiredMixin, TeamObjectMixin, UpdateView):
+    model = Team
+    template_name = 'accounts/user_details.html'
+    include_teams = False
 
 
 class TeamMixin(LoginRequiredMixin, TeamObjectMixin):
