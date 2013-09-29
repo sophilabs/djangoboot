@@ -5,7 +5,7 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 {% load stars %}
-
+{% load humanize %}
 
 {% block css %}
     {{ block.super }}
@@ -21,8 +21,8 @@
                         <a class="btn btn-default btn-sm" href="{{ boot.get_update_url }}">
                             <i class="icon-pencil"></i> {% trans 'Update Boot' %}
                         </a>
-                        {% if object %}
-                            <a class="btn btn-danger btn-sm" href="{{ object.get_delete_url }}">
+                        {% if version %}
+                            <a class="btn btn-danger btn-sm" href="{{ version.get_delete_url }}">
                                 <i class="icon-remove"></i> {% trans 'Delete this Version' %}
                             </a>
                         {% endif %}
@@ -39,7 +39,7 @@
             </div>
 
 
-            {% if object %}
+            {% if version %}
                 {{ boot.tagline }} {% if boot.url %} - <a href="{{ boot.url }}">{{ boot.url }}</a> {% endif %}<br/>
 
                 <div class="row">
@@ -51,9 +51,9 @@
                         <hr/>
 
                         <div class="input-group">
-                            <input disabled="disabled" type="text" class="form-control input-lg" value="{{ object.source }}">
+                            <input disabled="disabled" type="text" class="form-control input-lg" value="{{ version.source }}">
                             <span class="input-group-btn">
-                                <button id="boot-copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ object.source }}">
+                                <button id="boot-copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ version.source }}">
                                     <i class="icon-copy"></i>
                                 </button>
                             </span>
@@ -62,10 +62,10 @@
 
                     <div class="col-md-4">
                         <div class="list-group">
-                            {% for version in boot.versions.all %}
-                                <a href="{% if version != object %}{{ version.get_absolute_url }}{% endif %}" class="list-group-item {% if version == object %}active{% endif %}">
-                                    <span>{{ version.created }}</span>
-                                    <span class="badge">{{ version.slug }}</span>
+                            {% for boot_version in boot.versions.all %}
+                                <a href="{% if boot_version != version %}{{ boot_version.get_absolute_url }}{% endif %}" class="list-group-item {% if boot_version == version %}active{% endif %}">
+                                    <span>{{ boot_version.slug }}</span>
+                                    <span class="badge">{{ boot_version.created|naturalday }}</span>
                                 </a>
                             {% endfor %}
 

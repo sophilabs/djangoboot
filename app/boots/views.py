@@ -17,6 +17,7 @@ from haystack.views import SearchView as BaseSearchView
 
 class BootObjectMixin(SingleObjectMixin):
     model = Boot
+    context_object_name = 'boot'
 
     def get_object(self, queryset=None):
         if queryset is None:
@@ -28,11 +29,14 @@ class BootObjectMixin(SingleObjectMixin):
         except ObjectDoesNotExist:
             raise Http404
 
+        self.boot = obj
+
         return obj
 
 
 class BootVersionObjectMixin(SingleObjectMixin):
     model = BootVersion
+    context_object_name = 'version'
 
     def get_object(self, queryset=None):
         if queryset is None:
@@ -46,6 +50,7 @@ class BootVersionObjectMixin(SingleObjectMixin):
             raise Http404
 
         self.boot = obj.boot
+
         return obj
 
 
@@ -91,9 +96,10 @@ class BootContextMixin(object):
 
 class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot.html'
+    context_object_name = 'version'
 
     def get_object(self, queryset=None):
-        self.boot = super(BootView, self).get_object(queryset)
+        super(BootView, self).get_object(queryset)
         try:
             return self.boot.versions.latest()
         except ObjectDoesNotExist:
@@ -118,21 +124,10 @@ class BootDeleteView(TeamMixin, BootObjectMixin, DeleteView):
     template_name = 'boots/boot_delete.html'
 
 
-class BootVersionCreateView(TeamMixin, CreateView):
+class BootVersionCreateView(TeamMixin, BootObjectMixin, CreateView):
     template_name = 'boots/boot_version_create.html'
     form_class = BootVersionCreationForm
     model = BootVersion
-
-    def dispatch(self, request, *args, **kwargs):
-        self.boot = get_object_or_404(Boot,
-                                      team__slug=self.kwargs.get('team'),
-                                      slug=self.kwargs.get('boot'))
-        return super(BootVersionCreateView, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(BootVersionCreateView, self).get_context_data(**kwargs)
-        context['boot'] = self.boot
-        return context
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
