@@ -46,14 +46,17 @@ class Boot(TimeStampedMixin, models.Model):
     def get_star_count(self):
         if self.star_count is None:
             self.star_count = self.stars.count()
-            self.save()
         return self.star_count
 
     def star_count_increment(self):
         self.star_count = self.get_star_count() + 1
+        self.save()
+        return self.star_count
 
     def star_count_decrement(self):
         self.star_count = self.get_star_count() - 1
+        self.save()
+        return self.star_count
 
     class Meta:
         unique_together = (('team', 'slug',),)
