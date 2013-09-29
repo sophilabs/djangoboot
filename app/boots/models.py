@@ -123,7 +123,7 @@ class BootVersion(TimeStampedMixin, models.Model):
                 source=self.source
             )
         else:
-            return u'./django-admin.py {type} --template={source} {append}'.format(
+            return u'./django-admin.py {type} --template={source} {append} <name>'.format(
                 type=Boot.COMMAND[self.boot.type],
                 source=self.source,
                 append=self.append if self.append else ''
