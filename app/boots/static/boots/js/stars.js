@@ -21,10 +21,14 @@
             }, 1000);
         };
 
+        var csrf_token = $.cookie('csrftoken');
+
+        alert(csrf_token);
+
         $.post(STAR_BOOT_URL, {
-            'csrfmiddlewaretoken': $.cookie('csrftoken'),
             'boot_id': bootId,
-            'value': value
+            'value': value,
+            'csrfmiddlewaretoken': csrf_token
         }, function(response) {
             var message = response['message'];
             if (message) {

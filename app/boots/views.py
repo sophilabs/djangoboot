@@ -11,7 +11,8 @@ from django.utils.translation import ugettext as _
 
 from boots.models import Boot, BootVersion, Star
 from boots.forms import BootVersionCreationForm
-from accounts.views import UserTeamsMixin, TeamMixin
+from core.views import EnsureCSRFMixin
+from accounts.views import TeamMixin
 
 
 class BootObjectMixin(SingleObjectMixin):
@@ -60,16 +61,17 @@ class TeamView(TemplateView):
     template_name = 'boots/team.html'
 
 
-class BootContextMixin(UserTeamsMixin):
+class BootContextMixin(object):
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
         context = super(BootContextMixin, self).get_context_data(**kwargs)
         context['boot'] = self.boot
-        context['boot_team_member'] = self.get_teams_queryset().filter(id=self.boot.team.id)
+        context['team_member'] = user.get_teams().filter(id=self.boot.team.id) if user.is_authenticated() else False
         return context
 
 
-class BootView(BootContextMixin, BootObjectMixin, TemplateResponseMixin, BaseDetailView):
+class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot.html'
 
     def get_object(self, queryset=None):
@@ -125,11 +127,11 @@ class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
     template_name = 'boots/boot_version_delete.html'
 
 
-class BootVersionView(BootContextMixin, BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):
+class BootVersionView(EnsureCSRFMixin, BootContextMixin, BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot.html'
 
 
-class StarBootView(View):
+class StarBootView(EnsureCSRFMixin, View):
 
     def post(self, request, *args, **kwargs):
         user = request.user

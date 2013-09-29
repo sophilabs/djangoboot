@@ -11,7 +11,7 @@
         <div class="container">
             <div class="page-header">
                 <div class="pull-right">
-                    {% if boot_team_member %}
+                    {% if team_member %}
                         <a class="btn btn-default btn-sm" href="{{ boot.get_update_url }}">
                             <i class="icon-pencil"></i> {% trans 'Update Boot' %}
                         </a>
@@ -63,7 +63,7 @@
                                 </a>
                             {% endfor %}
 
-                            {% if boot_team_member %}
+                            {% if team_member %}
                                 <a href="{{ boot.get_create_url }}" class="list-group-item">
                                     <i class="icon-plus-sign"></i> {% trans 'Add Version' %}
                                 </a>
@@ -77,7 +77,7 @@
                         <h3></h3>
                         <div class="text-center">
                             {% trans 'This boot does not have any version.' %}
-                            {% if boot_team_member %}
+                            {% if team_member %}
                                 <hr/>
                                 <a href="{{ boot.get_create_url }}" class="btn btn-primary btn-lg">
                                     <i class="icon-plus-sign"></i> {% trans 'Add Version' %}

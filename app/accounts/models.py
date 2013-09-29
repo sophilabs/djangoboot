@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import ugettext as _
+from django.db.models import Q
 
 from core.models import TimeStampedMixin
 
@@ -58,6 +59,9 @@ class User(TimeStampedMixin, AbstractBaseUser, PermissionsMixin):
 
     def __unicode__(self):
         return self.username
+
+    def get_teams(self):
+        return Team.objects.filter(Q(default_users=self) | Q(users=self))
 
     @property
     def is_staff(self):
