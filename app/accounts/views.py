@@ -37,12 +37,12 @@ class TeamCreateView(LoginRequiredMixin, CreateView):
     template_name = 'accounts/team_create.html'
 
 
-class TeamUpdateView(LoginRequiredMixin, UpdateView):
+class TeamUpdateView(LoginRequiredMixin, TeamObjectMixin, UpdateView):
     model = Team
     template_name = 'accounts/team_update.html'
 
 
-class TeamDeleteView(LoginRequiredMixin, DeleteView):
+class TeamDeleteView(LoginRequiredMixin, TeamObjectMixin, DeleteView):
     model = Team
     template_name = 'accounts/team_delete.html'
 
