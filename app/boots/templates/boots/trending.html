@@ -1,13 +1,14 @@
 {% extends 'boots/search.html' %}
 
 {% load i18n %}
+{% load qurl %}
 
 {% block search_title %}{% trans 'Trending' %}{% endblock search_title %}
 
 {% block sort_name %}{% trans 'Trending:' %}{% endblock sort_name %}
 {% block sort_active %}{% trans 'Today' %}{% endblock sort_active %}
 {% block sort_options %}
-    <li><a href="#">{% trans 'Today' %}</a></li>
-    <li><a href="#">{% trans 'This Week' %}</a></li>
-    <li><a href="#">{% trans 'This Month' %}</a></li>
+    <li><a href="{% qurl request.get_full_path page=None sort='today' %}">{% trans 'Today' %}</a></li>
+    <li><a href="{% qurl request.get_full_path page=None sort='week' %}">{% trans 'Week' %}</a></li>
+    <li><a href="{% qurl request.get_full_path page=None sort='month' %}">{% trans 'Month' %}</a></li>
 {% endblock sort_options %}

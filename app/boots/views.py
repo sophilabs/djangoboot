@@ -57,9 +57,22 @@ class BootVersionObjectMixin(SingleObjectMixin):
 class SearchView(BaseSearchView):
     template = 'boots/search.html'
 
+    def build_form(self, form_kwargs=None):
+        kwargs = {'sort': 'loved'}
+        if form_kwargs:
+            kwargs.update(form_kwargs)
+        return super(SearchView, self).build_form(kwargs)
+
     def extra_context(self):
         extra = super(SearchView, self).extra_context()
-        extra['facets'] = self.results.facet_counts()
+        facets = self.results.facet_counts()
+        tags = facets['fields']['tags'] if facets and facets.get('fields', None) and facets['fields'].get('tags', None) else []
+        facet_tags = [tag[0] for tag in tags]
+        filter_tags = self.form.tags
+        tags = [(tag[0], tag[1], tag[0] in filter_tags,) for tag in tags]
+        filter_tags = filter(lambda tag: tag not in facet_tags, filter_tags)
+        tags = [(tag, 0, True) for tag in filter_tags] + tags
+        extra['tags'] = tags
         return extra
 
     @classmethod
@@ -68,18 +81,25 @@ class SearchView(BaseSearchView):
             load_all=True,
             form_class=SearchForm,
             searchqueryset=SearchQuerySet().models(Boot),
-            results_per_page=1)
+            results_per_page=20)
 
 
 class TrendingView(SearchView):
     template = 'boots/trending.html'
 
+    def build_form(self, form_kwargs=None):
+        kwargs = {'sort': 'today'}
+        if form_kwargs:
+            kwargs.update(form_kwargs)
+        return super(TrendingView, self).build_form(kwargs)
 
 class TeamView(TeamObjectMixin, SearchView):
     template = 'boots/team.html'
 
     def extra_context(self):
-        return {'team': self.get_object()}
+        extra = super(TeamView, self).extra_context()
+        extra['team'] = self.get_object()
+        return extra
 
     def __call__(self, request, team):
         self.kwargs = {'team': team}

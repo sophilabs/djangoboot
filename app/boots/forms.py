@@ -46,25 +46,59 @@ class BootVersionForm(forms.ModelForm):
 
 class SearchForm(hsforms.SearchForm):
 
-    #sort = forms.CharField(required=False, label=_('Sort'))
-
+    sort = forms.CharField(required=False, label=_('Sort'))
     type = forms.CharField(required=False, label=_('Type'))
     tag = FreeMultipleChoiceField(required=False, label=_('Tag'))
+
+    SORTS = {
+        'loved': (_('Loved'), '-star_count',),
+        'modified': (_('Recently Modified'), '-modified',),
+        'added': (_('Recently Created'), '-created',),
+        'today': (_('Today'), '-star_count_day',),
+        'week': (_('Week'), '-star_count_week',),
+        'month': (_('Month'), '-star_count_month',),
+    }
+
+    def __init__(self, *args, **kwargs):
+        self.sort = kwargs.pop('sort', 'loved')
+        super(SearchForm, self).__init__(*args, **kwargs)
 
     def search(self):
         sqs = super(SearchForm, self).search()
 
         sqs = sqs.facet('tags')
+        sqs = sqs.order_by(self.sorted_value, 'id')
 
         if not self.is_valid():
             return sqs
-        if self.cleaned_data['tag']:
-            for tag in self.cleaned_data['tag']:
-                sqs = sqs.filter(tags_exact=tag)
+        for tag in self.tags:
+            sqs = sqs.filter(tags_exact=tag)
+
         if self.cleaned_data['type']:
             sqs = sqs.filter(type_exact=self.cleaned_data['type'])
 
         return sqs
+
+    @property
+    def tags(self):
+        if not self.is_valid():
+            return []
+        return self.cleaned_data['tag']
+
+    @property
+    def sorted(self):
+        if self.is_valid() and self.cleaned_data['sort'] and self.cleaned_data['sort'] in self.SORTS:
+            return self.cleaned_data['sort']
+        else:
+            return self.sort
+
+    @property
+    def sorted_name(self):
+        return self.SORTS[self.sorted][0]
+
+    @property
+    def sorted_value(self):
+        return self.SORTS[self.sorted][1]
 
     def no_query_found(self):
         return SearchQuerySet().models(Boot)

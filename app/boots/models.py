@@ -2,11 +2,12 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils.translation import ugettext as _
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
 from django.utils import timezone
 
 from taggit.managers import TaggableManager
+from taggit.models import TaggedItem
 
 from core.models import TimeStampedMixin, SlugField
 from accounts.models import User, Team
@@ -154,3 +155,14 @@ def star_count_increment(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Star)
 def star_count_decrement(sender, instance, **kwargs):
     instance.boot.update_star_count()
+
+
+@receiver(post_save, sender=TaggedItem)
+def update_search(sender, instance, **kwargs):
+    from haystack import connections
+    connections['default'].get_unified_index().get_index(Boot).update_object(instance.content_object)
+
+@receiver(post_delete, sender=TaggedItem)
+def update_search(sender, instance, **kwargs):
+    from haystack import connections
+    connections['default'].get_unified_index().get_index(Boot).update_object(instance.content_object)
