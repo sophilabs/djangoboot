@@ -148,7 +148,10 @@ class StarBootView(EnsureCSRFMixin, View):
 
             if boot:
                 value = request.POST.get('value') == 'true'
-                star = Star.objects.filter(user=user, boot=boot)
+                try:
+                    star = Star.objects.get(user=user, boot=boot)
+                except Star.DoesNotExist:
+                    star = None
 
                 if not value:
                     if not star:
@@ -156,10 +159,11 @@ class StarBootView(EnsureCSRFMixin, View):
                     response['value'] = True
                     response['message'] = _('Thank you!')
                 else:
-                    star.delete()
+                    if star:
+                        star.delete()
                     response['value'] = False
 
-                response['count'] = boot.star_count
+                response['count'] = Boot.objects.get(id=boot_id).star_count
         else:
             response['message'] = _('Must be logged in.')
 
