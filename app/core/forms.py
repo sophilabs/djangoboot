@@ -1,10 +1,10 @@
 from django import forms
 
-from core.validators import validate_slug
+from core.validators import validate_slug, validate_non_reserved
 
 
 class SlugField(forms.SlugField):
-    default_validators = [validate_slug]
+    default_validators = [validate_slug, validate_non_reserved]
 
 
 class FreeMultipleChoiceField(forms.MultipleChoiceField):

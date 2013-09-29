@@ -189,7 +189,9 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
 )
 
-RESERVED_SLUGS = ['create', 'update', 'delete', 'search', 'trending']
+RESERVED_SLUGS = ['login', 'logout', 'details', 'teams',
+                  'create', 'modify', 'delete', 'star_boot',
+                  'search', 'trending', 'add', 'update']
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
