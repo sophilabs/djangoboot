@@ -8,8 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Deleting model 'StarCount'
+        db.delete_table(u'boots_starcount')
+
         # Adding index on 'BootVersion', fields ['slug']
         db.create_index(u'boots_bootversion', ['slug'])
+
+        # Adding field 'Boot.star_count'
+        db.add_column(u'boots_boot', 'star_count',
+                      self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
+                      keep_default=False)
 
         # Adding index on 'Boot', fields ['slug']
         db.create_index(u'boots_boot', ['slug'])
@@ -22,6 +30,17 @@ class Migration(SchemaMigration):
         # Removing index on 'BootVersion', fields ['slug']
         db.delete_index(u'boots_bootversion', ['slug'])
 
+        # Adding model 'StarCount'
+        db.create_table(u'boots_starcount', (
+            ('count', self.gf('django.db.models.fields.IntegerField')()),
+            ('boot', self.gf('django.db.models.fields.related.OneToOneField')(related_name='star_count_object', unique=True, to=orm['boots.Boot'])),
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+        ))
+        db.send_create_signal(u'boots', ['StarCount'])
+
+        # Deleting field 'Boot.star_count'
+        db.delete_column(u'boots_boot', 'star_count')
+
 
     models = {
         u'accounts.team': {
@@ -29,7 +48,7 @@ class Migration(SchemaMigration):
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'slug': ('django.db.models.CharField', [], {'max_length': '50'}),
+            'slug': ('django.db.models.CharField', [], {'max_length': '50', 'db_index': 'True'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
         u'accounts.user': {
@@ -65,7 +84,8 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.CharField', [], {'max_length': '50'}),
+            'slug': ('django.db.models.CharField', [], {'max_length': '50', 'db_index': 'True'}),
+            'star_count': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'tagline': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             'team': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.Team']"}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
@@ -77,7 +97,7 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.CharField', [], {'max_length': '50'}),
+            'slug': ('django.db.models.CharField', [], {'max_length': '50', 'db_index': 'True'}),
             'source': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         },
         u'boots.star': {
@@ -86,12 +106,6 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['accounts.User']"})
-        },
-        u'boots.starcount': {
-            'Meta': {'object_name': 'StarCount'},
-            'boot': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'star_count_object'", 'unique': 'True', 'to': u"orm['boots.Boot']"}),
-            'count': ('django.db.models.fields.IntegerField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},

@@ -25,6 +25,8 @@ class Boot(TimeStampedMixin, models.Model):
     type = models.CharField(_('type'), max_length=1, choices=TYPES, help_text=_('Type of template.'))
     tags = TaggableManager(verbose_name=_('tags'))
 
+    star_count = models.IntegerField(null=True, blank=True)
+
     @models.permalink
     def get_absolute_url(self):
         return 'boots:boot', [self.team.slug, self.slug]
@@ -41,16 +43,17 @@ class Boot(TimeStampedMixin, models.Model):
     def get_create_url(self):
         return 'boots:boot_version_create', [self.team.slug, self.slug]
 
-    def get_star_count_object(self):
-        try:
-            star_count_object = self.star_count_object
-        except StarCount.DoesNotExist:
-            star_count_object = StarCount.objects.create(boot=self, count=self.stars.count())
-        return star_count_object
+    def get_star_count(self):
+        if self.star_count is None:
+            self.star_count = self.stars.count()
+            self.save()
+        return self.star_count
 
-    @property
-    def star_count(self):
-        return self.get_star_count_object().count
+    def star_count_increment(self):
+        self.star_count = self.get_star_count() + 1
+
+    def star_count_decrement(self):
+        self.star_count = self.get_star_count() - 1
 
     class Meta:
         unique_together = (('team', 'slug',),)
@@ -63,11 +66,6 @@ class Star(models.Model):
 
     class Meta:
         unique_together = (('boot', 'user',),)
-
-
-class StarCount(models.Model):
-    boot = models.OneToOneField(Boot, related_name='star_count_object')
-    count = models.IntegerField()
 
 
 class BootVersion(TimeStampedMixin, models.Model):
@@ -93,14 +91,9 @@ class BootVersion(TimeStampedMixin, models.Model):
 
 @receiver(post_save, sender=Star)
 def star_count_increment(sender, instance, created, **kwargs):
-    star_count_object = instance.boot.get_star_count_object()
-    star_count_object.count += 1
-    star_count_object.save()
+    instance.boot.star_count_increment()
 
 
 @receiver(pre_delete, sender=Star)
 def star_count_decrement(sender, instance, **kwargs):
-    star_count_object = instance.boot.get_star_count_object()
-    star_count_object.count -= 1
-    star_count_object.save()
-
+    instance.boot.star_count_decrement()
