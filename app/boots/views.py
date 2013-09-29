@@ -1,11 +1,9 @@
-import json
-
 from django.views.generic import CreateView, UpdateView, DeleteView, View
 from django.views.generic.edit import SingleObjectMixin, ModelFormMixin
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.base import TemplateResponseMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
@@ -13,7 +11,7 @@ from boots.models import Boot, BootVersion, Star
 from boots.forms import BootVersionCreationForm
 from accounts.views import TeamMixin, TeamObjectMixin
 from boots.models import Team, Boot, BootVersion
-from core.views import EnsureCSRFMixin
+from core.views import EnsureCSRFMixin, JSONResponseMixin
 from haystack.views import SearchView as BaseSearchView
 
 
@@ -151,9 +149,9 @@ class BootVersionView(EnsureCSRFMixin, BootContextMixin, BootVersionObjectMixin,
     template_name = 'boots/boot.html'
 
 
-class StarBootView(EnsureCSRFMixin, View):
+class StarBootView(JSONResponseMixin, EnsureCSRFMixin, View):
 
-    def post(self, request, *args, **kwargs):
+    def json_post(self, request, *args, **kwargs):
         user = request.user
 
         response = {}
@@ -187,4 +185,4 @@ class StarBootView(EnsureCSRFMixin, View):
         else:
             response['message'] = _('Must be logged in.')
 
-        return HttpResponse(json.dumps(response), content_type='application/json')
+        return response
