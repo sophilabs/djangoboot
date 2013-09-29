@@ -1,2 +1,4 @@
 Bootstrap: http://getbootstrap.com/customize/
 Icons: https://github.com/styleguide/css/7.0
+Tag: get_absolute_url => /search?tag=...
+Boot creation page: Add validation message to boot slug
