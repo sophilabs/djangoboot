@@ -73,10 +73,39 @@ class TeamUpdateView(TeamMixin, UpdateView):
     include_users = False
 
 
+class TeamAddUserView(TeamMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        team = self.get_object()
+        try:
+            user = User.objects.get(id=request.GET.get('user'))
+            if team.is_team():
+                user.teams.add(team)
+            return redirect(user.get_absolute_url())
+        except User.DoesNotExist:
+            return redirect(team.get_absolute_url())
+
+
+class TeamLeaveView(TeamMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        team = self.get_object()
+        user = request.user
+
+        if team.is_team() and team.users.count() == 1:
+            return redirect(team.get_delete_url())
+
+        user.teams.remove(team)
+        return redirect(team.get_absolute_url())
+
+
 class TeamDeleteView(TeamMixin, DeleteView):
     model = Team
     template_name = 'delete.html'
     include_users = False
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
 
 
 class TeamOnlyMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):

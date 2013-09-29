@@ -27,6 +27,26 @@ class Team(TimeStampedMixin, models.Model):
         else:
             return 'accounts:team_update', [self.slug]
 
+    @models.permalink
+    def get_add_user_url(self):
+        return 'accounts:team_add_user', [self.slug]
+
+    @models.permalink
+    def get_leave_url(self):
+        return 'accounts:team_leave', [self.slug]
+
+    def is_user(self):
+        try:
+            return self.default_users.all()[0]
+        except IndexError:
+            pass
+
+    def is_team(self):
+        return not self.is_user()
+
+    def has_user(self, user):
+        return user.team == self or self.users.filter(id=user.id)
+
     def __unicode__(self):
         return self.name
 
