@@ -2,12 +2,14 @@
 
 {% load i18n %}
 
+{% block title %}{{ block.super }} - Create Team{% endblock title %}
+
 {% block header %}
     {% trans 'Create Team' %}
-{% endblock %}
+{% endblock header %}
 
 {% block buttons %}
     <button type="submit" class="btn btn-primary btn-lg">
         <i class="icon-plus-sign"></i> {% trans 'Create' %}
     </button>
-{% endblock %}
+{% endblock buttons %}

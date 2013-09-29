@@ -3,6 +3,8 @@
 {% load i18n %}
 {% load auth %}
 
+{% block title %}{{ block.super }} - Sign in{% endblock title %}
+
 {% block content %}
     <main role="main">
         <div class="container">
@@ -23,4 +25,4 @@
             </div>
         </div>
     </main>
-{% endblock %}
+{% endblock content %}

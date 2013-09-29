@@ -9,10 +9,10 @@
         <div class="container">
             <div class="page-header">
                 <div class="pull-right">
-                    {% block header_buttons %}{% endblock %}
+                    {% block header_buttons %}{% endblock header_buttons %}
                 </div>
 
-                <h1>{% block header %}{% endblock %}</h1>
+                <h1>{% block header %}{% endblock header %}</h1>
             </div>
 
             <form action="" method="post" class="form">
@@ -25,7 +25,7 @@
                         <div class="pull-right">
                             {% bootstrap_form_buttons %}
                                 {% block buttons %}
-                                {% endblock %}
+                                {% endblock buttons %}
                             {% end_bootstrap_form_buttons %}
                         </div>
                     </div>
@@ -33,4 +33,4 @@
             </form>
         </div>
     </main>
-{% endblock %}
+{% endblock content %}

@@ -7,6 +7,8 @@
 {% load stars %}
 {% load humanize %}
 
+{% block title %}{{ block.super }} - {{ boot.team }}/{{ boot }}{% endblock %}
+
 {% block css %}
     {{ block.super }}
     {% include 'boots/star_boot_css.html' %}
