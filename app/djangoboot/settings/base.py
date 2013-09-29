@@ -47,6 +47,13 @@ DATABASES = {
     }
 }
 
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr/boots'
+    }
+}
+
 ALLOWED_HOSTS = []
 
 
@@ -168,6 +175,7 @@ INSTALLED_APPS = (
     'storages',
     'bootstrap3',
     'widget_tweaks',
+    'haystack',
 
     'core',
     'accounts',

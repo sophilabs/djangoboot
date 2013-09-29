@@ -4,6 +4,7 @@
 {% load future %}
 {% load gravatar %}
 {% load staticfiles %}
+{% load qurl %}
 
 {% block css %}
     {{ block.super }}
@@ -16,18 +17,25 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-3 filters">
+                {% if team %}
                 <div class="well">
                     <div class="row">
-                        <img class="col-md-12" src="{% gravatar user.email 200 %}" />
+                        <img class="col-md-12" src="{% gravatar team.email 200 %}" />
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                                <h5><i class="icon-user"></i> {{ request.user.team.slug }}</h5>
-                                <h5><i class="icon-envelope"></i> {{ request.user.team.email }}</h5>
-                                <h5><i class="icon-time"></i> September 24, 2013</h5>
-                            </div>
+                            <h5><i class="icon-user"></i> {{ team.slug }}</h5>
+                            <h5><i class="icon-envelope"></i> {{ team.email }}</h5>
+                            {% if team.url %}
+                            <h5><i class="icon-link"></i> {{ team.url }}</h5>
+                            {% endif %}
+                            {% if team.created %}
+                            <h5><i class="icon-time"></i> Joined on {{ team.created|date:'M j, Y' }}</h5>
+                            {% endif %}
                         </div>
                     </div>
+                </div>
+                {% endif %}
                 <form class="form-inline" role="form" method="get" action="/search?tag=b">
                     <div class="input-group">
                         <input name="q" class="form-control" type="text" placeholder="Search...">
@@ -51,7 +59,7 @@
                         </a>
                     </li>
                     <li>
-                        <form class="form-inline" role="form" method="get" action="/search?tag=b">
+                        <form class="form-inline" role="form" method="get" action="{{ request.get_full_path }}">
                             <input name="tag" class="form-control" type="text" placeholder="Type a tag...">
                         </form>
                     </li>
@@ -62,38 +70,46 @@
                     <div class="col-lg-12">
                         <div class="btn-group btn-group-sm pull-right">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                Sort: <strong></strong> <span class="caret"></span>
+                                {% block sort_name %}{% trans 'Sort:' %}{% endblock sort_name %}
+                                <strong>{% block sort_active %}{% trans 'Most Loved' %}{% endblock sort_active %}</strong>
+                                <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
+                                {% block sort_options %}
+                                <li><a href="#">{% trans 'Most Loved' %}</a></li>
+                                <li><a href="#">{% trans 'Recently Added' %}</a></li>
+                                <li><a href="#">{% trans 'Recently Created' %}</a></li>
+                                {% endblock sort_options %}
                             </ul>
                         </div>
-                        <h2>{% block search_title %}{% trans 'Results' %}{% endblock search_title %} <small>500 boots</small></h2>
+                        <h2>{% block search_title %}{% trans 'Results' %}{% endblock search_title %} <small>{{ object_list.count }} boots</small></h2>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="list-group">
+                            {% for boot in page.object_list %}
+                                HOLA!
                             <div class="list-group-item">
                                 <h4 class="list-group-item-heading">
                                     <span class="pull-right"><a class="btn btn-primary btn-xs" href="#"><i class="icon-heart"></i> 45</a></span>
-                                    <a href="#">pricco</a> / <a href="#">django-two-scoops</a>
+                                    <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>
+                                    /
+                                    <a href="{{ boot.get_absolute_url }}">{{ boot.slug }}</a>
                                 </h4>
-                                <p class="list-group-item-text">text text text text text text text text </p>
-                                <p class="list-group-item-text"><a class="label label-primary" href="#">puppet</a> <a class="label label-primary" href="#">sphinx</a></p>
+                                <p class="list-group-item-text">{{ boot.tagline }}</p>
+                                <p class="list-group-item-text">
+                                    {% if boot.type == 'A' %}
+                                    <span class="label label-default">app</span>
+                                    {% else %}
+                                    <span class="label label-default">project</span>
+                                    {% endif %}
+                                    {% for tag in boot.tags.all %}
+                                    <a class="label label-primary" href="#">{{ tag.slug }}</a>
+                                    {% endfor %}
+                                </p>
                             </div>
-                            <div class="list-group-item">
-                                <h4 class="list-group-item-heading">
-                                    <span class="pull-right"><a class="btn btn-primary btn-xs" href="#"><i class="icon-heart"></i> 45</a></span>
-                                    <a href="#">pricco</a> / <a href="#">django-two-scoops</a>
-                                </h4>
-                                <p class="list-group-item-text">text text text text text text text text </p>
-                                <p class="list-group-item-text"><a class="label label-primary" href="#">puppet</a> <a class="label label-primary" href="#">sphinx</a></p>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

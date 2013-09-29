@@ -1,0 +1,7 @@
+{{ object.slug }}
+{{ object.team.slug }}
+{{ object.tagline }}
+{{ object.type }}
+{% for tag in object.tags.all %}
+{{ tag.slug }}
+{% endfor %}

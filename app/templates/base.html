@@ -52,8 +52,15 @@
 
                     {% if request.user.is_authenticated %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="gravatar"><img src="{% gravatar request.user.email %}"> {{ request.user.team.slug }}</span> <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="gravatar">
+                                <img src="{% gravatar request.user.team.email %}">
+                                {{ request.user.team.slug }}
+                            </span>
+                            <b class="caret"></b>
+                        </a>
                         <ul class="dropdown-menu">
+                            <li><a href="{{ request.user.team.get_absolute_url }}"><i class="icon-user"></i> {% trans 'Profile' %}</a></li>
                             <li><a href="{% logout %}"><i class="icon-signout"></i> {% trans 'Sign out' %}</a></li>
                         </ul>
                     </li>

@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, View
+from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView, View
 from django.views.generic.edit import SingleObjectMixin, ModelFormMixin
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.base import TemplateResponseMixin
@@ -9,7 +9,8 @@ from django.shortcuts import get_object_or_404
 from boots.models import Boot, BootVersion
 from boots.forms import BootVersionCreationForm
 from accounts.views import UserTeamsMixin, TeamMixin
-
+from boots.models import Team, Boot, BootVersion
+from haystack.views import SearchView as BaseSearchView
 
 class BootObjectMixin(SingleObjectMixin):
     model = Boot
@@ -45,16 +46,44 @@ class BootVersionObjectMixin(SingleObjectMixin):
         return obj
 
 
-class SearchView(TemplateView):
-    template_name = 'boots/search.html'
+from haystack.forms import SearchForm as BaseSearchForm
+from haystack.query import SearchQuerySet
+from boots.search_indexes import BootIndex
+
+class SearchForm(BaseSearchForm):
+    pass
 
 
-class TrendingView(TemplateView):
+class SearchView(BaseSearchView):
+    template = 'boots/search.html'
+    form = SearchForm
+    results = SearchQuerySet().all()
+    results_per_page = 1
+
+    @classmethod
+    def as_view(cls):
+        return cls()
+
+
+class TrendingView(SearchView):
     template_name = 'boots/trending.html'
 
 
-class TeamView(TemplateView):
+class TeamView(SearchView):
     template_name = 'boots/team.html'
+
+    def __get_team(self):
+        try:
+            return Team.objects.get(slug=self.kwargs['team'])
+        except Team.DoesNotExist:
+            raise Http404
+
+    def get_context_data(self, **kwargs):
+        kwargs['team'] = self.__get_team()
+        return super(TeamView, self).get_context_data(**kwargs)
+
+    def get_queryset(self):
+        return super(TeamView, self).get_queryset().filter(team=self.__get_team())
 
 
 class BootContextMixin(UserTeamsMixin):
