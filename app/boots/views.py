@@ -159,7 +159,7 @@ class StarBootView(EnsureCSRFMixin, View):
                     star.delete()
                     response['value'] = False
 
-                response['count'] = Star.objects.filter(boot=boot).count()
+                response['count'] = boot.star_count
         else:
             response['message'] = _('Must be logged in.')
 

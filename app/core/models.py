@@ -17,3 +17,6 @@ class SlugField(models.SlugField):
         defaults = {'form_class': forms.SlugField}
         defaults.update(kwargs)
         return super(SlugField, self).formfield(**defaults)
+
+    def south_field_triple(self):
+        return 'django.db.models.CharField', [], {'max_length':'50'}

@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
 
 from taggit.managers import TaggableManager
 
@@ -39,6 +41,17 @@ class Boot(TimeStampedMixin, models.Model):
     def get_create_url(self):
         return 'boots:boot_version_create', [self.team.slug, self.slug]
 
+    def get_star_count_object(self):
+        try:
+            star_count_object = self.star_count_object
+        except StarCount.DoesNotExist:
+            star_count_object = StarCount.objects.create(boot=self, count=self.stars.count())
+        return star_count_object
+
+    @property
+    def star_count(self):
+        return self.get_star_count_object().count
+
     class Meta:
         unique_together = (('team', 'slug',),)
 
@@ -50,6 +63,11 @@ class Star(models.Model):
 
     class Meta:
         unique_together = (('boot', 'user',),)
+
+
+class StarCount(models.Model):
+    boot = models.OneToOneField(Boot, related_name='star_count_object')
+    count = models.IntegerField()
 
 
 class BootVersion(TimeStampedMixin, models.Model):
@@ -71,3 +89,18 @@ class BootVersion(TimeStampedMixin, models.Model):
 
     class Meta:
         unique_together = (('boot', 'slug',),)
+
+
+@receiver(post_save, sender=Star)
+def star_count_increment(sender, instance, created, **kwargs):
+    star_count_object = instance.boot.get_star_count_object()
+    star_count_object.count += 1
+    star_count_object.save()
+
+
+@receiver(pre_delete, sender=Star)
+def star_count_decrement(sender, instance, **kwargs):
+    star_count_object = instance.boot.get_star_count_object()
+    star_count_object.count -= 1
+    star_count_object.save()
+
