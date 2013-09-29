@@ -6,6 +6,7 @@
 {% load staticfiles %}
 {% load stars %}
 
+
 {% block content %}
     <main role="main">
         <div class="container">
@@ -47,7 +48,7 @@
                         <div class="input-group">
                             <input disabled="disabled" type="text" class="form-control input-lg" value="{{ object.source }}">
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ object.source }}">
+                                <button id="boot-copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ object.source }}">
                                     <i class="icon-copy"></i>
                                 </button>
                             </span>
@@ -94,5 +95,11 @@
 
 {% block js %}
     {{ block.super }}
+    <script src="{% static 'js/ZeroClipboard.js' %}"></script>
+    <script>
+        var clip = new ZeroClipboard(document.getElementById('boot-copy-button'), {
+            moviePath: '{% static "swf/ZeroClipboard.swf" %}'
+        });
+    </script>
     {% include 'boots/star_boot_js.html' %}
 {% endblock %}
