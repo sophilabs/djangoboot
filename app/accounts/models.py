@@ -9,6 +9,7 @@ class Team(models.Model):
     slug = models.SlugField(_('slug'), unique=True)
     name = models.CharField(_('name'), max_length=100)
     email = models.EmailField(_('email'))
+    url = models.URLField(_('URL'), null=True, blank=True)
 
     @models.permalink
     def get_absolute_url(self):
