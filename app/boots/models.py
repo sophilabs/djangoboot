@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.utils.translation import ugettext as _
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
 
@@ -110,7 +110,7 @@ class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
     slug = SlugField(_('slug'), help_text=_('Version slug.'))
     source = models.URLField(_('source'), help_text=_('Template source url.'))
-    append = models.CharField(_('command arguments'), help_text=_('Extra command arguments for django-admin.py'),
+    append = models.CharField(_('command arguments'), help_text=_('Extra command arguments for django-admin.py or cookiecutter.'),
                               null=True, blank=True, max_length=200)
 
     def __unicode__(self):
@@ -151,6 +151,6 @@ def star_count_increment(sender, instance, created, **kwargs):
     instance.boot.update_star_count()
 
 
-@receiver(pre_delete, sender=Star)
+@receiver(post_delete, sender=Star)
 def star_count_decrement(sender, instance, **kwargs):
     instance.boot.update_star_count()

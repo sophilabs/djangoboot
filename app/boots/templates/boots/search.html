@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 {% endif %}
-                <form class="form-inline" role="form" method="get" action="{% qurl request.get_full_path q=None %}">
+                <form class="form-inline" role="form" method="get" action="{% qurl request.get_full_path page=None q=None %}">
                     <div class="input-group">
                         <input name="q" class="form-control" type="text" placeholder="Search..." value="{{ form.q.value|default_if_none:'' }}">
                         <span class="input-group-btn">
@@ -47,11 +47,22 @@
                     </div>
                 </form>
                 <h4>Type</h4>
-                <div class="btn-group btn-group-sm">
-                    <a href="{% qurl request.get_full_path type=None %}" type="button" class="btn btn-default">All</a>
-                    <a href="{% qurl request.get_full_path type='P' %}" type="button" class="btn btn-default">{% trans 'Project' %}</a>
-                    <a href="{% qurl request.get_full_path type='A' %}" type="button" class="btn btn-default">{% trans 'App' %}</a>
-                    <a href="{% qurl request.get_full_path type='C' %}" type="button" class="btn btn-default">{% trans 'CookieCutter' %}</a>
+                <ul class="nav nav-pills nav-justified">
+                    <li class="{% if not form.type.value %}active{% endif %}">
+                        <a href="{% qurl request.get_full_path page=None type=None %}">{% trans 'All' %}</a>
+                    </li>
+                    <li class="{% if form.type.value == 'P'  %}active{% endif %}">
+                        <a href="{% qurl request.get_full_path page=None type='P' %}">{% trans 'Project' %}</a>
+                    </li>
+                    <li class="{% if form.type.value == 'A'  %}active{% endif %}">
+                        <a href="{% qurl request.get_full_path page=None type='A' %}">{% trans 'App' %}</a>
+                    </li>
+                    <li class="{% if form.type.value == 'C'  %}active{% endif %}">
+                        <a href="{% qurl request.get_full_path page=None type='C' %}">{% trans 'Cookie' %}</a>
+                    </li>
+                </ul>
+                <div class="btn-group btn-group-sm btn-group-justified">
+
                 </div>
                 <h4>Tags</h4>
                 <ul class="nav nav-pills nav-stacked">
@@ -68,7 +79,7 @@
                         </a>
                     </li>
                     <li>
-                        <form class="form-inline" role="form" method="get" action="{{ request.get_full_path }}">
+                        <form class="form-inline" role="form" method="get" action="{% qurl request.get_full_path page=None %}">
                             <input name="tag" class="form-control" type="text" placeholder="Type a tag...">
                             <input name="tag" class="form-control" type="text" value="aaad">
                             <input type="submit" >
@@ -87,9 +98,9 @@
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 {% block sort_options %}
-                                <li><a href="{% qurl request.get_full_path sort='loved' %}">{% trans 'Most Loved' %}</a></li>
-                                <li><a href="{% qurl request.get_full_path sort='adde' %}">{% trans 'Recently Added' %}</a></li>
-                                <li><a href="{% qurl request.get_full_path sort='modified' %}">{% trans 'Recently Modified' %}</a></li>
+                                <li><a href="{% qurl request.get_full_path page=None sort='loved' %}">{% trans 'Most Loved' %}</a></li>
+                                <li><a href="{% qurl request.get_full_path page=None sort='adde' %}">{% trans 'Recently Added' %}</a></li>
+                                <li><a href="{% qurl request.get_full_path page=None sort='modified' %}">{% trans 'Recently Modified' %}</a></li>
                                 {% endblock sort_options %}
                             </ul>
                         </div>
@@ -109,15 +120,9 @@
                                 </h4>
                                 <p class="list-group-item-text">{{ boot.object.tagline }}</p>
                                 <p class="list-group-item-text">
-                                    {% if boot.type == 'A' %}
-                                    <span class="label label-default">app</span>
-                                    {% elif boot.type == 'C' %}
-                                        <span class="label label-default">cookiecutter</span>
-                                    {% else %}
-                                    <span class="label label-default">project</span>
-                                    {% endif %}
+                                    <a href="{% qurl request.get_full_path page=None type=boot.object.type %}" class="label label-default">{{ boot.object.get_type_display|lower }}</a>
                                     {% for tag in boot.object.tags.all %}
-                                    <a class="label label-primary" href="{% qurl request.get_full_path tag+=tag.slug %}">{{ tag.slug }}</a>
+                                    <a href="{% qurl request.get_full_path page=None tag+=tag.slug %}" class="label label-primary">{{ tag.slug }}</a>
                                     {% endfor %}
                                 </p>
                             </div>
@@ -135,14 +140,13 @@
                             {% else %}
                             <li class="disabled"><a href="#">&laquo;</a></li>
                             {% endif %}
-
-
-
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
+                            {% for page_number in page.paginator.page_range %}
+                                {% if page.number == page_number %}
+                                <li class="disabled"><a href="#">{{ page_number }}</a></li>
+                                {% else %}
+                                <li><a href="{% qurl request.get_full_path page=page_number %}">{{ page_number }}</a></li>
+                                {% endif %}
+                            {% endfor %}
                             {% if page.has_next %}
                                 <li><a href="{% qurl request.get_full_path page=page.next_page_number %}">&raquo;</a></li>
                             {% else %}

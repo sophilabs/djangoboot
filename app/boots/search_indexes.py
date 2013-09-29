@@ -16,9 +16,8 @@ class BootIndex(indexes.SearchIndex, indexes.Indexable):
     star_count_day = indexes.IntegerField(model_attr='star_count_day')
     star_count_week = indexes.IntegerField(model_attr='star_count_week')
     star_count_month = indexes.IntegerField(model_attr='star_count_month')
-
     type = indexes.CharField(model_attr='type', faceted=True)
-    #tags = indexes.MultiValueField(model_attr='tags__slug', faceted=True)
+    tags = indexes.MultiValueField(model_attr='tags__all', faceted=True)
 
     def get_model(self):
         return Boot
