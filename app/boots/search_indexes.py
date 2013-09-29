@@ -12,9 +12,9 @@ class BootIndex(indexes.SearchIndex, indexes.Indexable):
     created = indexes.DateTimeField(model_attr='created')
     modified = indexes.DateTimeField(model_attr='modified')
     star_count = indexes.IntegerField(model_attr='star_count')
-    star_count_daily = indexes.IntegerField(model_attr='star_count_daily')
-    star_count_weekly = indexes.IntegerField(model_attr='star_count_weekly')
-    star_count_monthly = indexes.IntegerField(model_attr='star_count_monthly')
+    star_count_day = indexes.IntegerField(model_attr='star_count_day')
+    star_count_week = indexes.IntegerField(model_attr='star_count_week')
+    star_count_month = indexes.IntegerField(model_attr='star_count_month')
 
     #type = indexes.FacetCharField(model_attr='type')
     #tags = indexes.FacetMultiValueField()

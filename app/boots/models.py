@@ -1,7 +1,10 @@
+from datetime import timedelta
+
 from django.db import models
 from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
+from django.utils import timezone
 
 from taggit.managers import TaggableManager
 
@@ -28,9 +31,9 @@ class Boot(TimeStampedMixin, models.Model):
     tags = TaggableManager(verbose_name=_('tags'))
 
     r_star_count = models.IntegerField(null=True, blank=True)
-    r_star_count_daily = models.IntegerField(null=True, blank=True)
-    r_star_count_weekly = models.IntegerField(null=True, blank=True)
-    r_star_count_monthly = models.IntegerField(null=True, blank=True)
+    r_star_count_day = models.IntegerField(null=True, blank=True)
+    r_star_count_week = models.IntegerField(null=True, blank=True)
+    r_star_count_month = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
         return self.slug
@@ -58,28 +61,30 @@ class Boot(TimeStampedMixin, models.Model):
         return self.r_star_count
 
     @property
-    def star_count_daily(self):
-        if self.r_star_count_daily is None:
+    def star_count_day(self):
+        if self.r_star_count_day is None:
             self.update_star_count()
-        return self.r_star_count_daily
+        return self.r_star_count_day
 
     @property
-    def star_count_weekly(self):
-        if self.r_star_count_weekly is None:
+    def star_count_week(self):
+        if self.r_star_count_week is None:
             self.update_star_count()
-        return self.r_star_count_weekly
+        return self.r_star_count_week
 
     @property
-    def star_count_monthly(self):
-        if self.r_star_count_monthly is None:
+    def star_count_month(self):
+        if self.r_star_count_month is None:
             self.update_star_count()
-        return self.r_star_count_monthly
+        return self.r_star_count_month
 
     def star_count_increment(self, value=1):
         self.r_star_count = self.star_count + value
-        self.r_star_count_daily = self.star_count_daily + value
-        self.r_star_count_weekly = self.star_count_weekly + value
-        self.r_star_count_monthly = self.star_count_monthly + value
+
+        self.r_star_count_day = self.star_count_day + value
+        self.r_star_count_week = self.star_count_week + value
+        self.r_star_count_month = self.star_count_month + value
+
         self.save()
         return self.star_count
 
@@ -88,10 +93,12 @@ class Boot(TimeStampedMixin, models.Model):
 
     def update_star_count(self):
         self.r_star_count = self.stars.count()
-        #TODO: calculate daily, ...
-        self.r_star_count_daily = self.stars.count()
-        self.r_star_count_weekly = self.stars.count()
-        self.r_star_count_monthly = self.stars.count()
+
+        now = timezone.now()
+        self.r_star_count_day = self.stars.filter(timestamp__gte=now - timedelta(days=1)).count()
+        self.r_star_count_week = self.stars.filter(timestamp__gte=now - timedelta(weeks=1)).count()
+        self.r_star_count_month = self.stars.filter(timestamp__gte=now - timedelta(months=1)).count()
+
         self.save()
 
     class Meta:
