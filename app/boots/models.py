@@ -27,6 +27,9 @@ class Boot(TimeStampedMixin, models.Model):
 
     star_count = models.IntegerField(null=True, blank=True)
 
+    def __unicode__(self):
+        return self.slug
+
     @models.permalink
     def get_absolute_url(self):
         return 'boots:boot', [self.team.slug, self.slug]
@@ -76,6 +79,9 @@ class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
     slug = SlugField(_('slug'), help_text=_('Version slug.'))
     source = models.URLField(_('source'), help_text=_('ZIP source containing the template.'))
+
+    def __unicode__(self):
+        return unicode(self.boot) + ' ' + self.slug
 
     @property
     def team(self):

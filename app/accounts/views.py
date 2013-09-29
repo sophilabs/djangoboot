@@ -44,7 +44,7 @@ class TeamUpdateView(LoginRequiredMixin, TeamObjectMixin, UpdateView):
 
 class TeamDeleteView(LoginRequiredMixin, TeamObjectMixin, DeleteView):
     model = Team
-    template_name = 'accounts/team_delete.html'
+    template_name = 'delete.html'
 
 
 class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):

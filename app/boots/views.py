@@ -3,6 +3,7 @@ from django.views.generic.edit import SingleObjectMixin, ModelFormMixin
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.base import TemplateResponseMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
@@ -121,23 +122,30 @@ class BootUpdateView(TeamMixin, BootObjectMixin, UpdateView):
 
 
 class BootDeleteView(TeamMixin, BootObjectMixin, DeleteView):
-    template_name = 'boots/boot_delete.html'
+    template_name = 'delete.html'
+
+    def get_success_url(self):
+        return self.request.user.get_absolute_url()
 
 
-class BootVersionCreateView(TeamMixin, BootObjectMixin, CreateView):
+class BootVersionCreateView(TeamMixin, CreateView):
     template_name = 'boots/boot_version_create.html'
     form_class = BootVersionCreationForm
     model = BootVersion
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.boot = self.boot
+        self.object.boot = Boot.objects.get(team__slug=self.kwargs.get('team'),
+                                            slug=self.kwargs.get('boot'))
         self.object.save()
         return super(ModelFormMixin, self).form_valid(form)
 
 
 class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
-    template_name = 'boots/boot_version_delete.html'
+    template_name = 'delete.html'
+
+    def get_success_url(self):
+        return self.object.boot.get_absolute_url()
 
 
 class BootVersionView(EnsureCSRFMixin, BootContextMixin, BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):
