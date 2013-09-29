@@ -9,20 +9,18 @@
     <main role="main">
         <div class="container">
             <div class="page-header">
-                <span class="pull-right"><a class="btn btn-primary btn-lg" href="#"><i class="icon-heart"></i> 45</a></span>
+                <span class="pull-right"><a class="btn btn-primary btn-md" href="#"><i class="icon-heart"></i> 45</a></span>
 
                 <h2><a href="#">{{ object.team.slug }}</a> <span class="text-muted">/</span> <a href="#">{{ object.slug }}</a></h2>
-
-                {% for tag in object.tags.all %}
-                    <a href="#" class="label label-primary">{{ tag }}</a>
-                {% endfor %}
-
-                <a href="{{ object.url }}">{{ object.url }}</a>
             </div>
+
+            {{ object.tagline }} - <a href="{{ object.url }}">{{ object.url }}</a> <br/>
 
             <div class="row">
                 <div class="col-md-8">
-                    {{ object.tagline|linebreaks }}
+                    {% for tag in object.tags.all %}
+                        <a href="#" class="label label-primary">{{ tag }}</a>
+                    {% endfor %}
 
                     <hr/>
 
@@ -36,24 +34,24 @@
 
                 <div class="col-md-4">
                     <div class="list-group">
-                        <a href="#" class="list-group-item">
-                            <span class="label label-default">0.4</span>
-                            <span class="pull-right">December 14, 2013</span> <br/>
+                        <a href="#" class="list-group-item active">
+                            <span>December 14, 2013</span>
+                            <span class="badge">0.4</span>
                         </a>
 
                         <a href="#" class="list-group-item">
-                            <span class="label label-default">0.4</span>
-                            <span class="pull-right">December 14, 2013</span> <br/>
+                            <span>December 14, 2013</span>
+                            <span class="badge">0.4</span>
                         </a>
 
                         <a href="#" class="list-group-item">
-                            <span class="label label-default">0.4</span>
-                            <span class="pull-right">December 14, 2013</span> <br/>
+                            <span>December 14, 2013</span>
+                            <span class="badge">0.4</span>
                         </a>
 
                         <a href="#" class="list-group-item">
-                            <span class="label label-default">0.4</span>
-                            <span class="pull-right">December 14, 2013</span> <br/>
+                            <span>December 14, 2013</span>
+                            <span class="badge">0.4</span>
                         </a>
                     </div>
                 </div>
