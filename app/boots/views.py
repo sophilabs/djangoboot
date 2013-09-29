@@ -85,7 +85,7 @@ class BootVersionCreateView(TeamMixin, BootVersionObjectMixin, CreateView):
         self.boot = get_object_or_404(Boot,
                                       team__slug=self.kwargs.get('team'),
                                       slug=self.kwargs.get('boot'))
-        return super(BootVersionCreateView, self).dispatch(*args, **kwargs)
+        return super(BootVersionCreateView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

@@ -47,5 +47,5 @@ class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):
         team_field = form.fields.get('team')
         if team_field:
             team_field.queryset = self.get_teams_queryset()
-        team_field.widget = forms.HiddenInput()
+            team_field.widget = forms.HiddenInput()
         return form
