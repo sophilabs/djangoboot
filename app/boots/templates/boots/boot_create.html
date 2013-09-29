@@ -1,70 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'boots/boot_common.html' %}
 
 {% load i18n %}
-{% load bootstrap3 %}
-{% load widget_tweaks %}
-{% load staticfiles %}
 
-{% block content %}
-    <main role="main">
-        <div class="container">
-            <div class="page-header">
-                <h1><i class="icon-plus-sign"></i> {% trans 'Add Boot' %} <small></small></h1>
-            </div>
-
-
-            <form action="" method="post" class="form">
-                {% csrf_token %}
-
-                <div class="row">
-                    <div class="col-md-4">
-                        {% bootstrap_field form.type %}
-
-                        <div class="form-group">
-                            <label>Boot slug</label>
-
-                            <div class="form-inline">
-                                <div class="form-group {% if form.team.errors %}has-error{% endif %}">
-                                    <!-- Owner -->
-                                    {% include 'accounts/team_selector.html' %}
-                                </div>
-
-                                <div class="form-group text-muted">
-                                    /
-                                </div>
-
-                                <div class="form-group {% if form.slug.errors %}has-error{% endif %}">
-                                    <!-- Slug -->
-                                    {{ form.slug|attr:'class:form-control' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4 left">
-                        {% bootstrap_field form.tagline %}
-                        {% bootstrap_field form.tags %}
-                    </div>
-
-                    <div class="col-md-4 left">
-                        {% bootstrap_field form.url %}
-                        <div class="pull-right">
-                            {% bootstrap_form_buttons %}
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    {% trans 'Create' %}
-                                </button>
-                            {% end_bootstrap_form_buttons %}
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </main>
+{% block header %}
+    <i class="icon-plus-sign"></i> {% trans 'Add Boot' %} <small></small>
 {% endblock %}
 
-
-{% block js %}
-    {{ block.super }}
-    <script src="{% static 'js/team_selector.js' %}"></script>
+{% block caption %}
+    {% trans 'Add' %}
 {% endblock %}

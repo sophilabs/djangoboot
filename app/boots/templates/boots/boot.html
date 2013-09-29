@@ -9,7 +9,18 @@
     <main role="main">
         <div class="container">
             <div class="page-header">
-                <span class="pull-right"><a class="btn btn-primary btn-md" href="#"><i class="icon-heart"></i> 45</a></span>
+                <div class="pull-right">
+                    {% if boot_team_member %}
+                        <a class="btn btn-default btn-md" href="{{ boot.get_update_url }}">
+                            <i class="icon-pencil"></i> {% trans 'Update Boot' %}
+                        </a>
+                        <a class="btn btn-danger btn-md" href="{{ object.get_delete_url }}">
+                            <i class="icon-remove"></i> {% trans 'Delete this version' %}
+                        </a>
+                    {% endif %}
+
+                    <a class="btn btn-primary btn-md" href="#"><i class="icon-heart"></i> 45</a>
+                </div>
 
                 <h1>
                     <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>

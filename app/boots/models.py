@@ -28,6 +28,14 @@ class Boot(TimeStampedMixin, models.Model):
         return 'boots:boot', [self.team.slug, self.slug]
 
     @models.permalink
+    def get_update_url(self):
+        return 'boots:boot_update', [self.team.slug, self.slug]
+
+    @models.permalink
+    def get_delete_url(self):
+        return 'boots:boot_delete', [self.team.slug, self.slug]
+
+    @models.permalink
     def get_create_url(self):
         return 'boots:boot_version_create', [self.team.slug, self.slug]
 
@@ -47,6 +55,10 @@ class BootVersion(TimeStampedMixin, models.Model):
     @models.permalink
     def get_absolute_url(self):
         return 'boots:boot_version', [self.boot.team.slug, self.boot.slug, self.slug]
+
+    @models.permalink
+    def get_delete_url(self):
+        return 'boots:boot_version_delete', [self.boot.team.slug, self.boot.slug, self.slug]
 
     class Meta:
         unique_together = (('boot', 'slug',),)
