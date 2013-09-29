@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 
 from taggit.managers import TaggableManager
 
-from core.models import TimeStampedMixin
+from core.models import TimeStampedMixin, SlugField
 from accounts.models import User, Team
 
 
@@ -17,7 +17,7 @@ class Boot(TimeStampedMixin, models.Model):
     )
 
     team = models.ForeignKey(Team, verbose_name=_('owner'))
-    slug = models.SlugField(_('slug'))
+    slug = SlugField(_('slug'))
     tagline = models.CharField(max_length=250, help_text=_('Short description.'))
     url = models.URLField(_('URL'), null=True, blank=True, help_text=_('Public site or repository.'))
     type = models.CharField(_('type'), max_length=1, choices=TYPES, help_text=_('Type of template.'))
@@ -54,7 +54,7 @@ class Star(models.Model):
 
 class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
-    slug = models.SlugField(_('slug'), help_text=_('Version slug.'))
+    slug = SlugField(_('slug'), help_text=_('Version slug.'))
     source = models.URLField(_('source'), help_text=_('ZIP source containing the template.'))
 
     @property
