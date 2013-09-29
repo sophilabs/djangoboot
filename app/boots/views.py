@@ -1,12 +1,15 @@
+import json
+
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, View
 from django.views.generic.edit import SingleObjectMixin, ModelFormMixin
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.base import TemplateResponseMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 
-from boots.models import Boot, BootVersion
+from boots.models import Boot, BootVersion, Star
 from boots.forms import BootVersionCreationForm
 from accounts.views import UserTeamsMixin, TeamMixin
 
@@ -124,3 +127,38 @@ class BootVersionDeleteView(TeamMixin, BootVersionObjectMixin, DeleteView):
 
 class BootVersionView(BootContextMixin, BootVersionObjectMixin, TemplateResponseMixin, BaseDetailView):
     template_name = 'boots/boot.html'
+
+
+class StarBootView(View):
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        response = {}
+
+        if user.is_authenticated():
+            boot_id = request.POST.get('boot_id')
+            try:
+                boot = Boot.objects.get(id=boot_id)
+            except ObjectDoesNotExist:
+                boot = None
+                response['message'] = _('Boot not found.')
+
+            if boot:
+                value = request.POST.get('value') == 'true'
+                star = Star.objects.filter(user=user, boot=boot)
+
+                if not value:
+                    if not star:
+                        Star.objects.create(user=user, boot=boot)
+                    response['value'] = True
+                    response['message'] = _('Thank you!')
+                else:
+                    star.delete()
+                    response['value'] = False
+
+                response['count'] = Star.objects.filter(boot=boot).count()
+        else:
+            response['message'] = _('Must be logged in.')
+
+        return HttpResponse(json.dumps(response), content_type='application/json')

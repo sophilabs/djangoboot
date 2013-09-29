@@ -1,10 +1,14 @@
 from django.conf.urls import patterns, url
 
 from boots.views import SearchView, TrendingView, TeamView, BootView, BootVersionView, BootCreateView, \
-    BootUpdateView, BootDeleteView, BootVersionCreateView, BootVersionDeleteView
+    BootUpdateView, BootDeleteView, BootVersionCreateView, BootVersionDeleteView, StarBootView
 
 
 urlpatterns = patterns('',
+    url(r'^star_boot$',
+        StarBootView.as_view(),
+        name='star_boot'),
+
     url(r'^search$',
         SearchView.as_view(),
         name='search'),
@@ -38,5 +42,4 @@ urlpatterns = patterns('',
     url(r'^(?P<team>[-a-zA-Z0-9_]+)/(?P<boot>[-a-zA-Z0-9_]+)/(?P<version>[-a-zA-Z0-9_]+)$',
         BootVersionView.as_view(),
         name='boot_version'),
-
 )

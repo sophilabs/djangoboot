@@ -4,6 +4,7 @@
 {% load bootstrap3 %}
 {% load widget_tweaks %}
 {% load staticfiles %}
+{% load stars %}
 
 {% block content %}
     <main role="main">
@@ -21,7 +22,7 @@
                         {% endif %}
                     {% endif %}
 
-                    <a class="btn btn-primary btn-sm" href="#"><i class="icon-heart"></i> 45</a>
+                    {% star_button boot %}
                 </div>
 
                 <h1>
@@ -88,4 +89,10 @@
             {% endif %}
         </div>
     </main>
+{% endblock %}
+
+
+{% block js %}
+    {{ block.super }}
+    {% include 'boots/star_boot_js.html' %}
 {% endblock %}
