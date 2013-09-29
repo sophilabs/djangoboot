@@ -99,7 +99,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 {% block sort_options %}
                                 <li><a href="{% qurl request.get_full_path page=None sort='loved' %}">{% trans 'Most Loved' %}</a></li>
-                                <li><a href="{% qurl request.get_full_path page=None sort='adde' %}">{% trans 'Recently Added' %}</a></li>
+                                <li><a href="{% qurl request.get_full_path page=None sort='added' %}">{% trans 'Recently Added' %}</a></li>
                                 <li><a href="{% qurl request.get_full_path page=None sort='modified' %}">{% trans 'Recently Modified' %}</a></li>
                                 {% endblock sort_options %}
                             </ul>

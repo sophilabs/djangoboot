@@ -19,6 +19,7 @@ class LogoutView(View):
 class TeamObjectMixin(SingleObjectMixin):
     model = Team
     context_object_name = 'team'
+    include_users = True
 
     def get_object(self, queryset=None):
         if queryset is None:
@@ -29,6 +30,14 @@ class TeamObjectMixin(SingleObjectMixin):
         except ObjectDoesNotExist:
             raise Http404
 
+        print '*' * 100
+
+        if not self.include_users:
+            if User.objects.filter(team=obj):
+                raise Http404()
+
+        print '-' * 100
+
         return obj
 
 
@@ -36,15 +45,22 @@ class TeamCreateView(LoginRequiredMixin, CreateView):
     model = Team
     template_name = 'accounts/team_create.html'
 
+    def form_valid(self, form):
+        self.object = form.save()
+        self.request.user.teams.add(self.object)
+        return super(TeamCreateView, self).form_valid(form)
+
 
 class TeamUpdateView(LoginRequiredMixin, TeamObjectMixin, UpdateView):
     model = Team
     template_name = 'accounts/team_update.html'
+    include_users = False
 
 
 class TeamDeleteView(LoginRequiredMixin, TeamObjectMixin, DeleteView):
     model = Team
     template_name = 'delete.html'
+    include_users = False
 
 
 class TeamMixin(LoginRequiredMixin, FormMixin, SingleObjectMixin):

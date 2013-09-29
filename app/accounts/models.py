@@ -8,13 +8,17 @@ from core.models import TimeStampedMixin, SlugField
 
 class Team(models.Model):
     slug = SlugField(_('slug'), unique=True)
-    name = models.CharField(_('name'), max_length=100)
+    name = models.CharField(_('name'), max_length=100, help_text=_('Display name for the team.'))
     email = models.EmailField(_('email'))
-    url = models.URLField(_('URL'), null=True, blank=True)
+    url = models.URLField(_('URL'), null=True, blank=True, help_text=_('Website of the team.'))
 
     @models.permalink
     def get_absolute_url(self):
         return 'boots:team', [self.slug]
+
+    @models.permalink
+    def get_delete_url(self):
+        return 'accounts:team_delete', [self.slug]
 
     def __unicode__(self):
         return self.name
