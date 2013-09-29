@@ -67,11 +67,11 @@ class SearchView(BaseSearchView):
 
 
 class TrendingView(SearchView):
-    template_name = 'boots/trending.html'
+    template = 'boots/trending.html'
 
 
 class TeamView(TeamObjectMixin, SearchView):
-    template_name = 'boots/team.html'
+    template = 'boots/team.html'
 
     def extra_context(self):
         return {'team': self.get_object()}

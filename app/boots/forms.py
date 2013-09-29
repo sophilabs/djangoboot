@@ -53,6 +53,7 @@ class SearchForm(hsforms.SearchForm):
             return sqs
         if self.cleaned_data['type']:
             sqs = sqs.filter_and(type=self.cleaned_data['type'])
+
         return sqs
 
     def no_query_found(self):

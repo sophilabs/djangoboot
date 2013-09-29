@@ -38,9 +38,9 @@
                     </div>
                 </div>
                 {% endif %}
-                <form class="form-inline" role="form" method="get" action="/search?tag=b">
+                <form class="form-inline" role="form" method="get" action="{% qurl request.get_full_path q=None %}">
                     <div class="input-group">
-                        <input name="q" class="form-control" type="text" placeholder="Search...">
+                        <input name="q" class="form-control" type="text" placeholder="Search..." value="{{ form.q.value|default_if_none:'' }}">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="submit"><i class="icon-search"></i></button>
                         </span>
@@ -70,6 +70,8 @@
                     <li>
                         <form class="form-inline" role="form" method="get" action="{{ request.get_full_path }}">
                             <input name="tag" class="form-control" type="text" placeholder="Type a tag...">
+                            <input name="tag" class="form-control" type="text" value="aaad">
+                            <input type="submit" >
                         </form>
                     </li>
                 </ul>
