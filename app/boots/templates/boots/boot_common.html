@@ -9,6 +9,10 @@
     <main role="main">
         <div class="container">
             <div class="page-header">
+                <div class="pull-right">
+                    {% block header_buttons %}{% endblock %}
+                </div>
+
                 <h1>{% block header %}{% endblock %}</h1>
             </div>
 
@@ -51,9 +55,8 @@
                         {% bootstrap_field form.url %}
                         <div class="pull-right">
                             {% bootstrap_form_buttons %}
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    {% block caption %}{% endblock %}
-                                </button>
+                                {% block buttons %}
+                                {% endblock %}
                             {% end_bootstrap_form_buttons %}
                         </div>
                     </div>

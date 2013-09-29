@@ -6,6 +6,18 @@
     <i class="icon-pencil"></i> {% trans 'Update Boot' %} <small></small>
 {% endblock %}
 
-{% block caption %}
-    {% trans 'Save' %}
+{% block header_buttons %}
+    <a href="{{ boot.get_absolute_url }}" class="btn btn-default btn-sm">
+        <i class="icon-arrow-left"></i> {% trans 'Back' %}
+    </a>
+
+    <a href="{{ boot.get_delete_url }}" class="btn btn-danger btn-sm">
+        <i class="icon-remove"></i> {% trans 'Delete this Boot' %}
+    </a>
+{% endblock %}
+
+{% block buttons %}
+    <button type="submit" class="btn btn-primary btn-lg">
+        <i class="icon-ok"></i> {% trans 'Save' %}
+    </button>
 {% endblock %}
