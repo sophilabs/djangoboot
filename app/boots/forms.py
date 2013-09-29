@@ -45,14 +45,20 @@ class BootVersionForm(forms.ModelForm):
 
 class SearchForm(hsforms.SearchForm):
 
+    #sort = forms.CharField(required=False, label=_('Sort'))
+
     type = forms.CharField(required=False, label=_('Type'))
+    #tag = forms.MultipleChoiceField(required=False, label=_('Tag'))
 
     def search(self):
         sqs = super(SearchForm, self).search()
         if not self.is_valid():
+            print self.errors
             return sqs
+        print 'aaa'
+        print self.cleaned_data['tag']
         if self.cleaned_data['type']:
-            sqs = sqs.filter_and(type=self.cleaned_data['type'])
+            sqs = sqs.filter(type=self.cleaned_data['type'])
 
         return sqs
 
