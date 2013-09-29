@@ -60,8 +60,13 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ request.user.team.get_absolute_url }}"><i class="icon-user"></i> {% trans 'Profile' %}</a></li>
                             <li><a href="{% logout %}"><i class="icon-signout"></i> {% trans 'Sign out' %}</a></li>
+                            <li class="divider"></li>
+                            {% for team in user.teams.all %}
+                                <li><a href="{{ team.get_absolute_url }}">{{ team }}</a></li>
+                            {% endfor %}
+                            <li class="divider"></li>
+                            <li><a href="{% url 'accounts:team_create' %}">{% trans 'Create Team' %}</a></li>
                         </ul>
                     </li>
                     {% else %}
