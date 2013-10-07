@@ -5,7 +5,7 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 
-{% block title %}{{ block.super }} - {{ boot.team }}/{{ boot }} - Create Version{% endblock %}
+{% block title %}Add Version - {{ boot.team.slug }}/{{ boot.slug }} - {{ block.super }}{% endblock title %}
 
 {% block content %}
     <main role="main">
@@ -41,4 +41,4 @@
             </form>
         </div>
     </main>
-{% endblock %}
+{% endblock content %}

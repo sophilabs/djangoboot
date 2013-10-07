@@ -11,7 +11,7 @@
     <p class="list-group-item-text">{{ boot.object.tagline }}</p>
     <p class="list-group-item-text">
         {% if not team %}
-        <a href="{{ boot.object.team.get_absolute_url }}"><img src="{% gravatar boot.object.team.email %}" /></a>
+        <a href="{{ boot.object.team.get_absolute_url }}"><img class="gravatar-small" src="{% gravatar boot.object.team.email %}" /></a>
         {% endif %}
         <a href="{% qurl search_url page=None type=boot.object.type %}" class="label label-default">{{ boot.object.get_type_display|lower }}</a>
         {% for tag in boot.object.tags.all %}

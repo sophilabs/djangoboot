@@ -192,7 +192,7 @@ INSTALLED_APPS = (
 RESERVED_SLUGS = ['login', 'logout', 'details', 'teams',
                   'create', 'modify', 'delete', 'star_boot',
                   'search', 'trending', 'add', 'update',
-                  'leave']
+                  'leave', 'admin', 'help', 'about']
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 

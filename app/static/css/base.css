@@ -83,7 +83,7 @@ fieldset[disabled] .btn-important.active {
     border-color: #fe8800;
 }
 
-.list-group-item-text img {
+.gravatar-small {
     height: 19px;
     width: 19px;
     border-radius: 3px;

@@ -8,7 +8,7 @@
 {% load stars %}
 {% load teams %}
 
-{% block title %}{{ block.super }} - {% block subtitle %}Search{% endblock %}{% endblock %}
+{% block title %}{% block subtitle %}Search{% endblock %} - {{ block.super }}{% endblock %}
 
 {% block css %}
     {{ block.super }}

@@ -7,17 +7,17 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'boots/css/boot_common.css' %}"/>
-{% endblock %}
+{% endblock css %}
 
 {% block content %}
     <main role="main">
         <div class="container">
             <div class="page-header">
                 <div class="pull-right">
-                    {% block header_buttons %}{% endblock %}
+                    {% block header_buttons %}{% endblock header_buttons %}
                 </div>
 
-                <h1>{% block header %}{% endblock %}</h1>
+                <h1>{% block header %}{% endblock header %}</h1>
             </div>
 
             {% include "common_form_errors.html" %}
@@ -69,7 +69,7 @@
 
                             <div class="text-right buttons-help">
                                 {% block buttons_help %}
-                                {% endblock %}
+                                {% endblock buttons_help %}
                             </div>
                         </div>
                     </div>
@@ -77,10 +77,10 @@
             </form>
         </div>
     </main>
-{% endblock %}
+{% endblock content %}
 
 
 {% block js %}
     {{ block.super }}
     <script src="{% static 'js/team_selector.js' %}"></script>
-{% endblock %}
+{% endblock js %}

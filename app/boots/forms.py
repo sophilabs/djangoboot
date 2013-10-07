@@ -68,7 +68,7 @@ class SearchForm(hsforms.SearchForm):
         sqs = super(SearchForm, self).search()
 
         sqs = sqs.facet('tags')
-        sqs = sqs.order_by(self.sorted_value, 'id')
+        sqs = sqs.order_by(self.sorted_value, '-star_count')
 
         if self.team:
             sqs = sqs.filter(team_slug=self.team)

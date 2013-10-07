@@ -7,8 +7,9 @@
 {% load stars %}
 {% load humanize %}
 {% load future %}
+{% load gravatar %}
 
-{% block title %}{{ block.super }} - {{ boot.team }}/{{ boot }}{% if version %}/{{ version.slug }}{% endif %}{% endblock %}
+{% block title %}{{ boot.team.slug }}/{{ boot.slug }}{% if version %}/{{ version.slug }}{% endif %}{% endblock %}
 
 {% block css %}
     {{ block.super }}
@@ -47,7 +48,9 @@
 
             <div class="row">
                 <div class="col-md-8">
-                    {{ boot.tagline }} {% if boot.url %} - <a href="{{ boot.url }}">{{ boot.url }}</a> {% endif %}<br/>
+                    <p>{{ boot.tagline }} {% if boot.url %} - <a href="{{ boot.url }}">{{ boot.url }}</a> {% endif %}</p>
+                    <a href="{{ boot.team.get_absolute_url }}"><img class="gravatar-small" src="{% gravatar boot.team.email %}" /></a>
+                    <a href="{% url 'boots:search' %}?type={{ boot.type  }}" class="label label-default">{{ boot.get_type_display|lower }}</a>
                     {% for tag in boot.tags.all %}
                         <a href="{% url 'boots:search' %}?tag={{ tag }}" class="label label-primary">{{ tag }}</a>
                     {% endfor %}

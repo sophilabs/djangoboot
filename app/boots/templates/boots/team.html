@@ -1,5 +1,5 @@
 {% extends 'boots/search.html' %}
 
-{% block subtitle %}{% if team.name %}{{ team.name }}{% else %}{{ team.slug }}{% endif %}{% endblock %}
+{% block subtitle %}{{ team.slug }}{% endblock subtitle %}
 
 {% block search_title %}{% if team.name %}{{ team.name }}{% else %}{{ team.slug }}{% endif %}{% endblock search_title %}

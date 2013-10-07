@@ -20,3 +20,4 @@ class SlugField(models.SlugField):
 
     def south_field_triple(self):
         return 'django.db.models.CharField', [], {'max_length': '50', 'db_index': 'True'}
+

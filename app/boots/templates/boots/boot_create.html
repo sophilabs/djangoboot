@@ -2,11 +2,11 @@
 
 {% load i18n %}
 
-{% block title %}{{ block.super }} - Add Boot{% endblock %}
+{% block title %}Add Boot - {{ block.super }}{% endblock %}
 
 {% block header %}
     {% trans 'Add Boot' %}
-{% endblock %}
+{% endblock header %}
 
 {% block buttons_help %}
     <span class="text-muted">
@@ -14,10 +14,10 @@
             Once you add the boot you'll be able to add its first version.
         {% endblocktrans %}
     </span>
-{% endblock %}
+{% endblock buttons_help %}
 
 {% block buttons %}
     <button type="submit" class="btn btn-primary btn-lg space-10">
         <i class="icon-plus-sign"></i> {% trans 'Add' %}
     </button>
-{% endblock %}
+{% endblock buttons %}
