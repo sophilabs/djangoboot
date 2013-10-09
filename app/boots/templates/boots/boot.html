@@ -13,6 +13,7 @@
 
 {% block css %}
     {{ block.super }}
+    <link href="{% static 'css/markdown.css' %}" rel="stylesheet">
     {% include 'boots/star_boot_css.html' %}
 {% endblock css %}
 
@@ -55,19 +56,21 @@
                         <a href="{% url 'boots:search' %}?tag={{ tag }}" class="label label-primary">{{ tag }}</a>
                     {% endfor %}
 
-
                     {% if version %}
                     <hr/>
-                    {% with version.get_command as command %}
-                        <div class="input-group">
-                            <input disabled="disabled" type="text" class="form-control input-lg" value="{{ command }}">
-                            <span class="input-group-btn">
-                                <button id="copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-text="{{ command }}">
-                                    <i class="icon-copy"></i>
-                                </button>
-                            </span>
+                    {% if version.readme %}
+                        <div class="markdown">
+                            {{ version.readme }}
                         </div>
-                    {% endwith %}
+                    {% endif %}
+                    <div class="input-group">
+                        <pre id="command" class="form-control input-lg">{{ version.command|escape }}</pre>
+                        <span class="input-group-btn">
+                            <button id="copy-button" class="btn btn-search btn-lg btn-primary" data-clipboard-target="command">
+                                <i class="icon-copy"></i>
+                            </button>
+                        </span>
+                    </div>
                     {% endif %}
                 </div>
 
@@ -80,7 +83,7 @@
                             </a>
                         {% endif %}
 
-                        {% for boot_version in boot.versions.all %}
+                        {% for boot_version in boot.sorted_versions %}
                             <a href="{% if boot_version != version %}{{ boot_version.get_absolute_url }}{% endif %}" class="list-group-item {% if boot_version == version %}active{% endif %}">
                                 <span>{{ boot_version.slug }}</span>
                                 <span class="badge">{{ boot_version.created|naturalday }}</span>

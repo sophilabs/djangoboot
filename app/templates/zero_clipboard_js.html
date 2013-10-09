@@ -3,6 +3,7 @@
 <script src="{% static 'js/ZeroClipboard.js' %}"></script>
 <script>
     var clip = new ZeroClipboard(document.getElementById('copy-button'), {
-        moviePath: '{% static "swf/ZeroClipboard.swf" %}'
+        moviePath: '{% static "swf/ZeroClipboard.swf" %}',
+        allowScriptAccess: 'always'
     });
 </script>

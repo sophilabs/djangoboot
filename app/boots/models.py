@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItem
+from markupfield.fields import MarkupField
 
 from core.models import TimeStampedMixin, SlugField
 from accounts.models import User, Team
@@ -17,17 +18,14 @@ class Boot(TimeStampedMixin, models.Model):
     TYPE_PROJECT = 'P'
     TYPE_APP = 'A'
     TYPE_COOKIECUTTER = 'C'
+    TYPE_PACKAGE = 'K'
 
     TYPES = (
-        (TYPE_PROJECT, _('Project')),
-        (TYPE_APP, _('App')),
+        (TYPE_PROJECT, _('Template Project')),
+        (TYPE_APP, _('Template App')),
         (TYPE_COOKIECUTTER, _('CookieCutter')),
+        (TYPE_PACKAGE, _('Package'))
     )
-
-    COMMAND = {
-        TYPE_PROJECT: 'startproject',
-        TYPE_APP: 'startapp'
-    }
 
     team = models.ForeignKey(Team, verbose_name=_('owner'))
     slug = SlugField(_('slug'), help_text=_('Boot name. e.g: <code>my-boot</code>.'))
@@ -37,6 +35,7 @@ class Boot(TimeStampedMixin, models.Model):
     type = models.CharField(_('type'), max_length=1, choices=TYPES, help_text=_('Type of template.'))
     tags = TaggableManager(verbose_name=_('tags'),
                            help_text=_('A comma-separated list of tags. e.g: <code>sphinx</code>, <code>puppet</code>, <code>south</code>.'))
+    flagged = models.BooleanField(default=False)
 
     r_star_count = models.IntegerField(null=True, blank=True)
     r_star_count_day = models.IntegerField(null=True, blank=True)
@@ -45,6 +44,10 @@ class Boot(TimeStampedMixin, models.Model):
 
     def __unicode__(self):
         return self.slug
+
+    @property
+    def sorted_versions(self):
+        return self.versions.order_by('order', '-id')
 
     @models.permalink
     def get_absolute_url(self):
@@ -112,26 +115,12 @@ class Star(models.Model):
 class BootVersion(TimeStampedMixin, models.Model):
     boot = models.ForeignKey(Boot, verbose_name=_('boot'), related_name='versions')
     slug = SlugField(_('slug'), help_text=_('Version slug. e.g: <code>1.0</code> or <code>0.1a</code>.'))
-    source = models.URLField(_('source'),
-                             help_text=_('A zip file url for project/app or git url for cookiecutter.'))
-    append = models.CharField(_('command arguments'),
-                              help_text=_('Extra command arguments for django-admin.py or cookiecutter. e.g: <code>--extension=py,rst,html</code>.'),
-                              null=True, blank=True, max_length=200)
+    readme = MarkupField(_('readme'), markup_type='markdown', help_text='You can use <code>markdown</code>.', null=True, blank=True)
+    command = models.TextField(_('command'), help_text=_('Command to use the template, cookiecutter or install the package'))
+    order = models.IntegerField(default=0)
 
     def __unicode__(self):
         return unicode(self.boot) + ' ' + self.slug
-
-    def get_command(self):
-        if self.boot.type == Boot.TYPE_COOKIECUTTER:
-            return u'cookiecutter {source}'.format(
-                source=self.source
-            )
-        else:
-            return u'./django-admin.py {type} --template={source} {append} <name>'.format(
-                type=Boot.COMMAND[self.boot.type],
-                source=self.source,
-                append=self.append if self.append else ''
-            )
 
     @property
     def team(self):

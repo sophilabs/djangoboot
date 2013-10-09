@@ -84,19 +84,15 @@
                 </form>
                 <hr>
                 <h4>Type</h4>
-                <ul class="nav nav-pills nav-justified">
-                    <li class="{% if not form.type.value %}active{% endif %}">
-                        <a href="{% qurl request.get_full_path page=None type=None %}">{% trans 'All' %}</a>
+                <ul class="nav nav-pills nav-stacked">
+                    {% for type in types %}
+                    <li class="{% if type.3 %}active{% endif %}">
+                        <a href="{% qurl request.get_full_path page=None type=type.0 %}">
+                            <span class="badge pull-right">{{ type.2 }}</span>
+                            {{ type.1 }}
+                        </a>
                     </li>
-                    <li class="{% if form.type.value == 'P'  %}active{% endif %}">
-                        <a href="{% qurl request.get_full_path page=None type='P' %}">{% trans 'Project' %}</a>
-                    </li>
-                    <li class="{% if form.type.value == 'A'  %}active{% endif %}">
-                        <a href="{% qurl request.get_full_path page=None type='A' %}">{% trans 'App' %}</a>
-                    </li>
-                    <li class="{% if form.type.value == 'C'  %}active{% endif %}">
-                        <a href="{% qurl request.get_full_path page=None type='C' %}">{% trans 'Cookie' %}</a>
-                    </li>
+                    {% endfor %}
                 </ul>
                 <hr>
                 <h4>Tags</h4>

@@ -54,7 +54,7 @@ class BootVersionObjectMixin(SingleObjectMixin):
         return obj
 
 
-class SearchView(BaseSearchView):
+class SearchView(EnsureCSRFMixin, BaseSearchView):
     template = 'boots/search.html'
 
     def build_form(self, form_kwargs=None):
@@ -66,6 +66,13 @@ class SearchView(BaseSearchView):
     def extra_context(self):
         extra = super(SearchView, self).extra_context()
         facets = self.results.facet_counts()
+        #type
+        filter_types = self.form.types or [None]
+        facet_types = facets['fields']['type']
+        types = [[None, _('All'), self.results.count(), None in filter_types]] + \
+                [[type[0], type[1], next(iter(filter(lambda t:t[0] == type[0], facet_types)), ('',0))[1], type[0] in filter_types] for type in Boot.TYPES]
+        extra['types'] = types
+        #tags
         tags = facets['fields']['tags'] if facets and facets.get('fields', None) and facets['fields'].get('tags', None) else []
         facet_tags = [tag[0] for tag in tags]
         filter_tags = self.form.tags

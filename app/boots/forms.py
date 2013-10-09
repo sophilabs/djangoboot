@@ -12,6 +12,10 @@ from boots.models import Boot, BootVersion
 
 class BootForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super(BootForm, self).__init__(*args, **kwargs)
+        self.fields['type'].empty_label = ''
+
     def clean(self, *args, **kwargs):
         team = self.cleaned_data.get('team')
         slug = self.cleaned_data.get('slug')
@@ -41,7 +45,7 @@ class BootVersionForm(forms.ModelForm):
 
     class Meta:
         model = BootVersion
-        exclude = ('boot',)
+        exclude = ('boot', 'order',)
 
 
 class SearchForm(hsforms.SearchForm):
@@ -67,8 +71,11 @@ class SearchForm(hsforms.SearchForm):
     def search(self):
         sqs = super(SearchForm, self).search()
 
-        sqs = sqs.facet('tags')
+        sqs = sqs.facet('tags', mincount=1, limit=8)
+        sqs = sqs.facet('{!ex=type_exact}type_exact', mincount=1)
         sqs = sqs.order_by(self.sorted_value, '-star_count')
+
+        sqs = sqs.filter(flagged=False)
 
         if self.team:
             sqs = sqs.filter(team_slug=self.team)
@@ -79,9 +86,15 @@ class SearchForm(hsforms.SearchForm):
             sqs = sqs.filter(tags_exact=tag)
 
         if self.cleaned_data['type']:
-            sqs = sqs.filter(type_exact=self.cleaned_data['type'])
+            sqs = sqs.narrow('{{!tag=type_exact}}type_exact:{0}'.format(self.cleaned_data['type']))
 
         return sqs
+
+    @property
+    def types(self):
+        if not self.is_valid():
+            return []
+        return [self.cleaned_data['type']]
 
     @property
     def tags(self):

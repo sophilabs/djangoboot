@@ -5,7 +5,7 @@ from boots.models import Boot, BootVersion
 class BootVersionInline(admin.TabularInline):
 
     model = BootVersion
-    fields = ('slug', 'source',)
+    fields = ('slug', 'command', 'order',)
 
 
 class BootAdmin(admin.ModelAdmin):

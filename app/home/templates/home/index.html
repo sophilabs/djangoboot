@@ -5,7 +5,7 @@
 {% load future %}
 {% load auth %}
 
-{% block title %}{{ block.super }} - Home{% endblock %}
+{% block title %}Home - {{ block.super }}{% endblock %}
 
 {% block class  %}home-index{% endblock class %}
 
@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-5 left">
                     <h1>djangoboot</h1>
-                    <p>{% trans 'templates for startproject, startapp and cookiecutter (boots)' %}</p>
+                    <p>{% trans 'templates for startproject, startapp, cookiecutter and packages (boots)' %}</p>
                 </div>
                 <div class=" col-md-offset-1 col-md-4 right">
                     <form action="{% url 'boots:search' %}" method="get" role="search">
@@ -54,34 +54,51 @@
     </main>
     {% url 'boots:search' as search_url %}
     <div class="container">
-        <div class="col-md-4">
-            <h2>Trending Projects</h2>
-            <div class="list-group">
-                {% for boot in trending.projects %}
-                {% include 'boots/_boot_item.html' %}
-                {% empty %}
-                <div class="alert alert-info text-center">No boots found.</div>
-                {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center">Trending</h2>
             </div>
         </div>
-        <div class="col-md-4">
-            <h2>Trending Apps</h2>
-            <div class="list-group">
-                {% for boot in trending.apps %}
+        <div class="row">
+            <div class="col-md-3">
+                <h3>{% trans 'Template Projects' %}</h3>
+                <div class="list-group">
+                    {% for boot in trending.projects %}
                     {% include 'boots/_boot_item.html' %}
-                {% empty %}
-                    <div class="alert alert-info text-center">No boots found.</div>
-                {% endfor %}
+                    {% empty %}
+                    <div class="alert alert-info text-center">{% trans 'No boots found.' %}</div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <h2>Trending CookieCutters</h2>
-            <div class="list-group">
-                {% for boot in trending.cookiecutters %}
-                    {% include 'boots/_boot_item.html' %}
-                {% empty %}
-                    <div class="alert alert-info text-center">No boots found.</div>
-                {% endfor %}
+            <div class="col-md-3">
+                <h3>{% trans 'Template Apps' %}</h3>
+                <div class="list-group">
+                    {% for boot in trending.apps %}
+                        {% include 'boots/_boot_item.html' %}
+                    {% empty %}
+                        <div class="alert alert-info text-center">{% trans 'No boots found.' %}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h3>{% trans 'CookieCutters' %}</h3>
+                <div class="list-group">
+                    {% for boot in trending.cookiecutters %}
+                        {% include 'boots/_boot_item.html' %}
+                    {% empty %}
+                        <div class="alert alert-info text-center">{% trans 'No boots found.' %}</div>
+                    {% endfor %}
+                </div>
+            </div>
+             <div class="col-md-3">
+                <h3>{% trans 'Packages' %}</h3>
+                <div class="list-group">
+                    {% for boot in trending.packages %}
+                        {% include 'boots/_boot_item.html' %}
+                    {% empty %}
+                        <div class="alert alert-info text-center">{% trans 'No boots found.' %}</div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

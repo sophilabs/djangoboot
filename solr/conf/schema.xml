@@ -117,6 +117,7 @@
     <field name="tags_exact" type="string" indexed="true" stored="true" multiValued="true" />
     <field name="type" type="text_en" indexed="true" stored="true" multiValued="false" />
     <field name="type_exact" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="flagged" type="boolean" indexed="true" stored="true" multiValued="false" />
 
 	
 	<field name="_version_" type="long" indexed="true" stored="true"/>

@@ -1,4 +1,5 @@
 import os
+import markdown
 
 from django.conf import global_settings
 
@@ -221,3 +222,10 @@ LOGGING = {
 }
 
 AUTH_USER_MODEL = 'accounts.User'
+
+HOME_TRENDING_STAR = 3
+HOME_TRENDING_COUNT = 5
+
+MARKUP_FIELD_TYPES = (
+    ('markdown', markdown.markdown),
+)

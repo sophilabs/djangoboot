@@ -18,6 +18,7 @@ class BootIndex(indexes.SearchIndex, indexes.Indexable):
     star_count_month = indexes.IntegerField(model_attr='star_count_month')
     type = indexes.CharField(model_attr='type', faceted=True)
     tags = indexes.MultiValueField(model_attr='tags__all', faceted=True)
+    flagged = indexes.BooleanField(model_attr='flagged')
 
     def get_model(self):
         return Boot
