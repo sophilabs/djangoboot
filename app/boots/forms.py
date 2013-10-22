@@ -34,6 +34,13 @@ class BootForm(forms.ModelForm):
 
 class BootVersionForm(forms.ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super(BootVersionForm, self).__init__(*args, **kwargs)
+        self.fields['readme'].widget.attrs['placeholder'] = _('Write some instructions...')
+        self.fields['command'].widget.attrs['placeholder'] = _('./django-admin.py startproject --template=<url> <name> -or- '
+                                                               'cookiecutter <url> -or-'
+                                                               'pip install <package>')
+
     def clean(self, *args, **kwargs):
         slug = self.cleaned_data.get('slug')
         if slug:
