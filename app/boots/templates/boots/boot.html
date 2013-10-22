@@ -23,14 +23,6 @@
             <div class="page-header">
                 <div class="pull-right">
                     {% if team_member %}
-                         {% if version %}
-                            <a class="btn btn-default btn-sm" href="{{ version.get_update_url }}">
-                                <i class="icon-pencil"></i> {% trans 'Update this Version' %}
-                            </a>
-                            <a class="btn btn-danger btn-sm" href="{{ version.get_delete_url }}">
-                                <i class="icon-remove"></i> {% trans 'Delete this Version' %}
-                            </a>
-                        {% endif %}
                         <a class="btn btn-default btn-sm" href="{{ boot.get_update_url }}">
                             <i class="icon-pencil"></i> {% trans 'Update Boot' %}
                         </a>
@@ -94,11 +86,17 @@
                                     {% if team_member %}
                                         <span class="pull-right">
                                             {% if not forloop.first %}
-                                            <a class="btn btn-default btn-xs" href="{{ boot_version.get_up_url }}"><i class="icon-arrow-up"></i></a>
+                                            <a title="{% trans 'Up' %}" class="btn btn-default btn-xs" href="{{ boot_version.get_up_url }}"><i class="icon-arrow-up"></i></a>
+                                            {% else %}
+                                            <span class="btn btn-default btn-xs disabled"><i class="icon-arrow-up"></i></span>
                                             {% endif %}
                                             {% if not forloop.last %}
-                                            <a class="btn btn-default btn-xs" href="{{ boot_version.get_down_url }}"><i class="icon-arrow-down"></i></a>
+                                            <a title='Down' class="btn btn-default btn-xs" href="{{ boot_version.get_down_url }}"><i class="icon-arrow-down"></i></a>
+                                            {% else %}
+                                            <span class="btn btn-default btn-xs disabled"><i class="icon-arrow-down"></i></span>
                                             {% endif %}
+                                            <a title="{% trans 'Edit' %}" class="btn btn-default btn-xs" href="{{ boot_version.get_update_url }}"><i class="icon-pencil"></i></a>
+                                            <a title="{% trans 'Delete' %}" class="btn btn-danger btn-xs" href="{{ boot_version.get_delete_url }}"><i class="icon-remove"></i></a>
                                         </span>
                                     {% endif %}
                                     {% if boot_version != version %}
