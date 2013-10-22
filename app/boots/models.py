@@ -99,6 +99,12 @@ class Boot(TimeStampedMixin, models.Model):
 
         self.save()
 
+    def latest_version(self):
+        try:
+            return self.sorted_versions[:1].get()
+        except BootVersion.DoesNotExist:
+            return None
+
     class Meta:
         unique_together = (('team', 'slug',),)
 
@@ -131,13 +137,24 @@ class BootVersion(TimeStampedMixin, models.Model):
         return 'boots:boot_version', [self.boot.team.slug, self.boot.slug, self.slug]
 
     @models.permalink
+    def get_update_url(self):
+        return 'boots:boot_version_update', [self.boot.team.slug, self.boot.slug, self.slug]
+
+    @models.permalink
     def get_delete_url(self):
         return 'boots:boot_version_delete', [self.boot.team.slug, self.boot.slug, self.slug]
+
+    @models.permalink
+    def get_up_url(self):
+        return 'boots:boot_version_up', [self.boot.team.slug, self.boot.slug, self.slug]
+
+    @models.permalink
+    def get_down_url(self):
+        return 'boots:boot_version_down', [self.boot.team.slug, self.boot.slug, self.slug]
 
     class Meta:
         unique_together = (('boot', 'slug',),)
         ordering = ('-created',)
-        get_latest_by = 'created'
 
 
 @receiver(post_save, sender=Star)

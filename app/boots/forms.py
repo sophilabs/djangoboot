@@ -14,7 +14,8 @@ class BootForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(BootForm, self).__init__(*args, **kwargs)
-        self.fields['type'].empty_label = ''
+        self.fields['type'].choices = tuple((v, n if v != '' else 'Select a boot type',) for v, n in self.fields['type'].choices)
+        self.fields['team'].label_from_instance = lambda i: i.slug
 
     def clean(self, *args, **kwargs):
         team = self.cleaned_data.get('team')
@@ -36,9 +37,11 @@ class BootVersionForm(forms.ModelForm):
     def clean(self, *args, **kwargs):
         slug = self.cleaned_data.get('slug')
         if slug:
-            queryset = self.boot.versions.filter(slug=slug)
-            if self.instance:
-                queryset = queryset.exclude(id=self.instance.id)
+            if self.instance and self.instance.boot_id:
+                queryset = self.instance.boot.versions.exclude(id=self.instance.id)
+            else:
+                queryset = self.boot.versions
+            queryset = queryset.filter(slug=slug)
             if queryset:
                 raise ValidationError(_('A version with the specified slug already exists for this boot.'))
         return super(BootVersionForm, self).clean(*args, **kwargs)

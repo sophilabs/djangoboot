@@ -13,8 +13,7 @@ class IndexView(EnsureCSRFMixin, TemplateView):
         sqs = SearchQuerySet().models(Boot).filter(star_count__gt=settings.HOME_TRENDING_STAR, flagged=False). \
             order_by('-star_count_week', '-star_count_month', '-star_count')
         kwargs['trending'] = {
-            'projects': sqs.filter(type_exact=Boot.TYPE_PROJECT)[:settings.HOME_TRENDING_COUNT],
-            'apps': sqs.filter(type_exact=Boot.TYPE_APP)[:settings.HOME_TRENDING_COUNT],
+            'templates': sqs.filter(type_exact__in=[Boot.TYPE_PROJECT, Boot.TYPE_APP])[:settings.HOME_TRENDING_COUNT],
             'cookiecutters': sqs.filter(type_exact=Boot.TYPE_COOKIECUTTER)[:settings.HOME_TRENDING_COUNT],
             'packages': sqs.filter(type_exact=Boot.TYPE_PACKAGE)[:settings.HOME_TRENDING_COUNT]
         }

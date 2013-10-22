@@ -1,0 +1,29 @@
+{% extends 'boots/boot_version_common.html' %}
+
+{% load i18n %}
+
+{% block title %}Update Version - {{ version.boot.team.slug }}/{{ version.boot.slug }} - {{ block.super }}{% endblock %}
+
+{% block header %}
+    <a href="{{ version.boot.team.get_absolute_url }}">{{ version.boot.team.slug }}</a>
+    <span class="text-muted">/</span>
+    <a href="{{ version.boot.get_absolute_url }}">{{ version.boot.slug }}</a>
+    <span class="text-muted">/</span>
+    {% trans 'Update Version' %}
+{% endblock header %}
+
+{% block header_buttons %}
+    <a href="{{ version.get_absolute_url }}" class="btn btn-default btn-sm">
+        <i class="icon-arrow-left"></i> {% trans 'Back' %}
+    </a>
+
+    <a href="{{ version.get_delete_url }}" class="btn btn-danger btn-sm">
+        <i class="icon-remove"></i> {% trans 'Delete this Version' %}
+    </a>
+{% endblock %}
+
+{% block buttons %}
+    <button type="submit" class="btn btn-primary btn-lg space-10">
+        <i class="icon-ok"></i> {% trans 'Save' %}
+    </button>
+{% endblock buttons %}

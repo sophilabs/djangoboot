@@ -1,5 +1,5 @@
-from django.views.generic import CreateView, UpdateView, DeleteView, View
-from django.views.generic.edit import SingleObjectMixin, ModelFormMixin
+from django.views.generic import CreateView, UpdateView, DeleteView, RedirectView, View
+from django.views.generic.edit import SingleObjectMixin
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.base import TemplateResponseMixin
 from django.core.exceptions import ObjectDoesNotExist
@@ -136,10 +136,7 @@ class BootView(EnsureCSRFMixin, BootContextMixin, BootObjectMixin, TemplateRespo
 
     def get_object(self, queryset=None):
         super(BootView, self).get_object(queryset)
-        try:
-            return self.boot.versions.latest()
-        except ObjectDoesNotExist:
-            return None
+        return self.boot.latest_version()
 
 
 class BootCreateView(TeamOnlyMixin, CreateView):
@@ -188,6 +185,29 @@ class BootVersionCreateView(TeamOnlyMixin, CreateView):
         self.object.boot = self.boot
         self.object.save()
         return super(BootVersionCreateView, self).form_valid(form)
+
+
+class BootVersionUpdateView(TeamOnlyMixin, BootVersionObjectMixin, UpdateView):
+    template_name = 'boots/boot_version_update.html'
+    form_class = BootVersionForm
+
+
+class BootVersionMoveView(BootVersionObjectMixin, RedirectView):
+    permanent = False
+    up = True
+
+    def get_redirect_url(self, *args, **kwargs):
+        current = self.get_object()
+        versions = list(current.boot.sorted_versions)
+        position = next(position for position, version in enumerate(versions) if versions[position].id == current.id)
+        if position > 0 and self.up:
+            versions[position-1], versions[position] = versions[position], versions[position-1]
+        elif position < len(versions) - 1 and not self.up:
+            versions[position], versions[position+1] = versions[position+1], versions[position]
+        for position, version in enumerate(versions):
+            version.order = position
+            version.save()
+        return current.get_absolute_url()
 
 
 class BootVersionDeleteView(TeamOnlyMixin, BootVersionObjectMixin, DeleteView):

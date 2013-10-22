@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, url
 
 from boots.views import SearchView, TrendingView, TeamView, BootView, BootVersionView, BootCreateView, \
-    BootUpdateView, BootDeleteView, BootVersionCreateView, BootVersionDeleteView, StarBootView
+    BootUpdateView, BootDeleteView, BootVersionCreateView, BootVersionUpdateView, BootVersionDeleteView, \
+    BootVersionMoveView, StarBootView
 
 
 urlpatterns = patterns('',
@@ -36,6 +37,15 @@ urlpatterns = patterns('',
     url(r'^(?P<team>[-a-zA-Z0-9_\.]+)/(?P<boot>[-a-zA-Z0-9_\.]+)/add$',
         BootVersionCreateView.as_view(),
         name='boot_version_create'),
+     url(r'^(?P<team>[-a-zA-Z0-9_\.]+)/(?P<boot>[-a-zA-Z0-9_\.]+)/(?P<version>[-a-zA-Z0-9_\.]+)/update$',
+        BootVersionUpdateView.as_view(),
+        name='boot_version_update'),
+    url(r'^(?P<team>[-a-zA-Z0-9_\.]+)/(?P<boot>[-a-zA-Z0-9_\.]+)/(?P<version>[-a-zA-Z0-9_\.]+)/up$',
+        BootVersionMoveView.as_view(up=True, permanent=False),
+        name='boot_version_up'),
+    url(r'^(?P<team>[-a-zA-Z0-9_\.]+)/(?P<boot>[-a-zA-Z0-9_\.]+)/(?P<version>[-a-zA-Z0-9_\.]+)/down$',
+        BootVersionMoveView.as_view(up=False, permanent=False),
+        name='boot_version_down'),
     url(r'^(?P<team>[-a-zA-Z0-9_\.]+)/(?P<boot>[-a-zA-Z0-9_\.]+)/(?P<version>[-a-zA-Z0-9_\.]+)/delete$',
         BootVersionDeleteView.as_view(),
         name='boot_version_delete'),

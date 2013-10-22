@@ -6,7 +6,7 @@
 {% load staticfiles %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'boots/css/boot_common.css' %}"/>
+    <link rel="stylesheet" href="{% static 'boots/css/boot_version_common.css' %}"/>
 {% endblock css %}
 
 {% block content %}
@@ -26,37 +26,16 @@
 
                 <div class="row">
                     <div class="col-md-4">
-                        {% bootstrap_field form.type %}
-
-                        <div class="form-group">
-                            <label>Boot slug</label>
-
-                            <div class="form-inline">
-                                <div class="form-group {% if form.team.errors %}has-error{% endif %} boot-team">
-                                    <!-- Owner -->
-                                    {% include 'accounts/team_selector.html' %}
-                                </div>
-
-                                <div class="form-group text-muted boot-slash">
-                                    /
-                                </div>
-
-                                <div class="form-group {% if form.slug.errors %}has-error{% endif %} boot-slug">
-                                    <!-- Slug -->
-                                    {% bootstrap_field form.slug show_label=False %}
-                                </div>
-                            </div>
-                        </div>
+                        {% bootstrap_field form.readme %}
                     </div>
 
 
                     <div class="col-md-4 left">
-                        {% bootstrap_field form.tagline %}
-                        {% bootstrap_field form.tags %}
+                        {% bootstrap_field form.command %}
                     </div>
 
                     <div class="col-md-4 left">
-                        {% bootstrap_field form.url %}
+                        {% bootstrap_field form.slug %}
 
                         <div class="form-buttons">
                             <div class="pull-right buttons">

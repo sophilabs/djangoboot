@@ -1,44 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'boots/boot_version_common.html' %}
 
 {% load i18n %}
-{% load bootstrap3 %}
-{% load widget_tweaks %}
-{% load staticfiles %}
 
-{% block title %}Add Version - {{ boot.team.slug }}/{{ boot.slug }} - {{ block.super }}{% endblock title %}
+{% block title %}Add Version - {{ boot.team.slug }}/{{ boot.slug }} - {{ block.super }}{% endblock %}
 
-{% block content %}
-    <main role="main">
-        <div class="container">
-            <div class="page-header">
-                <h1>
-                    <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>
-                    <span class="text-muted">/</span>
-                    <a href="{{ boot.get_absolute_url }}">{{ boot.slug }}</a>
-                    <span class="text-muted">/</span>
-                    {% trans 'Add Version' %}
-                </h1>
-            </div>
+{% block header %}
+    <a href="{{ boot.team.get_absolute_url }}">{{ boot.team.slug }}</a>
+    <span class="text-muted">/</span>
+    <a href="{{ boot.get_absolute_url }}">{{ boot.slug }}</a>
+    <span class="text-muted">/</span>
+    {% trans 'Add Version' %}
+{% endblock header %}
 
-            <form action="" method="post" class="form">
-                {% csrf_token %}
-
-                <div class="row">
-                    <div class="col-md-offset-4 col-md-4">
-                        {% bootstrap_form form %}
-
-                        {% bootstrap_form_buttons %}
-                            <button type="submit" class="btn btn-primary btn-lg pull-right">
-                                {% trans 'Add Version' %} <i class="icon-ok"></i>
-                            </button>
-                        {% end_bootstrap_form_buttons %}
-
-                        <a href="{{ boot.get_absolute_url }}" class="btn btn-default btn-lg">
-                            <i class="icon-arrow-left"></i> Back to Boot
-                        </a>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </main>
-{% endblock content %}
+{% block buttons %}
+    <button type="submit" class="btn btn-primary btn-lg space-10">
+        <i class="icon-plus-sign"></i> {% trans 'Add' %}
+    </button>
+{% endblock buttons %}
