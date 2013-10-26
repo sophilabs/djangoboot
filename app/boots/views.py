@@ -66,6 +66,10 @@ class SearchView(EnsureCSRFMixin, BaseSearchView):
     def extra_context(self):
         extra = super(SearchView, self).extra_context()
         facets = self.results.facet_counts()
+        if not facets:
+            extra['types'] = []
+            extra['tags'] = []
+            return extra
         #type
         filter_types = self.form.types or [None]
         facet_types = facets['fields']['type']

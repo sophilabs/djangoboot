@@ -1,3 +1,5 @@
 from base import *
 
 HOME_TRENDING_STAR = 0
+
+STATIC_DOMAIN = '127.0.0.1:8000'
