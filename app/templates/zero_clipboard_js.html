@@ -5,6 +5,6 @@
     var clip = new ZeroClipboard(document.getElementById('copy-button'), {
         moviePath: '{% static "swf/ZeroClipboard.swf" %}',
         allowScriptAccess: 'always',
-        trustedDomains: '{{ STATIC_DOMAIN }}'
+        trustedDomains:location.hostname
     });
 </script>
