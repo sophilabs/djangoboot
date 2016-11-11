@@ -1,5 +1,6 @@
-djangoboot
-==========
+# djangoboot
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 Is a web application intended to explore templates for `django-admin.py` projects/apps and `cookiecutter`.
 
