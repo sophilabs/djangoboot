@@ -40,4 +40,13 @@ Try it: http://djangoboot.com
     cp -R <djangoboot-path>/solr solr-4.4.0/example/solr/boots
     java -jar start.jar
 
+## License
+djangoboot is Copyright (c) 2017 sophilabs, inc. It is free software, and may be
+redistributed under the terms specified in the [license](/LICENSE) file.
 
+## About
+
+[![sophilabs.co](https://s3.amazonaws.com/sophilabs-assets/logo/logo_300x66.gif)](https://sophilabs.co)
+
+djangoboot is maintained and funded by sophilabs, inc. The names and logos for
+sophilabs are trademarks of sophilabs, inc.
